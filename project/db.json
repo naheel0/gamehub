@@ -1,0 +1,284 @@
+{
+  "games": [
+    {
+      "id": 1,
+      "name": "Elden Ring",
+      "genre": "Action RPG",
+      "platform": "PC, PlayStation, Xbox",
+      "price": 59.99,
+      "rating": 4.9,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/E3Huy2cdih0",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg"
+      ],
+      "description": "An open-world action RPG set in the Lands Between, featuring vast exploration and intense boss battles."
+    },
+    {
+      "id": 2,
+      "name": "God of War",
+      "genre": "Action Adventure",
+      "platform": "PC, PlayStation",
+      "price": 49.99,
+      "rating": 4.8,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/K0u_kAWLJOA",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/1593500/header.jpg"
+      ],
+      "description": "Journey of Kratos and Atreus through the Norse realms in this award-winning action adventure."
+    },
+    {
+      "id": 3,
+      "name": "Cyberpunk 2077",
+      "genre": "Action RPG",
+      "platform": "PC, PlayStation, Xbox",
+      "price": 39.99,
+      "rating": 4.3,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/qIcTM8WXFjk",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg"
+      ],
+      "description": "An open-world adventure set in Night City, a megalopolis obsessed with power and body modification."
+    },
+    {
+      "id": 4,
+      "name": "Call of Duty: Modern Warfare III",
+      "genre": "Shooter",
+      "platform": "PC, PlayStation, Xbox",
+      "price": 69.99,
+      "rating": 4.5,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/r72GP1PIZa0",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/2357570/header.jpg"
+      ],
+      "description": "Continue the Modern Warfare saga with intense missions and thrilling multiplayer battles."
+    },
+    {
+      "id": 5,
+      "name": "Marvel's Spider-Man Remastered",
+      "genre": "Action Adventure",
+      "platform": "PC, PlayStation",
+      "price": 59.99,
+      "rating": 4.9,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/iqysmS4lxwQ",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/1817070/header.jpg"
+      ],
+      "description": "Swing through New York as Peter Parker and battle iconic villains in this thrilling adventure."
+    },
+    {
+      "id": 6,
+      "name": "Hogwarts Legacy",
+      "genre": "Action RPG",
+      "platform": "PC, PlayStation, Xbox",
+      "price": 59.99,
+      "rating": 4.7,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/1O6Qstncpnc",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/990080/header.jpg"
+      ],
+      "description": "Experience life as a student at Hogwarts and uncover hidden magic in the wizarding world."
+    },
+    {
+      "id": 7,
+      "name": "Red Dead Redemption 2",
+      "genre": "Open World",
+      "platform": "PC, PlayStation, Xbox",
+      "price": 49.99,
+      "rating": 4.9,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/eaW0tYpxyp0",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/header.jpg"
+      ],
+      "description": "Epic story of life in America’s unforgiving heartland as Arthur Morgan and the Van der Linde gang."
+    },
+    {
+      "id": 8,
+      "name": "Resident Evil 4 Remake",
+      "genre": "Survival Horror",
+      "platform": "PC, PlayStation, Xbox",
+      "price": 59.99,
+      "rating": 4.8,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/IdG7JbO3Mlk",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/2050650/header.jpg"
+      ],
+      "description": "Reimagined survival horror classic featuring Leon S. Kennedy on a mission to rescue the president’s daughter."
+    },
+    {
+      "id": 9,
+      "name": "Assassin’s Creed Mirage",
+      "genre": "Action Adventure",
+      "platform": "PC, PlayStation, Xbox",
+      "price": 49.99,
+      "rating": 4.2,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/x55lAlFtXmw",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/368870/header.jpg"
+      ],
+      "description": "Experience the story of Basim in ninth-century Baghdad — a return to stealth-focused gameplay."
+    },
+    {
+      "id": 10,
+      "name": "Starfield",
+      "genre": "Sci-Fi RPG",
+      "platform": "PC, Xbox",
+      "price": 69.99,
+      "rating": 4.1,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/kfYEiTdsyas",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/1716740/header.jpg"
+      ],
+      "description": "Bethesda’s first new universe in 25 years — explore the stars and uncover humanity’s greatest mystery."
+    },
+    {
+      "id": 11,
+      "name": "Baldur’s Gate 3",
+      "genre": "RPG",
+      "platform": "PC, PlayStation",
+      "price": 59.99,
+      "rating": 5.0,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/OcP0WdH7rTs",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
+      ],
+      "description": "Embark on an epic D&D adventure filled with magic, friendship, betrayal, and survival."
+    },
+    {
+      "id": 12,
+      "name": "Forza Horizon 5",
+      "genre": "Racing",
+      "platform": "PC, Xbox",
+      "price": 59.99,
+      "rating": 4.7,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/FYH9n37B7Yw",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/1551360/header.jpg"
+      ],
+      "description": "Explore vibrant open-world landscapes of Mexico in this stunning racing experience."
+    },
+    {
+      "id": 13,
+      "name": "The Witcher 3: Wild Hunt",
+      "genre": "Action RPG",
+      "platform": "PC, PlayStation, Xbox",
+      "price": 29.99,
+      "rating": 4.9,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/c0i88t0Kacs",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/292030/header.jpg"
+      ],
+      "description": "Play as Geralt of Rivia and hunt monsters, navigate politics, and fulfill your destiny."
+    },
+    {
+      "id": 14,
+      "name": "FIFA 24",
+      "genre": "Sports",
+      "platform": "PC, PlayStation, Xbox",
+      "price": 69.99,
+      "rating": 4.0,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/o3V-GvvzjE4",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/2195250/header.jpg"
+      ],
+      "description": "Experience the world’s game with realistic physics and dynamic gameplay."
+    },
+    {
+      "id": 15,
+      "name": "Grand Theft Auto V",
+      "genre": "Open World",
+      "platform": "PC, PlayStation, Xbox",
+      "price": 19.99,
+      "rating": 4.8,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/QkkoHAzjnUs",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg"
+      ],
+      "description": "An open-world masterpiece featuring three criminal protagonists in Los Santos."
+    },
+    {
+      "id": 16,
+      "name": "Minecraft",
+      "genre": "Sandbox",
+      "platform": "PC, PlayStation, Xbox, Switch",
+      "price": 26.95,
+      "rating": 4.9,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/MmB9b5njVbA",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/1672970/header.jpg"
+      ],
+      "description": "Build, explore, and survive in a blocky, procedurally generated 3D world."
+    },
+    {
+      "id": 17,
+      "name": "The Last of Us Part I",
+      "genre": "Action Adventure",
+      "platform": "PC, PlayStation",
+      "price": 59.99,
+      "rating": 4.7,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/W01L70IGBgE",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/1888930/header.jpg"
+      ],
+      "description": "Survive and endure in a post-apocalyptic world as Joel and Ellie."
+    },
+    {
+      "id": 18,
+      "name": "Sekiro: Shadows Die Twice",
+      "genre": "Action Adventure",
+      "platform": "PC, PlayStation, Xbox",
+      "price": 49.99,
+      "rating": 4.8,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/rXMX4YJ7Lks",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/814380/header.jpg"
+      ],
+      "description": "A brutal action adventure set in late 1500s Sengoku Japan — sharpen your blade and your skills."
+    },
+    {
+      "id": 19,
+      "name": "Diablo IV",
+      "genre": "Action RPG",
+      "platform": "PC, PlayStation, Xbox",
+      "price": 69.99,
+      "rating": 4.5,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/MpR0hC3fNFE",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/2344520/header.jpg"
+      ],
+      "description": "Descend into darkness and fight against the forces of evil in the next chapter of the iconic ARPG series."
+    },
+    {
+      "id": 20,
+      "name": "Dying Light 2 Stay Human",
+      "genre": "Action Survival",
+      "platform": "PC, PlayStation, Xbox",
+      "price": 49.99,
+      "rating": 4.3,
+      "inStock": true,
+      "trailer": "https://www.youtube.com/embed/2MD4gTitmzw",
+      "images": [
+        "https://cdn.cloudflare.steamstatic.com/steam/apps/534380/header.jpg"
+      ],
+      "description": "Parkour through a post-apocalyptic city and battle both the infected and hostile humans."
+    }
+  ]
+}

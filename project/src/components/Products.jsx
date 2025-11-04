@@ -1,0 +1,434 @@
+import React, { useState, useEffect } from 'react';
+import { StarIcon, ShoppingCartIcon, HeartIcon } from '@heroicons/react/24/solid';
+import { StarIcon as StarOutline, HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+
+const Products = () => {
+  const [games, setGames] = useState([]);
+  const [filteredGames, setFilteredGames] = useState([]);
+  const [selectedGenre, setSelectedGenre] = useState('All');
+  const [selectedPlatform, setSelectedPlatform] = useState('All');
+  const [sortBy, setSortBy] = useState('name');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [wishlist, setWishlist] = useState([]);
+  const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [gamesPerPage] = useState(6); // You can change this number
+
+  // Fetch data from db.json
+  useEffect(() => {
+    const fetchGames = async () => {
+      try {
+        const response = await fetch('/db.json');
+        if (!response.ok) {
+          throw new Error('Failed to fetch games data');
+        }
+        const data = await response.json();
+        setGames(data.games);
+        setFilteredGames(data.games);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchGames();
+  }, []);
+
+  // Filter and sort games
+  useEffect(() => {
+    let result = [...games];
+
+    // Filter by search term
+    if (searchTerm) {
+      result = result.filter(game =>
+        game.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        game.genre.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Filter by genre
+    if (selectedGenre !== 'All') {
+      result = result.filter(game => game.genre === selectedGenre);
+    }
+
+    // Filter by platform
+    if (selectedPlatform !== 'All') {
+      result = result.filter(game => game.platform.includes(selectedPlatform));
+    }
+
+    // Sort games
+    switch (sortBy) {
+      case 'price-low':
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-high':
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case 'rating':
+        result.sort((a, b) => b.rating - a.rating);
+        break;
+      case 'name':
+      default:
+        result.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+    }
+
+    setFilteredGames(result);
+    setCurrentPage(1); // Reset to first page when filters change
+  }, [games, searchTerm, selectedGenre, selectedPlatform, sortBy]);
+
+  // Get current games for pagination
+  const indexOfLastGame = currentPage * gamesPerPage;
+  const indexOfFirstGame = indexOfLastGame - gamesPerPage;
+  const currentGames = filteredGames.slice(indexOfFirstGame, indexOfLastGame);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredGames.length / gamesPerPage);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Next page
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Previous page
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Get unique genres and platforms
+  const genres = ['All', ...new Set(games.map(game => game.genre))];
+  const platforms = ['All', ...new Set(games.flatMap(game => game.platform.split(', ')))];
+
+  // Wishlist functions
+  const toggleWishlist = (gameId) => {
+    setWishlist(prev =>
+      prev.includes(gameId)
+        ? prev.filter(id => id !== gameId)
+        : [...prev, gameId]
+    );
+  };
+
+  // Cart functions
+  const addToCart = (game) => {
+    if (game.inStock) {
+      setCart(prev => {
+        const existingItem = prev.find(item => item.id === game.id);
+        if (existingItem) {
+          return prev.map(item =>
+            item.id === game.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          );
+        }
+        return [...prev, { ...game, quantity: 1 }];
+      });
+      alert(`${game.name} added to cart!`);
+    } else {
+      alert('Sorry, this game is out of stock!');
+    }
+  };
+
+  // Render stars for rating
+  const renderStars = (rating) => {
+    return Array.from({ length: 5 }, (_, index) => (
+      index < Math.floor(rating) ? (
+        <StarIcon key={index} className="h-4 w-4 text-yellow-400" />
+      ) : (
+        <StarOutline key={index} className="h-4 w-4 text-yellow-400" />
+      )
+    ));
+  };
+
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxVisiblePages = 5;
+    
+    if (totalPages <= maxVisiblePages) {
+      // Show all pages if total pages are less than max visible
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      // Show limited pages with ellipsis
+      if (currentPage <= 3) {
+        // Near the start
+        for (let i = 1; i <= 4; i++) {
+          pageNumbers.push(i);
+        }
+        pageNumbers.push('...');
+        pageNumbers.push(totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        // Near the end
+        pageNumbers.push(1);
+        pageNumbers.push('...');
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pageNumbers.push(i);
+        }
+      } else {
+        // In the middle
+        pageNumbers.push(1);
+        pageNumbers.push('...');
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pageNumbers.push(i);
+        }
+        pageNumbers.push('...');
+        pageNumbers.push(totalPages);
+      }
+    }
+    
+    return pageNumbers;
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading games...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center text-red-600">
+          <p>Error: {error}</p>
+          <p className="mt-2 text-sm text-gray-600">Make sure db.json is in the public folder</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-100 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Our Games Collection</h1>
+          <p className="text-lg text-gray-600">Discover the latest and greatest games</p>
+        </div>
+
+        {/* Results Count */}
+        <div className="flex justify-between items-center mb-6">
+          <p className="text-gray-600">
+            Showing {indexOfFirstGame + 1}-{Math.min(indexOfLastGame, filteredGames.length)} of {filteredGames.length} games
+          </p>
+          <div className="text-sm text-gray-500">
+            Page {currentPage} of {totalPages}
+          </div>
+        </div>
+
+        {/* Filters and Search */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {/* Search */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
+              <input
+                type="text"
+                placeholder="Search games..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+            </div>
+
+            {/* Genre Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Genre</label>
+              <select
+                value={selectedGenre}
+                onChange={(e) => setSelectedGenre(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              >
+                {genres.map(genre => (
+                  <option key={genre} value={genre}>{genre}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Platform Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Platform</label>
+              <select
+                value={selectedPlatform}
+                onChange={(e) => setSelectedPlatform(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              >
+                {platforms.map(platform => (
+                  <option key={platform} value={platform}>{platform}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Sort */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              >
+                <option value="name">Name</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Rating</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Games Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {currentGames.map(game => (
+            <div key={game.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+              {/* Game Image */}
+              <div className="relative">
+                <img
+                  src={game.images[0]}
+                  alt={game.name}
+                  className="w-full h-48 object-cover"
+                />
+                {/* Wishlist Button */}
+                <button
+                  onClick={() => toggleWishlist(game.id)}
+                  className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition duration-300"
+                >
+                  {wishlist.includes(game.id) ? (
+                    <HeartIcon className="h-5 w-5 text-red-500" />
+                  ) : (
+                    <HeartOutline className="h-5 w-5 text-gray-600" />
+                  )}
+                </button>
+                {/* Out of Stock Badge */}
+                {!game.inStock && (
+                  <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                    Out of Stock
+                  </div>
+                )}
+              </div>
+
+              {/* Game Info */}
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{game.name}</h3>
+                <p className="text-sm text-gray-600 mb-2">{game.genre}</p>
+                <p className="text-xs text-gray-500 mb-3">{game.platform}</p>
+                
+                {/* Rating */}
+                <div className="flex items-center mb-3">
+                  <div className="flex">
+                    {renderStars(game.rating)}
+                  </div>
+                  <span className="ml-2 text-sm text-gray-600">{game.rating}</span>
+                </div>
+
+                {/* Price and Add to Cart */}
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-2xl font-bold text-gray-900">${game.price}</span>
+                  </div>
+                  <button
+                    onClick={() => addToCart(game)}
+                    disabled={!game.inStock}
+                    className={`flex items-center space-x-1 px-4 py-2 rounded-lg transition duration-300 ${
+                      game.inStock
+                        ? 'bg-purple-600 hover:bg-purple-700 text-white'
+                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    }`}
+                  >
+                    <ShoppingCartIcon className="h-4 w-4" />
+                    <span>{game.inStock ? 'Add to Cart' : 'Out of Stock'}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* No Results */}
+        {filteredGames.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-xl text-gray-600">No games found matching your criteria.</p>
+            <button
+              onClick={() => {
+                setSearchTerm('');
+                setSelectedGenre('All');
+                setSelectedPlatform('All');
+              }}
+              className="mt-4 px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition duration-300"
+            >
+              Clear Filters
+            </button>
+          </div>
+        )}
+
+        {/* Pagination */}
+        {filteredGames.length > 0 && (
+          <div className="flex justify-center items-center space-x-2 mt-8">
+            {/* Previous Button */}
+            <button
+              onClick={prevPage}
+              disabled={currentPage === 1}
+              className={`p-2 rounded-lg ${
+                currentPage === 1
+                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
+              }`}
+            >
+              <ChevronLeftIcon className="h-5 w-5" />
+            </button>
+
+            {/* Page Numbers */}
+            {getPageNumbers().map((number, index) => (
+              <button
+                key={index}
+                onClick={() => typeof number === 'number' && paginate(number)}
+                className={`px-4 py-2 rounded-lg ${
+                  number === currentPage
+                    ? 'bg-purple-600 text-white'
+                    : number === '...'
+                    ? 'bg-white text-gray-500 cursor-default'
+                    : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
+                }`}
+                disabled={number === '...'}
+              >
+                {number}
+              </button>
+            ))}
+
+            {/* Next Button */}
+            <button
+              onClick={nextPage}
+              disabled={currentPage === totalPages}
+              className={`p-2 rounded-lg ${
+                currentPage === totalPages
+                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
+              }`}
+            >
+              <ChevronRightIcon className="h-5 w-5" />
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Products;
