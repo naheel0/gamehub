@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { StarIcon, ShoppingCartIcon, HeartIcon } from '@heroicons/react/24/solid';
 import { StarIcon as StarOutline, HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
@@ -298,35 +299,46 @@ const Products = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {currentGames.map(game => (
             <div key={game.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
-              {/* Game Image */}
-              <div className="relative">
-                <img
-                  src={game.images[0]}
-                  alt={game.name}
-                  className="w-full h-48 object-cover"
-                />
-                {/* Wishlist Button */}
-                <button
-                  onClick={() => toggleWishlist(game.id)}
-                  className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition duration-300"
-                >
-                  {wishlist.includes(game.id) ? (
-                    <HeartIcon className="h-5 w-5 text-red-500" />
-                  ) : (
-                    <HeartOutline className="h-5 w-5 text-gray-600" />
+              {/* Game Image with Link */}
+              <Link to={`/product/${game.id}`}>
+                <div className="relative">
+                  <img
+                    src={game.images[0]}
+                    alt={game.name}
+                    className="w-full h-48 object-cover cursor-pointer"
+                  />
+                  {/* Wishlist Button */}
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      toggleWishlist(game.id);
+                    }}
+                    className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition duration-300"
+                  >
+                    {wishlist.includes(game.id) ? (
+                      <HeartIcon className="h-5 w-5 text-red-500" />
+                    ) : (
+                      <HeartOutline className="h-5 w-5 text-gray-600" />
+                    )}
+                  </button>
+                  {/* Out of Stock Badge */}
+                  {!game.inStock && (
+                    <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                      Out of Stock
+                    </div>
                   )}
-                </button>
-                {/* Out of Stock Badge */}
-                {!game.inStock && (
-                  <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold">
-                    Out of Stock
-                  </div>
-                )}
-              </div>
+                </div>
+              </Link>
 
               {/* Game Info */}
               <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{game.name}</h3>
+                {/* Game Title with Link */}
+                <Link to={`/product/${game.id}`}>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-purple-600 cursor-pointer transition duration-300">
+                    {game.name}
+                  </h3>
+                </Link>
                 <p className="text-sm text-gray-600 mb-2">{game.genre}</p>
                 <p className="text-xs text-gray-500 mb-3">{game.platform}</p>
                 
