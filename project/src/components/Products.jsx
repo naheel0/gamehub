@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { StarIcon, ShoppingCartIcon, HeartIcon } from '@heroicons/react/24/solid';
 import { StarIcon as StarOutline, HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { useCart } from '../contexts/CartContext';
 
 const Products = () => {
   const [games, setGames] = useState([]);
@@ -12,15 +13,17 @@ const Products = () => {
   const [sortBy, setSortBy] = useState('name');
   const [searchTerm, setSearchTerm] = useState('');
   const [wishlist, setWishlist] = useState([]);
-  const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
+  // Get cart functions from context
+  const { addToCart } = useCart();
+  
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [gamesPerPage] = useState(6); // You can change this number
+  const [gamesPerPage] = useState(6);
 
-  // Fetch data from db.json
+  // Fetch data from db.json and load from localStorage
   useEffect(() => {
     const fetchGames = async () => {
       try {
@@ -31,6 +34,14 @@ const Products = () => {
         const data = await response.json();
         setGames(data.games);
         setFilteredGames(data.games);
+        
+        // Load wishlist from localStorage
+        const savedWishlist = localStorage.getItem('gameStoreWishlist');
+        
+        if (savedWishlist) {
+          setWishlist(JSON.parse(savedWishlist));
+        }
+        
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -40,6 +51,11 @@ const Products = () => {
 
     fetchGames();
   }, []);
+
+  // Save wishlist to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('gameStoreWishlist', JSON.stringify(wishlist));
+  }, [wishlist]);
 
   // Filter and sort games
   useEffect(() => {
@@ -114,32 +130,40 @@ const Products = () => {
   const platforms = ['All', ...new Set(games.flatMap(game => game.platform.split(', ')))];
 
   // Wishlist functions
-  const toggleWishlist = (gameId) => {
-    setWishlist(prev =>
-      prev.includes(gameId)
-        ? prev.filter(id => id !== gameId)
-        : [...prev, gameId]
-    );
+  const toggleWishlist = (game) => {
+    setWishlist(prev => {
+      const isInWishlist = prev.some(item => item.id === game.id);
+      let newWishlist;
+      
+      if (isInWishlist) {
+        // Remove from wishlist
+        newWishlist = prev.filter(item => item.id !== game.id);
+        console.log('Removed from wishlist:', game.name);
+      } else {
+        // Add to wishlist - ensure we have all required properties
+        const wishlistGame = {
+          id: game.id,
+          name: game.name,
+          genre: game.genre,
+          platform: game.platform,
+          price: game.price,
+          rating: game.rating,
+          inStock: game.inStock,
+          images: game.images,
+          description: game.description,
+          trailer: game.trailer
+        };
+        newWishlist = [...prev, wishlistGame];
+        console.log('Added to wishlist:', game.name);
+      }
+      
+      return newWishlist;
+    });
   };
 
-  // Cart functions
-  const addToCart = (game) => {
-    if (game.inStock) {
-      setCart(prev => {
-        const existingItem = prev.find(item => item.id === game.id);
-        if (existingItem) {
-          return prev.map(item =>
-            item.id === game.id
-              ? { ...item, quantity: item.quantity + 1 }
-              : item
-          );
-        }
-        return [...prev, { ...game, quantity: 1 }];
-      });
-      alert(`${game.name} added to cart!`);
-    } else {
-      alert('Sorry, this game is out of stock!');
-    }
+  // Check if game is in wishlist
+  const isInWishlist = (gameId) => {
+    return wishlist.some(item => item.id === gameId);
   };
 
   // Render stars for rating
@@ -226,14 +250,22 @@ const Products = () => {
         </div>
 
         {/* Results Count */}
-        <div className="flex justify-between items-center mb-6">
+        {/* <div className="flex justify-between items-center mb-6">
           <p className="text-gray-600">
             Showing {indexOfFirstGame + 1}-{Math.min(indexOfLastGame, filteredGames.length)} of {filteredGames.length} games
           </p>
-          <div className="text-sm text-gray-500">
-            Page {currentPage} of {totalPages}
+          <div className="flex items-center space-x-4 text-sm text-gray-500">
+            <span>Page {currentPage} of {totalPages}</span>
+            <span className="flex items-center">
+              <HeartIcon className="h-4 w-4 text-red-500 mr-1" />
+              {wishlist.length} in wishlist
+            </span>
+            <span className="flex items-center">
+              <ShoppingCartIcon className="h-4 w-4 text-purple-500 mr-1" />
+              {getCartItemCount()} in cart
+            </span>
           </div>
-        </div>
+        </div> */}
 
         {/* Filters and Search */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
@@ -312,11 +344,12 @@ const Products = () => {
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      toggleWishlist(game.id);
+                      toggleWishlist(game);
                     }}
                     className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition duration-300"
+                    title={isInWishlist(game.id) ? "Remove from wishlist" : "Add to wishlist"}
                   >
-                    {wishlist.includes(game.id) ? (
+                    {isInWishlist(game.id) ? (
                       <HeartIcon className="h-5 w-5 text-red-500" />
                     ) : (
                       <HeartOutline className="h-5 w-5 text-gray-600" />

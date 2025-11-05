@@ -1,33 +1,74 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCartIcon, HeartIcon, UserIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [cartItems, setCartItems] = useState(2);
-  const [wishlistItems, setWishlistItems] = useState(3);
+  const [cartItems, setCartItems] = useState([]);
+  const [wishlistItems, setWishlistItems] = useState([]);
 
   const navigate = useNavigate();
 
+  // Load cart and wishlist from localStorage
+  useEffect(() => {
+    const savedCart = localStorage.getItem('gameStoreCart');
+    const savedWishlist = localStorage.getItem('gameStoreWishlist');
+    const savedLogin = localStorage.getItem('gameStoreLoggedIn');
+    
+    if (savedCart) {
+      setCartItems(JSON.parse(savedCart));
+    }
+    if (savedWishlist) {
+      setWishlistItems(JSON.parse(savedWishlist));
+    }
+    if (savedLogin) {
+      setIsLoggedIn(JSON.parse(savedLogin));
+    }
+  }, []);
+
+  // Calculate total items in cart
+  const getCartItemCount = () => {
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
+  };
+
   const toggleLogin = () => {
-    setIsLoggedIn(!isLoggedIn);
-    if (isLoggedIn) {
-      alert('Successfully logged out!');
-    } else {
+    const newLoginState = !isLoggedIn;
+    setIsLoggedIn(newLoginState);
+    localStorage.setItem('gameStoreLoggedIn', JSON.stringify(newLoginState));
+    
+    if (newLoginState) {
       alert('Successfully logged in!');
+    } else {
+      alert('Successfully logged out!');
     }
   };
 
   const handleCartClick = () => {
-    console.log('Cart clicked');
-    alert(`You have ${cartItems} items in your cart!`);
+    navigate('/cart');
   };
 
   const handleWishlistClick = () => {
-    console.log('Wishlist clicked');
-    alert(`You have ${wishlistItems} items in your wishlist!`);
+    navigate('/wishlist');
   };
+
+  // Listen for storage changes to update cart and wishlist counts
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const savedCart = localStorage.getItem('gameStoreCart');
+      const savedWishlist = localStorage.getItem('gameStoreWishlist');
+      
+      if (savedCart) {
+        setCartItems(JSON.parse(savedCart));
+      }
+      if (savedWishlist) {
+        setWishlistItems(JSON.parse(savedWishlist));
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   return (
     <nav className="bg-gray-900 text-white shadow-lg sticky top-0 z-50">
@@ -77,23 +118,39 @@ const Navbar = () => {
             {/* Wishlist */}
             <button 
               onClick={handleWishlistClick}
-              className="p-2 rounded-md hover:bg-gray-800 transition duration-300 relative"
+              className="p-2 rounded-md hover:bg-gray-800 transition duration-300 relative group"
             >
               <HeartIcon className="h-6 w-6" />
-              <span className="absolute -top-1 -right-1 bg-red-500 text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                {wishlistItems}
-              </span>
+              {wishlistItems.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {wishlistItems.length}
+                </span>
+              )}
+              <div className="absolute top-full right-0 mt-2 w-48 bg-white text-gray-900 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                <div className="p-3 text-sm">
+                  <p className="font-semibold">{wishlistItems.length} items in wishlist</p>
+                  <p className="text-gray-600">Click to view</p>
+                </div>
+              </div>
             </button>
 
             {/* Cart */}
             <button 
               onClick={handleCartClick}
-              className="p-2 rounded-md hover:bg-gray-800 transition duration-300 relative"
+              className="p-2 rounded-md hover:bg-gray-800 transition duration-300 relative group"
             >
               <ShoppingCartIcon className="h-6 w-6" />
-              <span className="absolute -top-1 -right-1 bg-purple-500 text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                {cartItems}
-              </span>
+              {getCartItemCount() > 0 && (
+                <span className="absolute -top-1 -right-1 bg-purple-500 text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {getCartItemCount()}
+                </span>
+              )}
+              <div className="absolute top-full right-0 mt-2 w-48 bg-white text-gray-900 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                <div className="p-3 text-sm">
+                  <p className="font-semibold">{getCartItemCount()} items in cart</p>
+                  <p className="text-gray-600">Total: ${cartItems.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2)}</p>
+                </div>
+              </div>
             </button>
 
             {/* Login/Logout */}
@@ -108,24 +165,30 @@ const Navbar = () => {
 
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-2">
+            {/* Wishlist */}
             <button 
               onClick={handleWishlistClick}
               className="p-2 rounded-md hover:bg-gray-800 transition duration-300 relative"
             >
               <HeartIcon className="h-6 w-6" />
-              <span className="absolute -top-1 -right-1 bg-red-500 text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                {wishlistItems}
-              </span>
+              {wishlistItems.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                  {wishlistItems.length}
+                </span>
+              )}
             </button>
             
+            {/* Cart */}
             <button 
               onClick={handleCartClick}
               className="p-2 rounded-md hover:bg-gray-800 transition duration-300 relative"
             >
               <ShoppingCartIcon className="h-6 w-6" />
-              <span className="absolute -top-1 -right-1 bg-purple-500 text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                {cartItems}
-              </span>
+              {getCartItemCount() > 0 && (
+                <span className="absolute -top-1 -right-1 bg-purple-500 text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                  {getCartItemCount()}
+                </span>
+              )}
             </button>
 
             <button
@@ -161,6 +224,13 @@ const Navbar = () => {
               Products
             </Link>
             <Link
+              to="/wishlist"
+              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-purple-300 transition duration-300"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Wishlist ({wishlistItems.length})
+            </Link>
+            <Link
               to="/about"
               className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 hover:text-purple-300 transition duration-300"
               onClick={() => setIsMenuOpen(false)}
@@ -174,13 +244,20 @@ const Navbar = () => {
             >
               Contact
             </Link>
+            
+            {/* Cart Summary in Mobile Menu */}
+            <div className="px-3 py-2 text-sm text-gray-300 border-t border-gray-700 mt-2 pt-2">
+              <p>Cart: {getCartItemCount()} items</p>
+              <p>Wishlist: {wishlistItems.length} items</p>
+            </div>
+
             {/* Mobile Login/Logout */}
             <button
               onClick={() => {
                 toggleLogin();
                 setIsMenuOpen(false);
               }}
-              className="flex items-center space-x-2 w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 transition duration-300"
+              className="flex items-center space-x-2 w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700 transition duration-300 mt-2"
             >
               <UserIcon className="h-5 w-5" />
               <span>{isLoggedIn ? 'Logout' : 'Login'}</span>

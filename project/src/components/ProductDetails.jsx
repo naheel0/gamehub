@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { StarIcon, ShoppingCartIcon, HeartIcon, ArrowLeftIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import { StarIcon as StarOutline, HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
+import { useCart } from '../contexts/CartContext';
+import { GiFastBackwardButton } from 'react-icons/gi';
+import { MdArrowForwardIos,MdArrowBackIosNew } from "react-icons/md";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -13,6 +16,9 @@ const ProductDetails = () => {
   const [showVideo, setShowVideo] = useState(false);
   const [wishlist, setWishlist] = useState([]);
   const [quantity, setQuantity] = useState(1);
+  
+  // Get cart functions from context
+  const { addToCart } = useCart();
   
   // Full screen image viewer state
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -42,6 +48,19 @@ const ProductDetails = () => {
 
     fetchGame();
   }, [id]);
+
+  // Load wishlist from localStorage
+  useEffect(() => {
+    const savedWishlist = localStorage.getItem('gameStoreWishlist');
+    if (savedWishlist) {
+      setWishlist(JSON.parse(savedWishlist));
+    }
+  }, []);
+
+  // Save wishlist to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem('gameStoreWishlist', JSON.stringify(wishlist));
+  }, [wishlist]);
 
   // Full screen image functions
   const openFullScreen = (index) => {
@@ -84,28 +103,44 @@ const ProductDetails = () => {
   }, [isFullScreen]);
 
   const toggleWishlist = () => {
-    setWishlist(prev =>
-      prev.includes(game.id)
-        ? prev.filter(gameId => gameId !== game.id)
-        : [...prev, game.id]
-    );
-  };
-
-  const addToCart = () => {
-    if (game.inStock) {
-      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-      const existingItem = cart.find(item => item.id === game.id);
+    if (!game) return;
+    
+    setWishlist(prev => {
+      const isInWishlist = prev.some(item => item.id === game.id);
+      let newWishlist;
       
-      if (existingItem) {
-        existingItem.quantity += quantity;
+      if (isInWishlist) {
+        newWishlist = prev.filter(item => item.id !== game.id);
       } else {
-        cart.push({
-          ...game,
-          quantity: quantity
-        });
+        const wishlistGame = {
+          id: game.id,
+          name: game.name,
+          genre: game.genre,
+          platform: game.platform,
+          price: game.price,
+          rating: game.rating,
+          inStock: game.inStock,
+          images: game.images,
+          description: game.description,
+          trailer: game.trailer
+        };
+        newWishlist = [...prev, wishlistGame];
       }
       
-      localStorage.setItem('cart', JSON.stringify(cart));
+      return newWishlist;
+    });
+  };
+
+  const isInWishlist = () => {
+    return wishlist.some(item => item.id === game?.id);
+  };
+
+  const handleAddToCart = () => {
+    if (game && game.inStock) {
+      // Add the game multiple times based on quantity
+      for (let i = 0; i < quantity; i++) {
+        addToCart(game);
+      }
       alert(`${quantity} ${game.name} added to cart!`);
     } else {
       alert('Sorry, this game is out of stock!');
@@ -113,7 +148,7 @@ const ProductDetails = () => {
   };
 
   const buyNow = () => {
-    addToCart();
+    handleAddToCart();
     navigate('/cart');
   };
 
@@ -163,8 +198,8 @@ const ProductDetails = () => {
             onClick={() => navigate(-1)}
             className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-6"
           >
-            <ArrowLeftIcon className="h-5 w-5" />
-            <span>Back to Products</span>
+            <GiFastBackwardButton className="h-10 w-10" />
+            {/* <span>Back to Products</span> */}
           </button>
 
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -250,7 +285,7 @@ const ProductDetails = () => {
                       )}
                       className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition duration-300"
                     >
-                      Previous
+                       <MdArrowBackIosNew/>
                     </button>
                     <span className="px-4 py-2 text-gray-600">
                       {selectedImageIndex + 1} / {game.images.length}
@@ -261,7 +296,7 @@ const ProductDetails = () => {
                       )}
                       className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition duration-300"
                     >
-                      Next
+                       <MdArrowForwardIos/>
                     </button>
                   </div>
                 )}
@@ -336,7 +371,7 @@ const ProductDetails = () => {
                 {/* Action Buttons */}
                 <div className="flex space-x-4">
                   <button
-                    onClick={addToCart}
+                    onClick={handleAddToCart}
                     disabled={!game.inStock}
                     className={`flex-1 flex items-center justify-center space-x-2 py-3 px-6 rounded-lg transition duration-300 ${
                       game.inStock
@@ -363,12 +398,12 @@ const ProductDetails = () => {
                   <button
                     onClick={toggleWishlist}
                     className={`p-3 rounded-lg border transition duration-300 ${
-                      wishlist.includes(game.id)
+                      isInWishlist()
                         ? 'bg-red-50 border-red-200 text-red-600'
                         : 'bg-white border-gray-300 text-gray-600 hover:bg-gray-50'
                     }`}
                   >
-                    {wishlist.includes(game.id) ? (
+                    {isInWishlist() ? (
                       <HeartIcon className="h-5 w-5" />
                     ) : (
                       <HeartOutline className="h-5 w-5" />
