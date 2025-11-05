@@ -164,10 +164,10 @@ const ProductDetails = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading game details...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto"></div>
+          <p className="mt-4 text-gray-300">Loading game details...</p>
         </div>
       </div>
     );
@@ -175,12 +175,12 @@ const ProductDetails = () => {
 
   if (error || !game) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <p className="text-xl text-red-600 mb-4">Game not found</p>
+          <p className="text-xl text-red-500 mb-4">Game not found</p>
           <Link
             to="/products"
-            className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition duration-300"
+            className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300 border border-red-600"
           >
             Back to Products
           </Link>
@@ -191,23 +191,23 @@ const ProductDetails = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-100 py-8">
+      <div className="min-h-screen bg-black py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back Button */}
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-6"
+            className="flex items-center space-x-2 text-gray-300 hover:text-white mb-6"
           >
             <GiFastBackwardButton className="h-10 w-10" />
             {/* <span>Back to Products</span> */}
           </button>
 
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div className="bg-gray-900 rounded-lg shadow-lg overflow-hidden border border-gray-800">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
               {/* Left Column - Images & Video */}
               <div className="space-y-6">
                 {/* Main Image/Video Display */}
-                <div className="bg-gray-900 rounded-lg overflow-hidden">
+                <div className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700">
                   {showVideo ? (
                     <div className="relative pt-[56.25%]">
                       <iframe
@@ -240,10 +240,10 @@ const ProductDetails = () => {
                       setSelectedImageIndex(0);
                     }}
                     className={`relative rounded-lg overflow-hidden border-2 ${
-                      showVideo ? 'border-purple-600' : 'border-gray-300'
+                      showVideo ? 'border-red-600' : 'border-gray-600'
                     }`}
                   >
-                    <div className="aspect-square bg-gray-800 flex items-center justify-center">
+                    <div className="aspect-square bg-gray-700 flex items-center justify-center">
                       <div className="text-white text-center">
                         <div className="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-1">
                           <span className="text-white text-xs">▶</span>
@@ -263,8 +263,8 @@ const ProductDetails = () => {
                       }}
                       className={`rounded-lg overflow-hidden border-2 cursor-pointer ${
                         !showVideo && selectedImageIndex === index 
-                          ? 'border-purple-600' 
-                          : 'border-gray-300'
+                          ? 'border-red-600' 
+                          : 'border-gray-600'
                       }`}
                     >
                       <img
@@ -283,18 +283,18 @@ const ProductDetails = () => {
                       onClick={() => setSelectedImageIndex(prev => 
                         prev > 0 ? prev - 1 : game.images.length - 1
                       )}
-                      className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition duration-300"
+                      className="px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition duration-300 border border-gray-600 text-white"
                     >
                        <MdArrowBackIosNew/>
                     </button>
-                    <span className="px-4 py-2 text-gray-600">
+                    <span className="px-4 py-2 text-gray-300">
                       {selectedImageIndex + 1} / {game.images.length}
                     </span>
                     <button
                       onClick={() => setSelectedImageIndex(prev => 
                         prev < game.images.length - 1 ? prev + 1 : 0
                       )}
-                      className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition duration-300"
+                      className="px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition duration-300 border border-gray-600 text-white"
                     >
                        <MdArrowForwardIos/>
                     </button>
@@ -306,18 +306,18 @@ const ProductDetails = () => {
               <div className="space-y-6">
                 {/* Title and Rating */}
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-2">{game.name}</h1>
+                  <h1 className="text-3xl font-bold text-white mb-2">{game.name}</h1>
                   <div className="flex items-center space-x-4 mb-4">
                     <div className="flex items-center space-x-1">
                       {renderStars(game.rating)}
-                      <span className="ml-2 text-lg font-semibold text-gray-700">
+                      <span className="ml-2 text-lg font-semibold text-gray-300">
                         {game.rating}/5.0
                       </span>
                     </div>
                     <span className={`px-2 py-1 rounded text-xs font-semibold ${
                       game.inStock 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-red-100 text-red-800'
+                        ? 'bg-green-900 text-green-300' 
+                        : 'bg-red-900 text-red-300'
                     }`}>
                       {game.inStock ? 'In Stock' : 'Out of Stock'}
                     </span>
@@ -326,42 +326,42 @@ const ProductDetails = () => {
 
                 {/* Price */}
                 <div className="flex items-baseline space-x-2">
-                  <span className="text-4xl font-bold text-gray-900">${game.price}</span>
+                  <span className="text-4xl font-bold text-white">${game.price}</span>
                   {game.originalPrice && (
-                    <span className="text-xl text-gray-500 line-through">${game.originalPrice}</span>
+                    <span className="text-xl text-gray-400 line-through">${game.originalPrice}</span>
                   )}
                 </div>
 
                 {/* Game Details */}
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="font-semibold text-gray-700">Genre:</span>
-                    <p className="text-gray-600">{game.genre}</p>
+                    <span className="font-semibold text-gray-300">Genre:</span>
+                    <p className="text-gray-400">{game.genre}</p>
                   </div>
                   <div>
-                    <span className="font-semibold text-gray-700">Platform:</span>
-                    <p className="text-gray-600">{game.platform}</p>
+                    <span className="font-semibold text-gray-300">Platform:</span>
+                    <p className="text-gray-400">{game.platform}</p>
                   </div>
                   <div className="col-span-2">
-                    <span className="font-semibold text-gray-700">Description:</span>
-                    <p className="text-gray-600 mt-1">{game.description}</p>
+                    <span className="font-semibold text-gray-300">Description:</span>
+                    <p className="text-gray-400 mt-1">{game.description}</p>
                   </div>
                 </div>
 
                 {/* Quantity Selector */}
                 <div className="flex items-center space-x-4">
-                  <span className="font-semibold text-gray-700">Quantity:</span>
+                  <span className="font-semibold text-gray-300">Quantity:</span>
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300"
+                      className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 border border-gray-600 text-white"
                     >
                       -
                     </button>
-                    <span className="w-12 text-center font-semibold">{quantity}</span>
+                    <span className="w-12 text-center font-semibold text-white">{quantity}</span>
                     <button
                       onClick={() => setQuantity(quantity + 1)}
-                      className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300"
+                      className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 border border-gray-600 text-white"
                     >
                       +
                     </button>
@@ -373,10 +373,10 @@ const ProductDetails = () => {
                   <button
                     onClick={handleAddToCart}
                     disabled={!game.inStock}
-                    className={`flex-1 flex items-center justify-center space-x-2 py-3 px-6 rounded-lg transition duration-300 ${
+                    className={`flex-1 flex items-center justify-center space-x-2 py-3 px-6 rounded-lg transition duration-300 border ${
                       game.inStock
-                        ? 'bg-purple-600 hover:bg-purple-700 text-white'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        ? 'bg-red-600 hover:bg-red-700 text-white border-red-600'
+                        : 'bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600'
                     }`}
                   >
                     <ShoppingCartIcon className="h-5 w-5" />
@@ -386,10 +386,10 @@ const ProductDetails = () => {
                   <button
                     onClick={buyNow}
                     disabled={!game.inStock}
-                    className={`flex-1 py-3 px-6 rounded-lg transition duration-300 ${
+                    className={`flex-1 py-3 px-6 rounded-lg transition duration-300 border ${
                       game.inStock
-                        ? 'bg-green-600 hover:bg-green-700 text-white'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        ? 'bg-green-600 hover:bg-green-700 text-white border-green-600'
+                        : 'bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600'
                     }`}
                   >
                     Buy Now
@@ -399,8 +399,8 @@ const ProductDetails = () => {
                     onClick={toggleWishlist}
                     className={`p-3 rounded-lg border transition duration-300 ${
                       isInWishlist()
-                        ? 'bg-red-50 border-red-200 text-red-600'
-                        : 'bg-white border-gray-300 text-gray-600 hover:bg-gray-50'
+                        ? 'bg-red-900 border-red-700 text-red-400'
+                        : 'bg-gray-800 border-gray-600 text-gray-400 hover:bg-gray-700'
                     }`}
                   >
                     {isInWishlist() ? (
@@ -412,9 +412,9 @@ const ProductDetails = () => {
                 </div>
 
                 {/* Features */}
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-900 mb-2">Features</h3>
-                  <ul className="text-sm text-gray-600 space-y-1">
+                <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                  <h3 className="font-semibold text-white mb-2">Features</h3>
+                  <ul className="text-sm text-gray-300 space-y-1">
                     <li>✅ Instant digital delivery</li>
                     <li>✅ Free updates and patches</li>
                     <li>✅ 24/7 customer support</li>
@@ -427,11 +427,11 @@ const ProductDetails = () => {
 
           {/* Related Games Section */}
           <div className="mt-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">You Might Also Like</h2>
+            <h2 className="text-2xl font-bold text-white mb-6">You Might Also Like</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {game.genre && (
                 <div className="text-center py-8">
-                  <p className="text-gray-600">More {game.genre} games coming soon!</p>
+                  <p className="text-gray-400">More {game.genre} games coming soon!</p>
                 </div>
               )}
             </div>
@@ -445,7 +445,7 @@ const ProductDetails = () => {
           {/* Close Button */}
           <button
             onClick={closeFullScreen}
-            className="absolute top-4 right-4 text-white hover:text-gray-300 z-10"
+            className="absolute top-4 right-4 text-white hover:text-red-500 z-10 bg-gray-800 rounded-full p-2 border border-gray-600"
           >
             <XMarkIcon className="h-8 w-8" />
           </button>
@@ -455,13 +455,13 @@ const ProductDetails = () => {
             <>
               <button
                 onClick={prevImage}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-10"
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-red-500 z-10 bg-gray-800 rounded-full p-2 border border-gray-600"
               >
                 <ChevronLeftIcon className="h-8 w-8" />
               </button>
               <button
                 onClick={nextImage}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-10"
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-red-500 z-10 bg-gray-800 rounded-full p-2 border border-gray-600"
               >
                 <ChevronRightIcon className="h-8 w-8" />
               </button>
@@ -490,7 +490,7 @@ const ProductDetails = () => {
                 onClick={() => setFullScreenImageIndex(index)}
                 className={`flex-shrink-0 w-16 h-16 rounded overflow-hidden border-2 ${
                   fullScreenImageIndex === index 
-                    ? 'border-white' 
+                    ? 'border-red-600' 
                     : 'border-gray-600'
                 }`}
               >

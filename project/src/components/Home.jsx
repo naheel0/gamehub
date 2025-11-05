@@ -72,10 +72,6 @@ const Home = () => {
     setCurrentGameIndex(index);
   };
 
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
-
   // FIXED VIDEO MODAL FUNCTION
   const openVideoModal = (trailerUrl) => {
     if (!trailerUrl) return;
@@ -139,16 +135,16 @@ const Home = () => {
     return Array.from({ length: 5 }, (_, index) => (
       <FaStar 
         key={index} 
-        className={`h-4 w-4 ${index < Math.floor(rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+        className={`h-4 w-4 ${index < Math.floor(rating) ? 'text-yellow-400 fill-current' : 'text-gray-400'}`}
       />
     ));
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-red-600 mx-auto"></div>
           <p className="mt-4 text-white text-lg">Loading amazing games...</p>
         </div>
       </div>
@@ -156,19 +152,19 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-black">
       {/* Hero Carousel Section */}
       <section className="relative h-screen overflow-hidden">
         {/* Background Image */}
         {featuredGames.length > 0 && (
           <div className="absolute inset-0">
             <img
-              src={featuredGames[currentGameIndex].images[0]}
+              src={featuredGames[currentGameIndex].trailer}
               alt={featuredGames[currentGameIndex].name}
-              className="w-full h-full object-cover transition-opacity duration-1000 ease-in-out"
+              className="w-full h-full object-cover transition-opacity duration-10000 ease-in-out"
             />
             {/* Dark Overlay */}
-            <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+            <div className="absolute inset-0 bg-black bg-opacity-70"></div>
             {/* Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
           </div>
@@ -182,7 +178,7 @@ const Home = () => {
                 <h1 className="text-5xl md:text-7xl font-bold mb-6 text-shadow-lg">
                   {featuredGames[currentGameIndex].name}
                 </h1>
-                <p className="text-xl md:text-2xl mb-8 text-gray-200 max-w-2xl mx-auto">
+                <p className="text-xl md:text-2xl mb-8 text-gray-300 max-w-2xl mx-auto">
                   {featuredGames[currentGameIndex].description}
                 </p>
                 <div className="flex items-center justify-center space-x-4 mb-8">
@@ -190,30 +186,30 @@ const Home = () => {
                     {renderStars(featuredGames[currentGameIndex].rating)}
                   </div>
                   <span className="text-lg">{featuredGames[currentGameIndex].rating}/5.0</span>
-                  <span className="text-lg font-semibold text-green-400">
+                  <span className="text-lg font-semibold text-red-500">
                     ${featuredGames[currentGameIndex].price}
                   </span>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link
                     to={`/product/${featuredGames[currentGameIndex].id}`}
-                    className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition duration-300 transform hover:scale-105"
+                    className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition duration-300 transform hover:scale-105"
                   >
                     Buy Now
                   </Link>
                   <button
                     onClick={() => openVideoModal(featuredGames[currentGameIndex].trailer)}
-                    className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-8 py-4 rounded-lg font-bold text-lg transition duration-300 backdrop-blur-sm flex items-center justify-center"
+                    className="bg-white bg-opacity-20 hover:bg-opacity-30 text-red-700 px-8 py-4 rounded-lg font-bold text-lg transition duration-300 backdrop-blur-sm flex items-center justify-center border border-gray-400"
                   >
                     <FaPlay className="inline mr-2" />
                     Watch Trailer
                   </button>
-                  <button
+                  {/* <button
                     onClick={togglePlayPause}
-                    className="bg-white bg-opacity-10 hover:bg-opacity-20 text-white px-4 py-4 rounded-lg font-bold text-lg transition duration-300 backdrop-blur-sm"
+                    className="bg-white bg-opacity-10 hover:bg-opacity-20 text-red-400 px-4 py-4 rounded-lg font-bold text-lg transition duration-300 backdrop-blur-sm border border-gray-400"
                   >
                     {isPlaying ? <FaPause className="h-5 w-5" /> : <FaPlay className="h-5 w-5" />}
-                  </button>
+                  </button> */}
                 </div>
               </>
             )}
@@ -226,13 +222,13 @@ const Home = () => {
             {/* Navigation Arrows */}
             <button
               onClick={prevGame}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-70 transition duration-300 z-20"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-70 text-white p-3 rounded-full hover:bg-red-600 transition duration-300 z-20 border border-gray-600"
             >
               <FaChevronLeft className="h-6 w-6" />
             </button>
             <button
               onClick={nextGame}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-70 transition duration-300 z-20"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-70 text-white p-3 rounded-full hover:bg-red-600 transition duration-300 z-20 border border-gray-600"
             >
               <FaChevronRight className="h-6 w-6" />
             </button>
@@ -244,7 +240,7 @@ const Home = () => {
                   key={index}
                   onClick={() => goToGame(index)}
                   className={`w-3 h-3 rounded-full transition duration-300 ${
-                    index === currentGameIndex ? 'bg-white' : 'bg-white bg-opacity-50'
+                    index === currentGameIndex ? 'bg-red-600' : 'bg-gray-400'
                   }`}
                 />
               ))}
@@ -265,11 +261,11 @@ const Home = () => {
           >
             <button
               onClick={closeVideoModal}
-              className="absolute -top-12 right-0 text-white hover:text-gray-300 z-10 bg-black bg-opacity-50 rounded-full p-2"
+              className="absolute -top-12 right-0 text-white hover:text-red-500 z-10 bg-black bg-opacity-70 rounded-full p-2 border border-gray-600"
             >
               <FaTimes className="h-6 w-6" />
             </button>
-            <div className="relative pt-[56.25%] bg-black rounded-lg overflow-hidden">
+            <div className="relative pt-[56.25%] bg-black rounded-lg overflow-hidden border border-gray-700">
               {currentVideo ? (
                 <iframe
                   src={currentVideo}
@@ -293,7 +289,7 @@ const Home = () => {
       )}
 
       {/* Features Section */}
-      <section className="bg-gray-800 py-16">
+      <section className="bg-gray-900 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-white mb-4">Why Choose GameHub?</h2>
@@ -301,8 +297,8 @@ const Home = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="text-center p-6 bg-gray-700 rounded-lg hover:bg-gray-600 transition duration-300">
-                <div className="text-purple-400 mb-4 flex justify-center">
+              <div key={index} className="text-center p-6 bg-gray-800 rounded-lg hover:bg-gray-700 transition duration-300 border border-gray-700">
+                <div className="text-red-500 mb-4 flex justify-center">
                   {feature.icon}
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-2">{feature.title}</h3>
@@ -314,7 +310,7 @@ const Home = () => {
       </section>
 
       {/* Featured Games Grid */}
-      <section className="py-16 bg-gray-900">
+      <section className="py-16 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-white mb-4">Featured Games</h2>
@@ -322,7 +318,7 @@ const Home = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredGames.map((game) => (
-              <div key={game.id} className="bg-gray-800 rounded-lg overflow-hidden hover:transform hover:scale-105 transition duration-300">
+              <div key={game.id} className="bg-gray-900 rounded-lg overflow-hidden hover:transform hover:scale-105 transition duration-300 border border-gray-800">
                 <Link to={`/product/${game.id}`}>
                   <div className="relative">
                     <img
@@ -330,7 +326,7 @@ const Home = () => {
                       alt={game.name}
                       className="w-full h-48 object-cover"
                     />
-                    <div className="absolute top-2 right-2 bg-purple-600 text-white px-2 py-1 rounded text-sm font-semibold">
+                    <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-sm font-semibold">
                       ${game.price}
                     </div>
                     {/* Play Button Overlay */}
@@ -342,7 +338,7 @@ const Home = () => {
                       }}
                       className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300"
                     >
-                      <div className="bg-white bg-opacity-20 rounded-full p-4 backdrop-blur-sm">
+                      <div className="bg-white bg-opacity-20 rounded-full p-4 backdrop-blur-sm border border-gray-400">
                         <FaPlay className="h-8 w-8 text-white" />
                       </div>
                     </button>
@@ -350,7 +346,7 @@ const Home = () => {
                 </Link>
                 <div className="p-6">
                   <Link to={`/product/${game.id}`}>
-                    <h3 className="text-xl font-semibold text-white mb-2 hover:text-purple-400 transition duration-300">
+                    <h3 className="text-xl font-semibold text-white mb-2 hover:text-red-500 transition duration-300">
                       {game.name}
                     </h3>
                   </Link>
@@ -365,11 +361,11 @@ const Home = () => {
                   <div className="flex space-x-2">
                     <Link
                       to={`/product/${game.id}`}
-                      className="flex-1 bg-purple-600 hover:bg-purple-700 text-white text-center py-2 px-4 rounded transition duration-300"
+                      className="flex-1 bg-red-600 hover:bg-red-700 text-white text-center py-2 px-4 rounded transition duration-300"
                     >
                       View Details
                     </Link>
-                    <button className="bg-gray-700 hover:bg-gray-600 text-white p-2 rounded transition duration-300">
+                    <button className="bg-gray-800 hover:bg-gray-700 text-white p-2 rounded transition duration-300 border border-gray-700">
                       <FaHeart className="h-5 w-5" />
                     </button>
                   </div>
@@ -380,7 +376,7 @@ const Home = () => {
           <div className="text-center mt-12">
             <Link
               to="/products"
-              className="bg-transparent border-2 border-purple-600 text-purple-400 hover:bg-purple-600 hover:text-white px-8 py-3 rounded-lg font-semibold transition duration-300"
+              className="bg-transparent border-2 border-red-600 text-red-400 hover:bg-red-600 hover:text-white px-8 py-3 rounded-lg font-semibold transition duration-300"
             >
               View All Games
             </Link>
@@ -389,7 +385,7 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-purple-600 to-blue-600 py-20">
+      <section className="bg-gradient-to-r from-red-600 to-red-800 py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <FaGamepad className="text-6xl text-white mx-auto mb-6" />
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -402,13 +398,13 @@ const Home = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/products"
-              className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-bold text-lg transition duration-300 transform hover:scale-105"
+              className="bg-white text-red-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-bold text-lg transition duration-300 transform hover:scale-105"
             >
               Browse All Games
             </Link>
             <Link
               to="/about"
-              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-purple-600 px-8 py-4 rounded-lg font-bold text-lg transition duration-300"
+              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-red-600 px-8 py-4 rounded-lg font-bold text-lg transition duration-300"
             >
               Learn More
             </Link>

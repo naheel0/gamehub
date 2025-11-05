@@ -220,10 +220,10 @@ const Products = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading games...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto"></div>
+          <p className="mt-4 text-gray-300">Loading games...</p>
         </div>
       </div>
     );
@@ -231,64 +231,46 @@ const Products = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="text-center text-red-600">
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center text-red-500">
           <p>Error: {error}</p>
-          <p className="mt-2 text-sm text-gray-600">Make sure db.json is in the public folder</p>
+          <p className="mt-2 text-sm text-gray-400">Make sure db.json is in the public folder</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8">
+    <div className="min-h-screen bg-black py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Our Games Collection</h1>
-          <p className="text-lg text-gray-600">Discover the latest and greatest games</p>
+          <h1 className="text-4xl font-bold text-white mb-4">Our Games Collection</h1>
+          <p className="text-lg text-gray-300">Discover the latest and greatest games</p>
         </div>
 
-        {/* Results Count */}
-        {/* <div className="flex justify-between items-center mb-6">
-          <p className="text-gray-600">
-            Showing {indexOfFirstGame + 1}-{Math.min(indexOfLastGame, filteredGames.length)} of {filteredGames.length} games
-          </p>
-          <div className="flex items-center space-x-4 text-sm text-gray-500">
-            <span>Page {currentPage} of {totalPages}</span>
-            <span className="flex items-center">
-              <HeartIcon className="h-4 w-4 text-red-500 mr-1" />
-              {wishlist.length} in wishlist
-            </span>
-            <span className="flex items-center">
-              <ShoppingCartIcon className="h-4 w-4 text-purple-500 mr-1" />
-              {getCartItemCount()} in cart
-            </span>
-          </div>
-        </div> */}
-
         {/* Filters and Search */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div className="bg-gray-900 rounded-lg shadow-md p-6 mb-8 border border-gray-800">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {/* Search */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Search</label>
               <input
                 type="text"
                 placeholder="Search games..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-white placeholder-gray-400"
               />
             </div>
 
             {/* Genre Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Genre</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Genre</label>
               <select
                 value={selectedGenre}
                 onChange={(e) => setSelectedGenre(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-white"
               >
                 {genres.map(genre => (
                   <option key={genre} value={genre}>{genre}</option>
@@ -298,11 +280,11 @@ const Products = () => {
 
             {/* Platform Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Platform</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Platform</label>
               <select
                 value={selectedPlatform}
                 onChange={(e) => setSelectedPlatform(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-white"
               >
                 {platforms.map(platform => (
                   <option key={platform} value={platform}>{platform}</option>
@@ -312,11 +294,11 @@ const Products = () => {
 
             {/* Sort */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Sort By</label>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-white"
               >
                 <option value="name">Name</option>
                 <option value="price-low">Price: Low to High</option>
@@ -330,7 +312,7 @@ const Products = () => {
         {/* Games Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {currentGames.map(game => (
-            <div key={game.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+            <div key={game.id} className="bg-gray-900 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300 border border-gray-800 hover:border-gray-700">
               {/* Game Image with Link */}
               <Link to={`/product/${game.id}`}>
                 <div className="relative">
@@ -346,18 +328,18 @@ const Products = () => {
                       e.stopPropagation();
                       toggleWishlist(game);
                     }}
-                    className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition duration-300"
+                    className="absolute top-2 right-2 p-2 bg-gray-800 rounded-full shadow-md hover:bg-gray-700 transition duration-300 border border-gray-700"
                     title={isInWishlist(game.id) ? "Remove from wishlist" : "Add to wishlist"}
                   >
                     {isInWishlist(game.id) ? (
                       <HeartIcon className="h-5 w-5 text-red-500" />
                     ) : (
-                      <HeartOutline className="h-5 w-5 text-gray-600" />
+                      <HeartOutline className="h-5 w-5 text-gray-400" />
                     )}
                   </button>
                   {/* Out of Stock Badge */}
                   {!game.inStock && (
-                    <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                    <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-semibold">
                       Out of Stock
                     </div>
                   )}
@@ -368,11 +350,11 @@ const Products = () => {
               <div className="p-4">
                 {/* Game Title with Link */}
                 <Link to={`/product/${game.id}`}>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-purple-600 cursor-pointer transition duration-300">
+                  <h3 className="text-lg font-semibold text-white mb-2 hover:text-red-500 cursor-pointer transition duration-300">
                     {game.name}
                   </h3>
                 </Link>
-                <p className="text-sm text-gray-600 mb-2">{game.genre}</p>
+                <p className="text-sm text-gray-400 mb-2">{game.genre}</p>
                 <p className="text-xs text-gray-500 mb-3">{game.platform}</p>
                 
                 {/* Rating */}
@@ -380,21 +362,21 @@ const Products = () => {
                   <div className="flex">
                     {renderStars(game.rating)}
                   </div>
-                  <span className="ml-2 text-sm text-gray-600">{game.rating}</span>
+                  <span className="ml-2 text-sm text-gray-300">{game.rating}</span>
                 </div>
 
                 {/* Price and Add to Cart */}
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-2xl font-bold text-gray-900">${game.price}</span>
+                    <span className="text-2xl font-bold text-white">${game.price}</span>
                   </div>
                   <button
                     onClick={() => addToCart(game)}
                     disabled={!game.inStock}
                     className={`flex items-center space-x-1 px-4 py-2 rounded-lg transition duration-300 ${
                       game.inStock
-                        ? 'bg-purple-600 hover:bg-purple-700 text-white'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        ? 'bg-red-600 hover:bg-red-700 text-white border border-red-600'
+                        : 'bg-gray-700 text-gray-400 cursor-not-allowed border border-gray-600'
                     }`}
                   >
                     <ShoppingCartIcon className="h-4 w-4" />
@@ -409,14 +391,14 @@ const Products = () => {
         {/* No Results */}
         {filteredGames.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-xl text-gray-600">No games found matching your criteria.</p>
+            <p className="text-xl text-gray-400">No games found matching your criteria.</p>
             <button
               onClick={() => {
                 setSearchTerm('');
                 setSelectedGenre('All');
                 setSelectedPlatform('All');
               }}
-              className="mt-4 px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition duration-300"
+              className="mt-4 px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300 border border-red-600"
             >
               Clear Filters
             </button>
@@ -430,10 +412,10 @@ const Products = () => {
             <button
               onClick={prevPage}
               disabled={currentPage === 1}
-              className={`p-2 rounded-lg ${
+              className={`p-2 rounded-lg border ${
                 currentPage === 1
-                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
+                  ? 'bg-gray-800 text-gray-500 cursor-not-allowed border-gray-700'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700 border-gray-600'
               }`}
             >
               <ChevronLeftIcon className="h-5 w-5" />
@@ -444,12 +426,12 @@ const Products = () => {
               <button
                 key={index}
                 onClick={() => typeof number === 'number' && paginate(number)}
-                className={`px-4 py-2 rounded-lg ${
+                className={`px-4 py-2 rounded-lg border ${
                   number === currentPage
-                    ? 'bg-purple-600 text-white'
+                    ? 'bg-red-600 text-white border-red-600'
                     : number === '...'
-                    ? 'bg-white text-gray-500 cursor-default'
-                    : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
+                    ? 'bg-gray-800 text-gray-500 cursor-default border-gray-700'
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700 border-gray-600'
                 }`}
                 disabled={number === '...'}
               >
@@ -461,10 +443,10 @@ const Products = () => {
             <button
               onClick={nextPage}
               disabled={currentPage === totalPages}
-              className={`p-2 rounded-lg ${
+              className={`p-2 rounded-lg border ${
                 currentPage === totalPages
-                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
+                  ? 'bg-gray-800 text-gray-500 cursor-not-allowed border-gray-700'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700 border-gray-600'
               }`}
             >
               <ChevronRightIcon className="h-5 w-5" />
