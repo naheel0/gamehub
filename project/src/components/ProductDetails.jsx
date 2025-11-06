@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { StarIcon, ShoppingCartIcon, HeartIcon, ArrowLeftIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import { StarIcon as StarOutline, HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 import { useCart } from '../contexts/CartContext';
+import { useAuth } from '../contexts/AuthContext';
 import { GiFastBackwardButton } from 'react-icons/gi';
 import { MdArrowForwardIos,MdArrowBackIosNew } from "react-icons/md";
 
@@ -14,12 +15,17 @@ const ProductDetails = () => {
   const [error, setError] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showVideo, setShowVideo] = useState(false);
-  const [wishlist, setWishlist] = useState([]);
+  const [isInWishlist, setIsInWishlist] = useState(false);
+  const [wishlistLoading, setWishlistLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
   
   // Get cart functions from context
   const { addToCart } = useCart();
+  const { user } = useAuth();
   
+  // JSON Server base URL
+  const API_BASE = 'http://localhost:3001';
+
   // Full screen image viewer state
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [fullScreenImageIndex, setFullScreenImageIndex] = useState(0);
@@ -36,6 +42,10 @@ const ProductDetails = () => {
         
         if (foundGame) {
           setGame(foundGame);
+          // Check if game is in user's wishlist
+          if (user) {
+            checkWishlistStatus(foundGame.id);
+          }
         } else {
           throw new Error('Game not found');
         }
@@ -47,20 +57,85 @@ const ProductDetails = () => {
     };
 
     fetchGame();
-  }, [id]);
+  }, [id, user]);
 
-  // Load wishlist from localStorage
-  useEffect(() => {
-    const savedWishlist = localStorage.getItem('gameStoreWishlist');
-    if (savedWishlist) {
-      setWishlist(JSON.parse(savedWishlist));
+  // Check if game is in user's wishlist
+  const checkWishlistStatus = async (gameId) => {
+    if (!user) return;
+    
+    try {
+      const response = await fetch(`${API_BASE}/wishlists?userId=${user.id}&gameId=${gameId}`);
+      if (!response.ok) {
+        throw new Error('Failed to check wishlist status');
+      }
+      const wishlistItems = await response.json();
+      setIsInWishlist(wishlistItems.length > 0);
+    } catch (error) {
+      console.error('Error checking wishlist status:', error);
     }
-  }, []);
+  };
 
-  // Save wishlist to localStorage when it changes
-  useEffect(() => {
-    localStorage.setItem('gameStoreWishlist', JSON.stringify(wishlist));
-  }, [wishlist]);
+  // Add/Remove from wishlist in db.json
+  const toggleWishlist = async () => {
+    if (!game) return;
+    
+    if (!user) {
+      alert('Please login to manage your wishlist');
+      navigate('/login', { state: { from: `/product/${game.id}` } });
+      return;
+    }
+
+    setWishlistLoading(true);
+
+    try {
+      if (isInWishlist) {
+        // Remove from wishlist
+        const response = await fetch(`${API_BASE}/wishlists?userId=${user.id}&gameId=${game.id}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch wishlist item');
+        }
+        const wishlistItems = await response.json();
+        
+        if (wishlistItems.length > 0) {
+          const deleteResponse = await fetch(`${API_BASE}/wishlists/${wishlistItems[0].id}`, {
+            method: 'DELETE',
+          });
+          
+          if (!deleteResponse.ok) {
+            throw new Error('Failed to remove from wishlist');
+          }
+          
+          setIsInWishlist(false);
+          console.log('Removed from wishlist:', game.name);
+        }
+      } else {
+        // Add to wishlist
+        const response = await fetch(`${API_BASE}/wishlists`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: user.id,
+            gameId: game.id,
+            addedAt: new Date().toISOString()
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to add to wishlist');
+        }
+
+        setIsInWishlist(true);
+        console.log('Added to wishlist:', game.name);
+      }
+    } catch (error) {
+      console.error('Error toggling wishlist:', error);
+      alert('Failed to update wishlist');
+    } finally {
+      setWishlistLoading(false);
+    }
+  };
 
   // Full screen image functions
   const openFullScreen = (index) => {
@@ -101,39 +176,6 @@ const ProductDetails = () => {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isFullScreen]);
-
-  const toggleWishlist = () => {
-    if (!game) return;
-    
-    setWishlist(prev => {
-      const isInWishlist = prev.some(item => item.id === game.id);
-      let newWishlist;
-      
-      if (isInWishlist) {
-        newWishlist = prev.filter(item => item.id !== game.id);
-      } else {
-        const wishlistGame = {
-          id: game.id,
-          name: game.name,
-          genre: game.genre,
-          platform: game.platform,
-          price: game.price,
-          rating: game.rating,
-          inStock: game.inStock,
-          images: game.images,
-          description: game.description,
-          trailer: game.trailer
-        };
-        newWishlist = [...prev, wishlistGame];
-      }
-      
-      return newWishlist;
-    });
-  };
-
-  const isInWishlist = () => {
-    return wishlist.some(item => item.id === game?.id);
-  };
 
   const handleAddToCart = () => {
     if (game && game.inStock) {
@@ -199,7 +241,6 @@ const ProductDetails = () => {
             className="flex items-center space-x-2 text-gray-300 hover:text-white mb-6"
           >
             <GiFastBackwardButton className="h-10 w-10" />
-            {/* <span>Back to Products</span> */}
           </button>
 
           <div className="bg-gray-900 rounded-lg shadow-lg overflow-hidden border border-gray-800">
@@ -397,19 +438,34 @@ const ProductDetails = () => {
 
                   <button
                     onClick={toggleWishlist}
+                    disabled={wishlistLoading}
                     className={`p-3 rounded-lg border transition duration-300 ${
-                      isInWishlist()
+                      isInWishlist
                         ? 'bg-red-900 border-red-700 text-red-400'
                         : 'bg-gray-800 border-gray-600 text-gray-400 hover:bg-gray-700'
-                    }`}
+                    } ${wishlistLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    title={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
                   >
-                    {isInWishlist() ? (
+                    {wishlistLoading ? (
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    ) : isInWishlist ? (
                       <HeartIcon className="h-5 w-5" />
                     ) : (
                       <HeartOutline className="h-5 w-5" />
                     )}
                   </button>
                 </div>
+
+                {/* User Status */}
+                {!user && (
+                  <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
+                    <p className="text-sm text-gray-300 text-center">
+                      <Link to="/login" className="text-red-400 hover:text-red-300">
+                        Login
+                      </Link> to save games to your wishlist
+                    </p>
+                  </div>
+                )}
 
                 {/* Features */}
                 <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">

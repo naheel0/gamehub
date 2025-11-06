@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { StarIcon, ShoppingCartIcon, HeartIcon } from '@heroicons/react/24/solid';
 import { StarIcon as StarOutline, HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { toast } from 'react-toastify';
 import { useCart } from '../contexts/CartContext';
+import { useWishlist } from '../contexts/WishlistContext';
+import { useAuth } from '../contexts/AuthContext';
 
 const Products = () => {
   const [games, setGames] = useState([]);
@@ -12,50 +15,49 @@ const Products = () => {
   const [selectedPlatform, setSelectedPlatform] = useState('All');
   const [sortBy, setSortBy] = useState('name');
   const [searchTerm, setSearchTerm] = useState('');
-  const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
+  const navigate = useNavigate();
+
   // Get cart functions from context
   const { addToCart } = useCart();
   
+  // Get wishlist functions from context
+  const { wishlist, addToWishlist, removeFromWishlist, isInWishlist, getWishlistCount } = useWishlist();
+  
+  // Get auth context
+  const { user } = useAuth();
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [gamesPerPage] = useState(6);
 
-  // Fetch data from db.json and load from localStorage
+  // JSON Server base URL
+  const API_BASE = 'http://localhost:3001';
+
+  // Fetch data from JSON Server API
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const response = await fetch('/db.json');
+        setLoading(true);
+        const response = await fetch(`${API_BASE}/games`);
         if (!response.ok) {
           throw new Error('Failed to fetch games data');
         }
         const data = await response.json();
-        setGames(data.games);
-        setFilteredGames(data.games);
-        
-        // Load wishlist from localStorage
-        const savedWishlist = localStorage.getItem('gameStoreWishlist');
-        
-        if (savedWishlist) {
-          setWishlist(JSON.parse(savedWishlist));
-        }
-        
+        setGames(data);
+        setFilteredGames(data);
         setLoading(false);
       } catch (err) {
         setError(err.message);
         setLoading(false);
+        console.error('Error fetching games:', err);
       }
     };
 
     fetchGames();
   }, []);
-
-  // Save wishlist to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('gameStoreWishlist', JSON.stringify(wishlist));
-  }, [wishlist]);
 
   // Filter and sort games
   useEffect(() => {
@@ -65,7 +67,8 @@ const Products = () => {
     if (searchTerm) {
       result = result.filter(game =>
         game.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        game.genre.toLowerCase().includes(searchTerm.toLowerCase())
+        game.genre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        game.description?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -129,41 +132,36 @@ const Products = () => {
   const genres = ['All', ...new Set(games.map(game => game.genre))];
   const platforms = ['All', ...new Set(games.flatMap(game => game.platform.split(', ')))];
 
-  // Wishlist functions
-  const toggleWishlist = (game) => {
-    setWishlist(prev => {
-      const isInWishlist = prev.some(item => item.id === game.id);
-      let newWishlist;
-      
-      if (isInWishlist) {
-        // Remove from wishlist
-        newWishlist = prev.filter(item => item.id !== game.id);
-        console.log('Removed from wishlist:', game.name);
-      } else {
-        // Add to wishlist - ensure we have all required properties
-        const wishlistGame = {
-          id: game.id,
-          name: game.name,
-          genre: game.genre,
-          platform: game.platform,
-          price: game.price,
-          rating: game.rating,
-          inStock: game.inStock,
-          images: game.images,
-          description: game.description,
-          trailer: game.trailer
-        };
-        newWishlist = [...prev, wishlistGame];
-        console.log('Added to wishlist:', game.name);
-      }
-      
-      return newWishlist;
-    });
+  // Wishlist handler
+  const handleWishlist = (game) => {
+    if (!user) {
+      toast.warning('Please log in to manage your wishlist.');
+      setTimeout(() => navigate('/login'), 1000);
+      return;
+    }
+
+    if (isInWishlist(game.id)) {
+      removeFromWishlist(game.id);
+    } else {
+      addToWishlist(game);
+    }
   };
 
-  // Check if game is in wishlist
-  const isInWishlist = (gameId) => {
-    return wishlist.some(item => item.id === gameId);
+  // Add to cart handler
+  const handleAddToCart = (game) => {
+    if (!user) {
+      toast.warning('Please log in before adding items to your cart.');
+      setTimeout(() => navigate('/login'), 1000);
+      return;
+    }
+
+    if (!game.inStock) {
+      toast.error('This game is out of stock!');
+      return;
+    }
+
+    addToCart(game);
+    toast.success(`${game.name} added to your cart!`);
   };
 
   // Render stars for rating
@@ -183,28 +181,23 @@ const Products = () => {
     const maxVisiblePages = 5;
     
     if (totalPages <= maxVisiblePages) {
-      // Show all pages if total pages are less than max visible
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
       }
     } else {
-      // Show limited pages with ellipsis
       if (currentPage <= 3) {
-        // Near the start
         for (let i = 1; i <= 4; i++) {
           pageNumbers.push(i);
         }
         pageNumbers.push('...');
         pageNumbers.push(totalPages);
       } else if (currentPage >= totalPages - 2) {
-        // Near the end
         pageNumbers.push(1);
         pageNumbers.push('...');
         for (let i = totalPages - 3; i <= totalPages; i++) {
           pageNumbers.push(i);
         }
       } else {
-        // In the middle
         pageNumbers.push(1);
         pageNumbers.push('...');
         for (let i = currentPage - 1; i <= currentPage + 1; i++) {
@@ -216,6 +209,14 @@ const Products = () => {
     }
     
     return pageNumbers;
+  };
+
+  // Clear all filters
+  const clearFilters = () => {
+    setSearchTerm('');
+    setSelectedGenre('All');
+    setSelectedPlatform('All');
+    setSortBy('name');
   };
 
   if (loading) {
@@ -233,8 +234,14 @@ const Products = () => {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center text-red-500">
-          <p>Error: {error}</p>
-          <p className="mt-2 text-sm text-gray-400">Make sure db.json is in the public folder</p>
+          <p className="text-xl font-semibold">Error: {error}</p>
+          <p className="mt-2 text-sm text-gray-400">Make sure JSON Server is running on port 3001</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300"
+          >
+            Retry
+          </button>
         </div>
       </div>
     );
@@ -247,6 +254,10 @@ const Products = () => {
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-4">Our Games Collection</h1>
           <p className="text-lg text-gray-300">Discover the latest and greatest games</p>
+          <div className="mt-2 text-sm text-gray-400">
+            {filteredGames.length} games found • {getWishlistCount()} in wishlist
+            {user && <span> • Welcome, {user.name}!</span>}
+          </div>
         </div>
 
         {/* Filters and Search */}
@@ -307,6 +318,16 @@ const Products = () => {
               </select>
             </div>
           </div>
+
+          {/* Clear Filters */}
+          <div className="mt-4 flex justify-center">
+            <button
+              onClick={clearFilters}
+              className="px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition duration-300 border border-gray-600"
+            >
+              Clear All Filters
+            </button>
+          </div>
         </div>
 
         {/* Games Grid */}
@@ -317,7 +338,7 @@ const Products = () => {
               <Link to={`/product/${game.id}`}>
                 <div className="relative">
                   <img
-                    src={game.images[0]}
+                    src={game.images?.[0] || '/placeholder-game.jpg'}
                     alt={game.name}
                     className="w-full h-48 object-cover cursor-pointer"
                   />
@@ -326,7 +347,7 @@ const Products = () => {
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      toggleWishlist(game);
+                      handleWishlist(game);
                     }}
                     className="absolute top-2 right-2 p-2 bg-gray-800 rounded-full shadow-md hover:bg-gray-700 transition duration-300 border border-gray-700"
                     title={isInWishlist(game.id) ? "Remove from wishlist" : "Add to wishlist"}
@@ -371,7 +392,7 @@ const Products = () => {
                     <span className="text-2xl font-bold text-white">${game.price}</span>
                   </div>
                   <button
-                    onClick={() => addToCart(game)}
+                    onClick={() => handleAddToCart(game)}
                     disabled={!game.inStock}
                     className={`flex items-center space-x-1 px-4 py-2 rounded-lg transition duration-300 ${
                       game.inStock
@@ -393,11 +414,7 @@ const Products = () => {
           <div className="text-center py-12">
             <p className="text-xl text-gray-400">No games found matching your criteria.</p>
             <button
-              onClick={() => {
-                setSearchTerm('');
-                setSelectedGenre('All');
-                setSelectedPlatform('All');
-              }}
+              onClick={clearFilters}
               className="mt-4 px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300 border border-red-600"
             >
               Clear Filters
