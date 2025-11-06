@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { StarIcon, ShoppingCartIcon, HeartIcon, ArrowLeftIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import { StarIcon, ShoppingCartIcon, HeartIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import { StarIcon as StarOutline, HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
+import { useWishlist } from '../contexts/WishlistContext';
 import { GiFastBackwardButton } from 'react-icons/gi';
-import { MdArrowForwardIos,MdArrowBackIosNew } from "react-icons/md";
+import { MdArrowForwardIos, MdArrowBackIosNew } from "react-icons/md";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -15,13 +16,13 @@ const ProductDetails = () => {
   const [error, setError] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showVideo, setShowVideo] = useState(false);
-  const [isInWishlist, setIsInWishlist] = useState(false);
   const [wishlistLoading, setWishlistLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
   
-  // Get cart functions from context
+  // Get contexts
   const { addToCart } = useCart();
   const { user } = useAuth();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   
   // JSON Server base URL
   const API_BASE = 'http://localhost:3001';
@@ -30,52 +31,46 @@ const ProductDetails = () => {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [fullScreenImageIndex, setFullScreenImageIndex] = useState(0);
 
+  // Wishlist status
+  const [isInWishlistState, setIsInWishlistState] = useState(false);
+
   useEffect(() => {
     const fetchGame = async () => {
       try {
-        const response = await fetch('/db.json');
+        setLoading(true);
+        // Fetch from JSON Server instead of local db.json
+        const response = await fetch(`${API_BASE}/games/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch game data');
         }
-        const data = await response.json();
-        const foundGame = data.games.find(g => g.id === parseInt(id));
+        const foundGame = await response.json();
         
         if (foundGame) {
           setGame(foundGame);
-          // Check if game is in user's wishlist
-          if (user) {
-            checkWishlistStatus(foundGame.id);
-          }
         } else {
           throw new Error('Game not found');
         }
         setLoading(false);
       } catch (err) {
+        console.error('Error fetching game:', err);
         setError(err.message);
         setLoading(false);
       }
     };
 
     fetchGame();
-  }, [id, user]);
+  }, [id]);
 
-  // Check if game is in user's wishlist
-  const checkWishlistStatus = async (gameId) => {
-    if (!user) return;
-    
-    try {
-      const response = await fetch(`${API_BASE}/wishlists?userId=${user.id}&gameId=${gameId}`);
-      if (!response.ok) {
-        throw new Error('Failed to check wishlist status');
-      }
-      const wishlistItems = await response.json();
-      setIsInWishlist(wishlistItems.length > 0);
-    } catch (error) {
-      console.error('Error checking wishlist status:', error);
+  // Update wishlist status when game or user changes
+  useEffect(() => {
+    if (game && user) {
+      setIsInWishlistState(isInWishlist(game.id));
+    } else {
+      setIsInWishlistState(false);
     }
-  };
+  }, [game, user, isInWishlist]);
 
-  // Add/Remove from wishlist in db.json
+  // Toggle wishlist using context
   const toggleWishlist = async () => {
     if (!game) return;
     
@@ -88,46 +83,12 @@ const ProductDetails = () => {
     setWishlistLoading(true);
 
     try {
-      if (isInWishlist) {
-        // Remove from wishlist
-        const response = await fetch(`${API_BASE}/wishlists?userId=${user.id}&gameId=${game.id}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch wishlist item');
-        }
-        const wishlistItems = await response.json();
-        
-        if (wishlistItems.length > 0) {
-          const deleteResponse = await fetch(`${API_BASE}/wishlists/${wishlistItems[0].id}`, {
-            method: 'DELETE',
-          });
-          
-          if (!deleteResponse.ok) {
-            throw new Error('Failed to remove from wishlist');
-          }
-          
-          setIsInWishlist(false);
-          console.log('Removed from wishlist:', game.name);
-        }
+      if (isInWishlistState) {
+        await removeFromWishlist(game.id);
+        setIsInWishlistState(false);
       } else {
-        // Add to wishlist
-        const response = await fetch(`${API_BASE}/wishlists`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            userId: user.id,
-            gameId: game.id,
-            addedAt: new Date().toISOString()
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to add to wishlist');
-        }
-
-        setIsInWishlist(true);
-        console.log('Added to wishlist:', game.name);
+        await addToWishlist(game);
+        setIsInWishlistState(true);
       }
     } catch (error) {
       console.error('Error toggling wishlist:', error);
@@ -148,15 +109,19 @@ const ProductDetails = () => {
   };
 
   const nextImage = () => {
-    setFullScreenImageIndex(prev => 
-      prev < game.images.length - 1 ? prev + 1 : 0
-    );
+    if (game && game.images) {
+      setFullScreenImageIndex(prev => 
+        prev < game.images.length - 1 ? prev + 1 : 0
+      );
+    }
   };
 
   const prevImage = () => {
-    setFullScreenImageIndex(prev => 
-      prev > 0 ? prev - 1 : game.images.length - 1
-    );
+    if (game && game.images) {
+      setFullScreenImageIndex(prev => 
+        prev > 0 ? prev - 1 : game.images.length - 1
+      );
+    }
   };
 
   // Keyboard navigation for full screen
@@ -241,6 +206,7 @@ const ProductDetails = () => {
             className="flex items-center space-x-2 text-gray-300 hover:text-white mb-6"
           >
             <GiFastBackwardButton className="h-10 w-10" />
+            <span>Back</span>
           </button>
 
           <div className="bg-gray-900 rounded-lg shadow-lg overflow-hidden border border-gray-800">
@@ -264,9 +230,12 @@ const ProductDetails = () => {
                       onClick={() => openFullScreen(selectedImageIndex)}
                     >
                       <img
-                        src={game.images[selectedImageIndex]}
+                        src={game.images?.[selectedImageIndex] || '/images/placeholder-game.jpg'}
                         alt={`${game.name} - Image ${selectedImageIndex + 1}`}
                         className="w-full h-96 object-cover"
+                        onError={(e) => {
+                          e.target.src = '/images/placeholder-game.jpg';
+                        }}
                       />
                     </div>
                   )}
@@ -295,7 +264,7 @@ const ProductDetails = () => {
                   </button>
 
                   {/* Image Thumbnails */}
-                  {game.images.map((image, index) => (
+                  {game.images?.map((image, index) => (
                     <button
                       key={index}
                       onClick={() => {
@@ -312,13 +281,16 @@ const ProductDetails = () => {
                         src={image}
                         alt={`${game.name} ${index + 1}`}
                         className="w-full h-20 object-cover"
+                        onError={(e) => {
+                          e.target.src = '/images/placeholder-game.jpg';
+                        }}
                       />
                     </button>
                   ))}
                 </div>
 
                 {/* Image Navigation */}
-                {!showVideo && game.images.length > 1 && (
+                {!showVideo && game.images && game.images.length > 1 && (
                   <div className="flex justify-center space-x-4">
                     <button
                       onClick={() => setSelectedImageIndex(prev => 
@@ -440,15 +412,15 @@ const ProductDetails = () => {
                     onClick={toggleWishlist}
                     disabled={wishlistLoading}
                     className={`p-3 rounded-lg border transition duration-300 ${
-                      isInWishlist
+                      isInWishlistState
                         ? 'bg-red-900 border-red-700 text-red-400'
                         : 'bg-gray-800 border-gray-600 text-gray-400 hover:bg-gray-700'
                     } ${wishlistLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    title={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+                    title={isInWishlistState ? "Remove from wishlist" : "Add to wishlist"}
                   >
                     {wishlistLoading ? (
                       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                    ) : isInWishlist ? (
+                    ) : isInWishlistState ? (
                       <HeartIcon className="h-5 w-5" />
                     ) : (
                       <HeartOutline className="h-5 w-5" />
@@ -496,7 +468,7 @@ const ProductDetails = () => {
       </div>
 
       {/* Full Screen Image Viewer */}
-      {isFullScreen && (
+      {isFullScreen && game && game.images && (
         <div className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center">
           {/* Close Button */}
           <button

@@ -1,7 +1,7 @@
 {
   "games": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Elden Ring",
       "genre": "Action RPG",
       "platform": "PC, PlayStation, Xbox",
@@ -18,7 +18,7 @@
       "description": "An open-world action RPG set in the Lands Between, featuring vast exploration and intense boss battles."
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "God of War",
       "genre": "Action Adventure",
       "platform": "PC, PlayStation",
@@ -35,7 +35,7 @@
       "description": "Journey of Kratos and Atreus through the Norse realms in this award-winning action adventure."
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Cyberpunk 2077",
       "genre": "Action RPG",
       "platform": "PC, PlayStation, Xbox",
@@ -52,7 +52,7 @@
       "description": "An open-world adventure set in Night City, a megalopolis obsessed with power and body modification."
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Call of Duty: Modern Warfare III",
       "genre": "Shooter",
       "platform": "PC, PlayStation, Xbox",
@@ -64,12 +64,12 @@
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3595270/7d0f21912a075c33bbb5ea558100e187ceb234ac/header.jpg?t=1758060267",
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3595270/757e49ee3ff2b6ebf60e479731d983cec47faa41/ss_757e49ee3ff2b6ebf60e479731d983cec47faa41.1920x1080.jpg?t=1758060267",
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3595270/ee37e2686b1a21ede5b74e853d046ba9bd087878/ss_ee37e2686b1a21ede5b74e853d046ba9bd087878.1920x1080.jpg?t=1758060267",
-         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3595270/1db97cd94c0f2c80016967904ccc43a72df79f98/ss_1db97cd94c0f2c80016967904ccc43a72df79f98.1920x1080.jpg?t=1758060267"
-    ],
+        "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3595270/1db97cd94c0f2c80016967904ccc43a72df79f98/ss_1db97cd94c0f2c80016967904ccc43a72df79f98.1920x1080.jpg?t=1758060267"
+      ],
       "description": "Continue the Modern Warfare saga with intense missions and thrilling multiplayer battles."
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Marvel's Spider-Man Remastered",
       "genre": "Action Adventure",
       "platform": "PC, PlayStation",
@@ -82,12 +82,11 @@
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1817070/ss_dfe778bf6d66e952e4acd4e1f926f7615b609ddf.1920x1080.jpg?t=1750955096",
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1817070/ss_427677cf78195df94702f0a963cd9eaeb9d8935a.1920x1080.jpg?t=1750955096",
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1817070/ss_000ef57509c773d07a94c1b8c27a8f8966274d62.1920x1080.jpg?t=1750955096"
-        
       ],
       "description": "Swing through New York as Peter Parker and battle iconic villains in this thrilling adventure."
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "Hogwarts Legacy",
       "genre": "Action RPG",
       "platform": "PC, PlayStation, Xbox",
@@ -104,7 +103,7 @@
       "description": "Experience life as a student at Hogwarts and uncover hidden magic in the wizarding world."
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "Red Dead Redemption 2",
       "genre": "Open World",
       "platform": "PC, PlayStation, Xbox",
@@ -121,7 +120,7 @@
       "description": "Epic story of life in America's unforgiving heartland as Arthur Morgan and the Van der Linde gang."
     },
     {
-      "id": 8,
+      "id": "8",
       "name": "Resident Evil 4 Remake",
       "genre": "Survival Horror",
       "platform": "PC, PlayStation, Xbox",
@@ -138,7 +137,7 @@
       "description": "Reimagined survival horror classic featuring Leon S. Kennedy on a mission to rescue the president's daughter."
     },
     {
-      "id": 9,
+      "id": "9",
       "name": "Assassin's Creed Mirage",
       "genre": "Action Adventure",
       "platform": "PC, PlayStation, Xbox",
@@ -155,7 +154,7 @@
       "description": "Experience the story of Basim in ninth-century Baghdad — a return to stealth-focused gameplay."
     },
     {
-      "id": 10,
+      "id": "10",
       "name": "Starfield",
       "genre": "Sci-Fi RPG",
       "platform": "PC, Xbox",
@@ -174,12 +173,12 @@
       "description": "Bethesda's first new universe in 25 years — explore the stars and uncover humanity's greatest mystery."
     },
     {
-      "id": 11,
+      "id": "11",
       "name": "Baldur's Gate 3",
       "genre": "RPG",
       "platform": "PC, PlayStation",
       "price": 59.99,
-      "rating": 5.0,
+      "rating": 5,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/OcP0WdH7rTs",
       "images": [
@@ -192,7 +191,7 @@
       "description": "Embark on an epic D&D adventure filled with magic, friendship, betrayal, and survival."
     },
     {
-      "id": 12,
+      "id": "12",
       "name": "Forza Horizon 5",
       "genre": "Racing",
       "platform": "PC, Xbox",
@@ -206,12 +205,11 @@
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1551360/ss_00f0090174380eeaf8753bd3d1028b6772c3aebf.1920x1080.jpg?t=1746471508",
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1551360/ss_b65236b365315ebb6da6114ce42cd74b59cab3c8.1920x1080.jpg?t=1746471508",
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1551360/ss_3654a5988db68f9b47740f9f6a9299682c365599.1920x1080.jpg?t=1746471508"
-        
       ],
       "description": "Explore vibrant open-world landscapes of Mexico in this stunning racing experience."
     },
     {
-      "id": 13,
+      "id": "13",
       "name": "The Witcher 3: Wild Hunt",
       "genre": "Action RPG",
       "platform": "PC, PlayStation, Xbox",
@@ -225,17 +223,16 @@
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/292030/ss_0901e64e9d4b8ebaea8348c194e7a3644d2d832d.1920x1080.jpg?t=1761131270",
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/292030/ss_107600c1337accc09104f7a8aa7f275f23cad096.1920x1080.jpg?t=1761131270",
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/292030/ss_d5b80eb63c12a6484f26796f3e34410651bba068.1920x1080.jpg?t=1761131270"
-        
       ],
       "description": "Play as Geralt of Rivia and hunt monsters, navigate politics, and fulfill your destiny."
     },
     {
-      "id": 14,
+      "id": "14",
       "name": "FIFA 24",
       "genre": "Sports",
       "platform": "PC, PlayStation, Xbox",
       "price": 69.99,
-      "rating": 4.0,
+      "rating": 4,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/o3V-GvvzjE4",
       "images": [
@@ -244,12 +241,11 @@
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2195250/ss_b68a973175bebbdf7a189efa43c927899dc95240.1920x1080.jpg?t=1752167366",
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2195250/ss_2fa9762aa7fdc139ae78787b4abb3f9a8e99d071.1920x1080.jpg?t=1752167366",
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2195250/ss_6c1ef918ffe94050e72dcb2cfad3a95ee3d69f08.1920x1080.jpg?t=1752167366"
-        
       ],
       "description": "Experience the world's game with realistic physics and dynamic gameplay."
     },
     {
-      "id": 15,
+      "id": "15",
       "name": "Grand Theft Auto V",
       "genre": "Open World",
       "platform": "PC, PlayStation, Xbox",
@@ -264,12 +260,11 @@
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3240220/6959cc5d64cce82cb68a27457cfa46fb4d50f897/ss_6959cc5d64cce82cb68a27457cfa46fb4d50f897.1920x1080.jpg?t=1753974947",
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3240220/f4a6f63b4f7cb42262152449ba5e5c5837f20ff4/ss_f4a6f63b4f7cb42262152449ba5e5c5837f20ff4.1920x1080.jpg?t=1753974947",
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3240220/808b550269f898e227dae2c64b5e026f90da85f9/ss_808b550269f898e227dae2c64b5e026f90da85f9.1920x1080.jpg?t=1753974947"
-        
       ],
       "description": "An open-world masterpiece featuring three criminal protagonists in Los Santos."
     },
     {
-      "id": 16,
+      "id": "16",
       "name": "Minecraft",
       "genre": "Sandbox",
       "platform": "PC, PlayStation, Xbox, Switch",
@@ -286,7 +281,7 @@
       "description": "Build, explore, and survive in a blocky, procedurally generated 3D world."
     },
     {
-      "id": 17,
+      "id": "17",
       "name": "The Last of Us Part I",
       "genre": "Action Adventure",
       "platform": "PC, PlayStation",
@@ -305,7 +300,7 @@
       "description": "Survive and endure in a post-apocalyptic world as Joel and Ellie."
     },
     {
-      "id": 18,
+      "id": "18",
       "name": "Sekiro: Shadows Die Twice",
       "genre": "Action Adventure",
       "platform": "PC, PlayStation, Xbox",
@@ -323,7 +318,7 @@
       "description": "A brutal action adventure set in late 1500s Sengoku Japan — sharpen your blade and your skills."
     },
     {
-      "id": 19,
+      "id": "19",
       "name": "Diablo IV",
       "genre": "Action RPG",
       "platform": "PC, PlayStation, Xbox",
@@ -341,7 +336,7 @@
       "description": "Descend into darkness and fight against the forces of evil in the next chapter of the iconic ARPG series."
     },
     {
-      "id": 20,
+      "id": "20",
       "name": "Dying Light 2 Stay Human",
       "genre": "Action Survival",
       "platform": "PC, PlayStation, Xbox",
@@ -358,6 +353,144 @@
         "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/534380/ss_6b8d4cc1f7d657745cfd7aab941d3be0067dec00.1920x1080.jpg?t=1755623287"
       ],
       "description": "Parkour through a post-apocalyptic city and battle both the infected and hostile humans."
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "email": "demo@gamehub.com",
+      "password": "demo123",
+      "firstName": "Demo",
+      "lastName": "User",
+      "phone": "+1234567890",
+      "wishlist": [
+        1,
+        3,
+        5
+      ],
+      "purchaseHistory": [
+        2,
+        4
+      ],
+      "createdAt": "2024-01-15T10:30:00Z",
+      "cart": []
+    },
+    {
+      "id": "2",
+      "firstName": "naheel",
+      "lastName": "muhammed",
+      "email": "naheel@gmail.com",
+      "phone": "9876543210",
+      "password": "123456",
+      "wishlist": [
+        4,
+        20,
+        9
+      ],
+      "purchaseHistory": [
+        {
+          "id": "cart_1762421635795_7as0d998a",
+          "items": [
+            {
+              "gameId": 4,
+              "name": "Call of Duty: Modern Warfare III",
+              "price": 69.99,
+              "quantity": 1,
+              "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3595270/7d0f21912a075c33bbb5ea558100e187ceb234ac/header.jpg?t=1758060267"
+            }
+          ],
+          "summary": {
+            "subtotal": "69.99",
+            "tax": "7.00",
+            "total": "76.99"
+          },
+          "paymentMethod": "paypal",
+          "status": "completed",
+          "date": "2025-11-06T09:33:55.795Z"
+        }
+      ],
+      "createdAt": "2025-11-06T05:13:51.898Z",
+      "cart": []
+    },
+    {
+      "id": "9874",
+      "firstName": "muhammed",
+      "lastName": "safvan",
+      "email": "mhdsafvan15@gmail.com",
+      "phone": "9497521874",
+      "password": "Safvan@15",
+      "wishlist": [],
+      "cart": [],
+      "purchaseHistory": [
+        {
+          "id": "cart_1762424682921_nwvjiaspw",
+          "items": [
+            {
+              "gameId": "11",
+              "name": "Baldur's Gate 3",
+              "price": 59.99,
+              "quantity": 14,
+              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
+            },
+            {
+              "gameId": "19",
+              "name": "Diablo IV",
+              "price": 69.99,
+              "quantity": 18,
+              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/2344520/header.jpg"
+            }
+          ],
+          "summary": {
+            "subtotal": "2099.68",
+            "tax": "209.97",
+            "total": "2309.65"
+          },
+          "paymentMethod": "card",
+          "status": "completed",
+          "date": "2025-11-06T10:24:42.921Z"
+        },
+        {
+          "id": "cart_1762424812228_zn6iq66qb",
+          "items": [
+            {
+              "gameId": "11",
+              "name": "Baldur's Gate 3",
+              "price": 59.99,
+              "quantity": 1,
+              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
+            }
+          ],
+          "summary": {
+            "subtotal": "59.99",
+            "tax": "6.00",
+            "total": "65.99"
+          },
+          "paymentMethod": "card",
+          "status": "completed",
+          "date": "2025-11-06T10:26:52.228Z"
+        },
+        {
+          "id": "cart_1762425138378_cgv6n51tj",
+          "items": [
+            {
+              "gameId": "11",
+              "name": "Baldur's Gate 3",
+              "price": 59.99,
+              "quantity": 1,
+              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
+            }
+          ],
+          "summary": {
+            "subtotal": "59.99",
+            "tax": "6.00",
+            "total": "65.99"
+          },
+          "paymentMethod": "card",
+          "status": "completed",
+          "date": "2025-11-06T10:32:18.378Z"
+        }
+      ],
+      "createdAt": "2025-11-06T10:24:03.445Z"
     }
   ]
 }
