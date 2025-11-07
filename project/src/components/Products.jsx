@@ -24,7 +24,7 @@ const Products = () => {
   const { addToCart } = useCart();
   
   // Get wishlist functions from context
-  const { wishlist, addToWishlist, removeFromWishlist, isInWishlist, getWishlistCount } = useWishlist();
+  const { addToWishlist, removeFromWishlist, isInWishlist, getWishlistCount } = useWishlist();
   
   // Get auth context
   const { user } = useAuth();

@@ -419,7 +419,9 @@
       "email": "mhdsafvan15@gmail.com",
       "phone": "9497521874",
       "password": "Safvan@15",
-      "wishlist": [],
+      "wishlist": [
+        "19"
+      ],
       "cart": [],
       "purchaseHistory": [
         {
@@ -488,6 +490,46 @@
           "paymentMethod": "card",
           "status": "completed",
           "date": "2025-11-06T10:32:18.378Z"
+        },
+        {
+          "id": "cart_1762491835244_kf0pktbvw",
+          "items": [
+            {
+              "gameId": "11",
+              "name": "Baldur's Gate 3",
+              "price": 59.99,
+              "quantity": 1,
+              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
+            }
+          ],
+          "summary": {
+            "subtotal": "59.99",
+            "tax": "6.00",
+            "total": "65.99"
+          },
+          "paymentMethod": "card",
+          "status": "completed",
+          "date": "2025-11-07T05:03:55.244Z"
+        },
+        {
+          "id": "cart_1762491862599_hdv83uaml",
+          "items": [
+            {
+              "gameId": "19",
+              "name": "Diablo IV",
+              "price": 69.99,
+              "quantity": 1,
+              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/2344520/header.jpg"
+            }
+          ],
+          "summary": {
+            "subtotal": "69.99",
+            "tax": "7.00",
+            "total": "76.99"
+          },
+          "paymentMethod": "card",
+          "status": "completed",
+          "date": "2025-11-07T05:04:22.599Z"
         }
       ],
       "createdAt": "2025-11-06T10:24:03.445Z"

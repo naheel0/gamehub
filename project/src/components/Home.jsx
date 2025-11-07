@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   FaPlay, 
-  FaPause, 
   FaChevronLeft, 
   FaChevronRight, 
   FaShoppingCart, 
@@ -24,16 +23,19 @@ const Home = () => {
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [currentVideo, setCurrentVideo] = useState('');
 
+  // JSON Server base URL
+  const API_BASE = 'http://localhost:3001';
+
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const response = await fetch('/db.json'); 
+        const response = await fetch(`${API_BASE}/games`); 
         if (!response.ok) {
           throw new Error('Failed to fetch games data');
         }
         const data = await response.json();
         // Take first 6 games for featured section
-        setFeaturedGames(data.games.slice(0, 6));
+        setFeaturedGames(data.slice(0, 6));
         setLoading(false);
       } catch (err) {
         console.error('Error fetching games:', err);
@@ -159,9 +161,12 @@ const Home = () => {
         {featuredGames.length > 0 && (
           <div className="absolute inset-0">
             <img
-              src={featuredGames[currentGameIndex].trailer}
+              src={featuredGames[currentGameIndex].images?.[0] || '/images/placeholder-game.jpg'}
               alt={featuredGames[currentGameIndex].name}
               className="w-full h-full object-cover transition-opacity duration-10000 ease-in-out"
+              onError={(e) => {
+                e.target.src = '/images/placeholder-game.jpg';
+              }}
             />
             {/* Dark Overlay */}
             <div className="absolute inset-0 bg-black bg-opacity-70"></div>
@@ -204,12 +209,6 @@ const Home = () => {
                     <FaPlay className="inline mr-2" />
                     Watch Trailer
                   </button>
-                  {/* <button
-                    onClick={togglePlayPause}
-                    className="bg-white bg-opacity-10 hover:bg-opacity-20 text-red-400 px-4 py-4 rounded-lg font-bold text-lg transition duration-300 backdrop-blur-sm border border-gray-400"
-                  >
-                    {isPlaying ? <FaPause className="h-5 w-5" /> : <FaPlay className="h-5 w-5" />}
-                  </button> */}
                 </div>
               </>
             )}
@@ -322,9 +321,12 @@ const Home = () => {
                 <Link to={`/product/${game.id}`}>
                   <div className="relative">
                     <img
-                      src={game.images[0]}
+                      src={game.images?.[0] || '/images/placeholder-game.jpg'}
                       alt={game.name}
                       className="w-full h-48 object-cover"
+                      onError={(e) => {
+                        e.target.src = '/images/placeholder-game.jpg';
+                      }}
                     />
                     <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-sm font-semibold">
                       ${game.price}
@@ -339,7 +341,7 @@ const Home = () => {
                       className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300"
                     >
                       <div className="bg-white bg-opacity-20 rounded-full p-4 backdrop-blur-sm border border-gray-400">
-                        <FaPlay className="h-8 w-8 text-white" />
+                        <FaPlay className="h-8 w-8 text-red-600" />
                       </div>
                     </button>
                   </div>

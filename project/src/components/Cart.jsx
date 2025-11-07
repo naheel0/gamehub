@@ -71,7 +71,7 @@ const CartPage = () => {
   };
 
   const handleContinueShopping = () => {
-    navigate('/games');
+    navigate('/products');
   };
 
   if (loading) {

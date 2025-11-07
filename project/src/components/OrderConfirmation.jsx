@@ -209,7 +209,7 @@ const OrderConfirmation = () => {
                   <div className="flex justify-between items-center p-3 bg-gray-700/30 rounded-lg">
                     <span className="text-gray-400 flex items-center">
                       <CreditCardIcon className="h-4 w-4 mr-2" />
-                      Payment Method
+                      {getPaymentMethodIcon(order.paymentMethod)}
                     </span>
                     <span className="text-white font-semibold capitalize">
                       {order.paymentMethod}
