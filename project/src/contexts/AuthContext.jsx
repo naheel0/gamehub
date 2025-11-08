@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   // JSON Server base URL
-  const API_BASE = 'http://localhost:3001';
+  const API_BASE = 'https://gamehub-db.onrender.com';
 
   useEffect(() => {
     // Check if user is logged in on app start
