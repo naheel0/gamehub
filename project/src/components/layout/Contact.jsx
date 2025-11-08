@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import emailjs from 'emailjs-com'
-import Footer from './Footer'
 
 // Initialize EmailJS (use your actual public key)
 emailjs.init("VLxM2t4JmL7HsMc4F")

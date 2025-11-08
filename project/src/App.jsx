@@ -1,24 +1,24 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import Home from "./components/Home";
-import Products from "./components/Products";
-import About from "./components/About";
-import Contact from "./components/Contact";
-import Footer from "./components/Footer";
-import ProductDetails from "./components/ProductDetails";
-import Wishlist from "./components/Wishlist";
-import Cart from "./components/Cart";
-import Login from "./components/Login";
-import Signup from "./components/Signup";
+import Home from "./pages/Home";
+import Products from "./pages/Products";
+import About from "./pages/About";
+import Contact from "../src/components/layout/Contact";
+import Footer from "./components/layout/Footer";
+import ProductDetails from "./pages/ProductDetails";
+import Wishlist from "./pages/Wishlist";
+import Cart from "./pages/Cart";
+import Login from "../src/pages/Auth/Login";
+import Signup from "../src/pages/Auth/Signup";
 import { CartProvider } from "./contexts/CartContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { WishlistProvider } from "./contexts/WishlistContext";
-import PaymentMethods from "./components/PaymentMethods";
+import PaymentMethods from "../src/components/PaymentMethods/PaymentMethods";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import OrderConfirmation from './components/OrderConfirmation'
-import Navbar from "./components/NavBar";
-import Profile from "./components/Profile";
+import OrderConfirmation from './pages/OrderConfirmation'
+import Navbar from "../src/components/layout/NavBar";
+import Profile from "./pages/Profile";
 
 function App() {
   const location = useLocation();

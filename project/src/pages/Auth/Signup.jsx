@@ -1,9 +1,9 @@
 // src/components/Signup.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-import Logo from '../components/Logo'
+import Logo from '../../components/common/Logo'
 
 const Signup = () => {
   const [formData, setFormData] = useState({

@@ -17,8 +17,8 @@ import {
   FaTrash
 } from 'react-icons/fa';
 import { SiVisa, SiMastercard, SiStripe } from 'react-icons/si';
-import { useCart } from '../contexts/CartContext';
-import { useAuth } from '../contexts/AuthContext';
+import { useCart } from '../../contexts/CartContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'react-toastify';
 
 const PaymentPage = () => {
