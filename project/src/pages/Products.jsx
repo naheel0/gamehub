@@ -34,7 +34,7 @@ const Products = () => {
   const [gamesPerPage] = useState(6);
 
   // JSON Server base URL
-  const API_BASE = 'http://localhost:3001';
+  const API_BASE = 'https://gamehub-db.onrender.com';
 
   // Fetch data from JSON Server API
   useEffect(() => {
