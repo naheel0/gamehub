@@ -26,7 +26,7 @@ const ProductDetails = () => {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   
   // JSON Server base URL
-  const API_BASE = 'http://localhost:3001';
+  const API_BASE = 'https://gamehub-db.onrender.com';
 
   // Full screen image viewer state
   const [isFullScreen, setIsFullScreen] = useState(false);
