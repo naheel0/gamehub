@@ -19,7 +19,7 @@ export const CartProvider = ({ children }) => {
   const { user } = useAuth();
 
   // JSON Server base URL
-  const API_BASE = 'http://localhost:3001';
+  const API_BASE = 'https://gamehub-db.onrender.com';
 
   // Load cart from JSON Server when user changes
   useEffect(() => {
