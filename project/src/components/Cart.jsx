@@ -12,6 +12,7 @@ import {
   ShieldCheckIcon,
   TruckIcon 
 } from '@heroicons/react/24/outline';
+import { toast } from 'react-toastify';
 
 const CartPage = () => {
   const {
@@ -21,14 +22,12 @@ const CartPage = () => {
     updateQuantity,
     clearCart,
     getCartSummary,
-    checkout,
     isEmpty
   } = useCart();
   
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
-  const [selectedPayment, setSelectedPayment] = useState('card');
 
   const summary = getCartSummary();
 
@@ -55,16 +54,24 @@ const CartPage = () => {
       return;
     }
 
+    if (cart.some(item => !item.inStock)) {
+      toast.error('Please remove out-of-stock items before proceeding to payment.');
+      return;
+    }
+
     setIsCheckingOut(true);
     try {
-      const result = await checkout(selectedPayment);
-      if (result.success) {
-        setTimeout(() => {
-          navigate('/order-confirmation', { 
-            state: { order: result.order }
-          });
-        }, 1000);
-      }
+      // Navigate directly to payment page with cart summary
+      navigate('/payment', { 
+        state: { 
+          cartSummary: getCartSummary(),
+          cartItems: cart
+        }
+      });
+      
+    } catch (error) {
+      console.error('Navigation error:', error);
+      toast.error('Failed to proceed to payment.');
     } finally {
       setIsCheckingOut(false);
     }
@@ -168,7 +175,7 @@ const CartPage = () => {
                     <h3 className="text-lg font-semibold text-white mb-2">{item.name}</h3>
                     <div className="flex flex-wrap gap-2 mb-3">
                       <span className="bg-gray-800 text-gray-300 px-2 py-1 rounded text-xs">
-                        {item.category}
+                        {item.genre}
                       </span>
                       <span className="bg-gray-800 text-gray-300 px-2 py-1 rounded text-xs">
                         {item.platform}
@@ -257,37 +264,6 @@ const CartPage = () => {
                 </div>
               </div>
 
-              {/* Payment Method Selection */}
-              <div className="mb-6">
-                <h4 className="text-sm font-medium text-gray-300 mb-3">Payment Method</h4>
-                <div className="space-y-2">
-                  <label className="flex items-center gap-3 text-gray-300 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="payment"
-                      value="card"
-                      checked={selectedPayment === 'card'}
-                      onChange={(e) => setSelectedPayment(e.target.value)}
-                      disabled={isCheckingOut}
-                      className="text-red-600 focus:ring-red-500 border-gray-600 bg-gray-800"
-                    />
-                    <span>Credit/Debit Card</span>
-                  </label>
-                  <label className="flex items-center gap-3 text-gray-300 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="payment"
-                      value="paypal"
-                      checked={selectedPayment === 'paypal'}
-                      onChange={(e) => setSelectedPayment(e.target.value)}
-                      disabled={isCheckingOut}
-                      className="text-red-600 focus:ring-red-500 border-gray-600 bg-gray-800"
-                    />
-                    <span>PayPal</span>
-                  </label>
-                </div>
-              </div>
-
               {/* Checkout Button */}
               <button
                 onClick={handleCheckout}
@@ -300,7 +276,7 @@ const CartPage = () => {
                     Processing...
                   </div>
                 ) : (
-                  `Proceed to Checkout - $${summary.total}`
+                  `Proceed to Payment - $${summary.total}`
                 )}
               </button>
 

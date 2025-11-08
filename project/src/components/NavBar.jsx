@@ -48,7 +48,7 @@ const Navbar = () => {
 
   const handleProfileClick = () => {
     // You can add a profile page later
-    navigate('/');
+    navigate('/profile');
     setIsMenuOpen(false);
   };
 

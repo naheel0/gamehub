@@ -7,6 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useWishlist } from '../contexts/WishlistContext';
 import { GiFastBackwardButton } from 'react-icons/gi';
 import { MdArrowForwardIos, MdArrowBackIosNew } from "react-icons/md";
+import { toast } from 'react-toastify';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -38,7 +39,6 @@ const ProductDetails = () => {
     const fetchGame = async () => {
       try {
         setLoading(true);
-        // Fetch from JSON Server instead of local db.json
         const response = await fetch(`${API_BASE}/games/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch game data');
@@ -148,15 +148,59 @@ const ProductDetails = () => {
       for (let i = 0; i < quantity; i++) {
         addToCart(game);
       }
-      alert(`${quantity} ${game.name} added to cart!`);
+      toast.success(`${quantity} ${game.name} added to cart!`);
     } else {
-      alert('Sorry, this game is out of stock!');
+      toast.error('Sorry, this game is out of stock!');
     }
   };
 
   const buyNow = () => {
-    handleAddToCart();
-    navigate('/cart');
+    if (!user) {
+      toast.warning('Please login to make a purchase');
+      navigate('/login', { state: { from: `/product/${game.id}` } });
+      return;
+    }
+
+    if (!game.inStock) {
+      toast.error('Sorry, this game is out of stock!');
+      return;
+    }
+
+    // Create order data for single item purchase
+    const subtotal = game.price * quantity;
+    const tax = subtotal * 0.1; // 10% tax
+    const total = subtotal + tax;
+
+    const orderData = {
+      id: 'order_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+      items: [{
+        gameId: game.id,
+        name: game.name,
+        price: game.price,
+        quantity: quantity,
+        image: game.images?.[0],
+        platform: game.platform,
+        genre: game.genre
+      }],
+      summary: {
+        subtotal: subtotal.toFixed(2),
+        tax: tax.toFixed(2),
+        total: total.toFixed(2),
+        totalItems: quantity
+      },
+      status: 'pending',
+      date: new Date().toISOString(),
+      type: 'instant_purchase' // Flag to identify this is a single item purchase
+    };
+
+    // Navigate to payment page with the single item order
+    navigate('/payment', { 
+      state: { 
+        order: orderData,
+        fromProduct: true,
+        singleItem: true
+      }
+    });
   };
 
   const renderStars = (rating) => {
@@ -342,6 +386,11 @@ const ProductDetails = () => {
                   <span className="text-4xl font-bold text-white">${game.price}</span>
                   {game.originalPrice && (
                     <span className="text-xl text-gray-400 line-through">${game.originalPrice}</span>
+                  )}
+                  {quantity > 1 && (
+                    <span className="text-lg text-green-400">
+                      Total: ${(game.price * quantity).toFixed(2)}
+                    </span>
                   )}
                 </div>
 

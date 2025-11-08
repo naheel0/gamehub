@@ -1,6 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
-import NavBar from "./components/NavBar";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Home from "./components/Home";
 import Products from "./components/Products";
 import About from "./components/About";
@@ -18,14 +17,26 @@ import PaymentMethods from "./components/PaymentMethods";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import OrderConfirmation from './components/OrderConfirmation'
+import Navbar from "./components/NavBar";
+import Profile from "./components/Profile";
 
 function App() {
+  const location = useLocation();
+  
+  const hideNavbarRoutes = [
+    "/login",
+    "/signup", // Changed from "/register" to match your route
+  ];
+
+  const shouldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
+
   return (
     <AuthProvider>
       <CartProvider>
         <WishlistProvider>
           <div className="min-h-screen bg-black flex flex-col">
-            <NavBar />
+            {shouldShowNavbar && <Navbar />}
+            
             <main className="flex-grow">
               <Routes>
                 <Route path="/" element={<Home />} />
@@ -39,8 +50,10 @@ function App() {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/payment" element={<PaymentMethods />} />
                 <Route path="/order-confirmation" element={<OrderConfirmation />} />
+                <Route path="profile" element={<Profile/>}/>
               </Routes>
             </main>
+            
             <Footer />
             <ToastContainer theme="dark" />
           </div>

@@ -366,14 +366,90 @@
       "wishlist": [
         1,
         3,
-        5
+        5,
+        "16"
       ],
       "purchaseHistory": [
         2,
-        4
+        4,
+        {
+          "id": "cart_1762525928186_co51h7qur",
+          "items": [
+            {
+              "gameId": "9",
+              "name": "Assassin's Creed Mirage",
+              "price": 49.99,
+              "quantity": 2,
+              "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3035570/header.jpg?t=1753294133"
+            },
+            {
+              "gameId": "11",
+              "name": "Baldur's Gate 3",
+              "price": 59.99,
+              "quantity": 1,
+              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
+            }
+          ],
+          "summary": {
+            "subtotal": "159.97",
+            "tax": "16.00",
+            "total": "175.97"
+          },
+          "paymentMethod": "google",
+          "status": "completed",
+          "date": "2025-11-07T14:32:08.186Z"
+        },
+        {
+          "id": "cart_1762529157227_i6myemy3v",
+          "items": [
+            {
+              "gameId": "11",
+              "name": "Baldur's Gate 3",
+              "price": 59.99,
+              "quantity": 1,
+              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
+            }
+          ],
+          "summary": {
+            "subtotal": "59.99",
+            "tax": "6.00",
+            "total": "65.99"
+          },
+          "paymentMethod": "paypal",
+          "status": "completed",
+          "date": "2025-11-07T15:25:57.228Z"
+        },
+        {
+          "id": "cart_1762529299409_aptkvsrhh",
+          "items": [
+            {
+              "gameId": "11",
+              "name": "Baldur's Gate 3",
+              "price": 59.99,
+              "quantity": 1,
+              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
+            }
+          ],
+          "summary": {
+            "subtotal": "59.99",
+            "tax": "6.00",
+            "total": "65.99"
+          },
+          "paymentMethod": "paypal",
+          "status": "completed",
+          "date": "2025-11-07T15:28:19.409Z"
+        }
       ],
       "createdAt": "2024-01-15T10:30:00Z",
-      "cart": []
+      "cart": [
+        {
+          "id": "cart_1762529530386_2mt3ghxjv",
+          "gameId": "11",
+          "quantity": 1,
+          "addedAt": "2025-11-07T15:32:10.386Z",
+          "updatedAt": "2025-11-07T15:32:10.386Z"
+        }
+      ]
     },
     {
       "id": "2",
@@ -381,7 +457,6 @@
       "lastName": "muhammed",
       "email": "naheel@gmail.com",
       "phone": "9876543210",
-      "password": "123456",
       "wishlist": [
         4,
         20,
@@ -407,10 +482,44 @@
           "paymentMethod": "paypal",
           "status": "completed",
           "date": "2025-11-06T09:33:55.795Z"
+        },
+        {
+          "id": "cart_1762512966567_8a9r9b3bd",
+          "items": [
+            {
+              "gameId": "20",
+              "name": "Dying Light 2 Stay Human",
+              "price": 49.99,
+              "quantity": 1,
+              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/534380/header.jpg"
+            }
+          ],
+          "summary": {
+            "subtotal": "49.99",
+            "tax": "5.00",
+            "total": "54.99"
+          },
+          "paymentMethod": "google",
+          "status": "completed",
+          "date": "2025-11-07T10:56:06.568Z"
         }
       ],
       "createdAt": "2025-11-06T05:13:51.898Z",
-      "cart": []
+      "cart": [],
+      "addresses": [
+        {
+          "id": "addr_1762575509673",
+          "fullName": "github naheel",
+          "addressLine1": "zdxchgjhjn",
+          "addressLine2": "",
+          "city": "kerala",
+          "state": "zsdxgfchgv",
+          "zipCode": "12345",
+          "country": "india",
+          "phone": "9877613021",
+          "isDefault": false
+        }
+      ]
     },
     {
       "id": "9874",
@@ -418,7 +527,6 @@
       "lastName": "safvan",
       "email": "mhdsafvan15@gmail.com",
       "phone": "9497521874",
-      "password": "Safvan@15",
       "wishlist": [
         "19"
       ],
@@ -530,9 +638,117 @@
           "paymentMethod": "card",
           "status": "completed",
           "date": "2025-11-07T05:04:22.599Z"
+        },
+        {
+          "id": "cart_1762496424683_bx255j7ms",
+          "items": [
+            {
+              "gameId": "3",
+              "name": "Cyberpunk 2077",
+              "price": 39.99,
+              "quantity": 1,
+              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg"
+            },
+            {
+              "gameId": "11",
+              "name": "Baldur's Gate 3",
+              "price": 59.99,
+              "quantity": 1,
+              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
+            },
+            {
+              "gameId": "4",
+              "name": "Call of Duty: Modern Warfare III",
+              "price": 69.99,
+              "quantity": 1,
+              "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3595270/7d0f21912a075c33bbb5ea558100e187ceb234ac/header.jpg?t=1758060267"
+            }
+          ],
+          "summary": {
+            "subtotal": "169.97",
+            "tax": "17.00",
+            "total": "186.97"
+          },
+          "paymentMethod": "card",
+          "status": "completed",
+          "date": "2025-11-07T06:20:24.683Z"
+        },
+        {
+          "id": "cart_1762497921158_46seyln35",
+          "items": [
+            {
+              "gameId": "11",
+              "name": "Baldur's Gate 3",
+              "price": 59.99,
+              "quantity": 1,
+              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
+            }
+          ],
+          "summary": {
+            "subtotal": "59.99",
+            "tax": "6.00",
+            "total": "65.99"
+          },
+          "paymentMethod": "apple",
+          "status": "completed",
+          "date": "2025-11-07T06:45:21.158Z"
+        },
+        {
+          "id": "cart_1762498035104_li0l7qhkw",
+          "items": [
+            {
+              "gameId": "11",
+              "name": "Baldur's Gate 3",
+              "price": 59.99,
+              "quantity": 1,
+              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
+            }
+          ],
+          "summary": {
+            "subtotal": "59.99",
+            "tax": "6.00",
+            "total": "65.99"
+          },
+          "paymentMethod": "paypal",
+          "status": "completed",
+          "date": "2025-11-07T06:47:15.104Z"
+        },
+        {
+          "id": "cart_1762579494014_05unwk3f6",
+          "items": [
+            {
+              "gameId": "4",
+              "name": "Call of Duty: Modern Warfare III",
+              "price": 69.99,
+              "quantity": 1,
+              "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3595270/7d0f21912a075c33bbb5ea558100e187ceb234ac/header.jpg?t=1758060267"
+            }
+          ],
+          "summary": {
+            "subtotal": "69.99",
+            "tax": "7.00",
+            "total": "76.99"
+          },
+          "paymentMethod": "google",
+          "status": "completed",
+          "date": "2025-11-08T05:24:54.014Z"
         }
       ],
-      "createdAt": "2025-11-06T10:24:03.445Z"
+      "createdAt": "2025-11-06T10:24:03.445Z",
+      "addresses": [
+        {
+          "id": "addr_1762579436373",
+          "fullName": "muhammed safvan",
+          "addressLine1": "wertyuiop[",
+          "addressLine2": "wertyuiop[]fghjkl;'",
+          "city": "malapppuram",
+          "state": "kerala",
+          "zipCode": "12345",
+          "country": "india",
+          "phone": "0987761302",
+          "isDefault": false
+        }
+      ]
     }
   ]
 }
