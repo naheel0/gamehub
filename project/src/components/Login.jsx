@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import Logo from '../components/Logo'
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -64,9 +65,7 @@ const Login = () => {
         {/* Header */}
         <div className="text-center">
           <Link to="/" className="inline-block">
-            <span className="text-3xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
-              GameHub
-            </span>
+            <Logo/>
           </Link>
           <h2 className="mt-6 text-3xl font-bold text-white">Sign in to your account</h2>
           <p className="mt-2 text-sm text-gray-400">

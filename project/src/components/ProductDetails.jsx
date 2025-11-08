@@ -437,7 +437,7 @@ const ProductDetails = () => {
                     disabled={!game.inStock}
                     className={`flex-1 flex items-center justify-center space-x-2 py-3 px-6 rounded-lg transition duration-300 border ${
                       game.inStock
-                        ? 'bg-red-600 hover:bg-red-700 text-white border-red-600'
+                        ? 'bg-red-600 hover:bg-red-700 hover:transform hover:scale-105 transition duration-300 text-white border-red-600'
                         : 'bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600'
                     }`}
                   >
@@ -450,7 +450,7 @@ const ProductDetails = () => {
                     disabled={!game.inStock}
                     className={`flex-1 py-3 px-6 rounded-lg transition duration-300 border ${
                       game.inStock
-                        ? 'bg-green-600 hover:bg-green-700 text-white border-green-600'
+                        ? 'bg-green-600 hover:bg-green-700 hover:transform hover:scale-105 transition duration-300 text-white border-green-600'
                         : 'bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600'
                     }`}
                   >

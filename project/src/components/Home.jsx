@@ -148,7 +148,7 @@ const Home = () => {
                     </Link>
                     <button
                       onClick={() => window.open(game.trailer, "_blank")}
-                      className="bg-white bg-opacity-20 hover:bg-opacity-30 text-red-700 px-8 py-4 rounded-lg font-bold text-lg transition duration-300 backdrop-blur-sm flex items-center justify-center border border-gray-400"
+                      className="bg-white bg-opacity-20 hover:bg-opacity-30 text-red-700 px-8 py-4 rounded-lg font-bold text-lg transition duration-300 transform hover:scale-105 "
                     >
                       Watch Trailer
                     </button>

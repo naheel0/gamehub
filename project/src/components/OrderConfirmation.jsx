@@ -27,24 +27,53 @@ const OrderConfirmation = () => {
   const [countdown, setCountdown] = useState(5);
 
   useEffect(() => {
-    // Get order data from navigation state or localStorage
-    const orderData = location.state?.order || JSON.parse(localStorage.getItem('lastOrder'));
+    const orderData = location.state?.order || JSON.parse(localStorage.getItem('lastOrder') || 'null');
     
     if (orderData) {
-      setOrder(orderData);
-      localStorage.setItem('lastOrder', JSON.stringify(orderData));
+      const processedOrder = processOrderData(orderData);
+      setOrder(processedOrder);
+      localStorage.setItem('lastOrder', JSON.stringify(processedOrder));
       
-      // Clear cart after successful order
       if (location.state?.fromCart) {
         clearCart();
       }
     } else {
-      // Redirect to home if no order data
       navigate('/');
     }
     
     setLoading(false);
   }, [location, navigate, clearCart]);
+
+  const processOrderData = (orderData) => {
+    if (orderData.type === 'instant_purchase') {
+      return {
+        id: orderData.id || `order_${Date.now()}`,
+        items: orderData.items || [],
+        summary: orderData.summary || {
+          subtotal: '0.00',
+          tax: '0.00',
+          total: '0.00'
+        },
+        status: 'completed',
+        paymentMethod: orderData.paymentMethod || 'card',
+        date: orderData.date || new Date().toISOString(),
+        type: 'instant_purchase'
+      };
+    }
+    
+    return {
+      id: orderData.id || `order_${Date.now()}`,
+      items: orderData.items || [],
+      summary: orderData.summary || {
+        subtotal: '0.00',
+        tax: '0.00',
+        total: '0.00'
+      },
+      status: orderData.status || 'completed',
+      paymentMethod: orderData.paymentMethod || 'card',
+      date: orderData.date || new Date().toISOString()
+    };
+  };
 
   useEffect(() => {
     if (order) {
@@ -62,14 +91,44 @@ const OrderConfirmation = () => {
     }
   }, [order]);
 
+  // Format date function with proper try-catch structure
+  const formatDate = (dateString) => {
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  };
+
+  const date = new Date(dateString);
+  return isNaN(date) ? new Date().toLocaleString('en-US', options) : date.toLocaleString('en-US', options);
+};
+
+
+  // Get payment method icon function
+  const getPaymentMethodIcon = (method) => {
+    if (!method) return <CreditCardIcon className="h-5 w-5" />;
+    
+    switch (method.toLowerCase()) {
+      case 'card':
+        return <CreditCardIcon className="h-5 w-5" />;
+      case 'paypal':
+        return 'PP';
+      case 'crypto':
+        return '₿';
+      default:
+        return <CreditCardIcon className="h-5 w-5" />;
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-900 via-gray-900 to-black py-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="animate-pulse text-center">
-            <div className="h-24 w-24 bg-green-800 rounded-full mx-auto mb-6"></div>
-            <div className="h-8 bg-gray-800 rounded w-1/3 mx-auto mb-4"></div>
-            <div className="h-4 bg-gray-800 rounded w-1/2 mx-auto"></div>
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto mb-4"></div>
+            <p className="text-gray-300">Loading your order...</p>
           </div>
         </div>
       </div>
@@ -95,28 +154,12 @@ const OrderConfirmation = () => {
     );
   }
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const getPaymentMethodIcon = (method) => {
-    switch (method.toLowerCase()) {
-      case 'card':
-        return <CreditCardIcon className="h-5 w-5" />;
-      case 'paypal':
-        return 'PP';
-      case 'crypto':
-        return '₿';
-      default:
-        return <CreditCardIcon className="h-5 w-5" />;
-    }
-  };
+  const orderId = order.id || 'Unknown Order';
+  const orderDate = order.date || new Date().toISOString();
+  const orderStatus = order.status || 'completed';
+  const paymentMethod = order.paymentMethod || 'card';
+  const orderSummary = order.summary || { subtotal: '0.00', tax: '0.00', total: '0.00' };
+  const orderItems = order.items || [];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-900 via-gray-900 to-black py-8">
@@ -131,7 +174,7 @@ const OrderConfirmation = () => {
             Order Confirmed!
           </h1>
           <p className="text-xl text-green-400 mb-2">
-            Thank you for your purchase, {user?.name}!
+            Thank you for your purchase{user?.firstName ? `, ${user.firstName}` : ''}!
           </p>
           <p className="text-gray-400">
             Your order has been successfully processed and your games are ready to play.
@@ -144,15 +187,17 @@ const OrderConfirmation = () => {
           <div className="bg-gradient-to-r from-green-600 to-green-700 p-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
               <div>
-                <h2 className="text-2xl font-bold text-white mb-2">Order #{order.id.slice(-8).toUpperCase()}</h2>
+                <h2 className="text-2xl font-bold text-white mb-2">
+                  Order #{orderId.slice(-8).toUpperCase()}
+                </h2>
                 <p className="text-green-100 flex items-center">
                   <CalendarIcon className="h-4 w-4 mr-2" />
-                  {formatDate(order.date)}
+                  {formatDate(orderDate)}
                 </p>
               </div>
               <div className="bg-white/20 rounded-lg px-4 py-2 mt-4 sm:mt-0">
                 <span className="text-white font-semibold text-lg">
-                  ${order.summary.total}
+                  ${orderSummary.total || '0.00'}
                 </span>
               </div>
             </div>
@@ -164,34 +209,43 @@ const OrderConfirmation = () => {
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
                 <ShoppingBagSolid className="h-5 w-5 mr-2 text-green-400" />
-                Games Purchased ({order.items.length})
+                Games Purchased ({orderItems.length})
               </h3>
-              <div className="space-y-4">
-                {order.items.map((item, index) => (
-                  <div 
-                    key={index} 
-                    className="flex items-center justify-between p-4 bg-gray-700/30 rounded-lg border border-gray-600/30 hover:border-green-500/30 transition duration-300"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <img
-                        src={item.image || '/api/placeholder/60/60'}
-                        alt={item.name}
-                        className="w-12 h-12 object-cover rounded-lg"
-                      />
-                      <div>
-                        <h4 className="text-white font-semibold">{item.name}</h4>
-                        <p className="text-gray-400 text-sm">Quantity: {item.quantity}</p>
+              {orderItems.length > 0 ? (
+                <div className="space-y-4">
+                  {orderItems.map((item, index) => (
+                    <div 
+                      key={index} 
+                      className="flex items-center justify-between p-4 bg-gray-700/30 rounded-lg border border-gray-600/30 hover:border-green-500/30 transition duration-300"
+                    >
+                      <div className="flex items-center space-x-4">
+                        <img
+                          src={item.image || '/images/placeholder-game.jpg'}
+                          alt={item.name}
+                          className="w-12 h-12 object-cover rounded-lg"
+                          onError={(e) => {
+                            e.target.src = '/images/placeholder-game.jpg';
+                          }}
+                        />
+                        <div>
+                          <h4 className="text-white font-semibold">{item.name || 'Unknown Game'}</h4>
+                          <p className="text-gray-400 text-sm">Quantity: {item.quantity || 1}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-white font-semibold">${item.price || '0.00'}</p>
+                        <p className="text-green-400 text-sm">
+                          ${((item.price || 0) * (item.quantity || 1)).toFixed(2)}
+                        </p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-white font-semibold">${item.price}</p>
-                      <p className="text-green-400 text-sm">
-                        ${(item.price * item.quantity).toFixed(2)}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 bg-gray-700/30 rounded-lg">
+                  <p className="text-gray-400">No items in this order</p>
+                </div>
+              )}
             </div>
 
             {/* Order Summary */}
@@ -203,16 +257,16 @@ const OrderConfirmation = () => {
                   <div className="flex justify-between items-center p-3 bg-gray-700/30 rounded-lg">
                     <span className="text-gray-400">Status</span>
                     <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                      Completed
+                      {orderStatus}
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-gray-700/30 rounded-lg">
                     <span className="text-gray-400 flex items-center">
-                      <CreditCardIcon className="h-4 w-4 mr-2" />
-                      {getPaymentMethodIcon(order.paymentMethod)}
+                      {getPaymentMethodIcon(paymentMethod)}
+                      <span className="ml-2">Payment Method</span>
                     </span>
                     <span className="text-white font-semibold capitalize">
-                      {order.paymentMethod}
+                      {paymentMethod}
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-gray-700/30 rounded-lg">
@@ -231,11 +285,11 @@ const OrderConfirmation = () => {
                 <div className="space-y-2 bg-gray-700/30 rounded-lg p-4">
                   <div className="flex justify-between text-gray-300">
                     <span>Subtotal</span>
-                    <span>${order.summary.subtotal}</span>
+                    <span>${orderSummary.subtotal || '0.00'}</span>
                   </div>
                   <div className="flex justify-between text-gray-300">
                     <span>Tax</span>
-                    <span>${order.summary.tax}</span>
+                    <span>${orderSummary.tax || '0.00'}</span>
                   </div>
                   <div className="flex justify-between text-gray-300">
                     <span>Shipping</span>
@@ -244,7 +298,7 @@ const OrderConfirmation = () => {
                   <div className="border-t border-gray-600 pt-2 mt-2">
                     <div className="flex justify-between text-lg font-bold text-white">
                       <span>Total</span>
-                      <span className="text-green-400">${order.summary.total}</span>
+                      <span className="text-green-400">${orderSummary.total || '0.00'}</span>
                     </div>
                   </div>
                 </div>
@@ -330,43 +384,6 @@ const OrderConfirmation = () => {
           </p>
         </div>
       </div>
-
-      {/* Confetti Effect (CSS-based) */}
-      <style jsx>{`
-        @keyframes confettiFall {
-          0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-          100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-        }
-        
-        .confetti {
-          position: fixed;
-          width: 10px;
-          height: 10px;
-          background: #10B981;
-          animation: confettiFall 3s linear forwards;
-          z-index: 1000;
-        }
-        
-        .confetti:nth-child(2n) { background: #EF4444; }
-        .confetti:nth-child(3n) { background: #3B82F6; }
-        .confetti:nth-child(4n) { background: #F59E0B; }
-        .confetti:nth-child(5n) { background: #8B5CF6; }
-      `}</style>
-      
-      {/* Generate confetti */}
-      {typeof window !== 'undefined' && 
-        Array.from({ length: 50 }).map((_, i) => (
-          <div
-            key={i}
-            className="confetti"
-            style={{
-              left: `${Math.random() * 100}vw`,
-              animationDelay: `${Math.random() * 2}s`,
-              animationDuration: `${2 + Math.random() * 2}s`
-            }}
-          />
-        ))
-      }
     </div>
   );
 };

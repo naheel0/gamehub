@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCartIcon, HeartIcon, UserIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '../contexts/AuthContext';
-
+import Logo from './Logo';
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
@@ -78,7 +78,7 @@ const Navbar = () => {
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center">
               <span className="text-2xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
-                GameHub
+                <Logo/>
               </span>
             </Link>
           </div>
@@ -163,7 +163,7 @@ const Navbar = () => {
                 
                 {/* User Dropdown */}
                 <div className="relative group">
-                  <button className="flex items-center space-x-1 px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 transition duration-300 border border-red-600">
+                  <button className="flex items-center space-x-1 px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 hover:transform hover:scale-105 transition duration-300 border border-red-600">
                     <UserIcon className="h-4 w-4" />
                     <span>Account</span>
                   </button>

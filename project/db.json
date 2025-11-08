@@ -324,7 +324,7 @@
       "platform": "PC, PlayStation, Xbox",
       "price": 69.99,
       "rating": 4.5,
-      "inStock": true,
+      "inStock": false,
       "trailer": "https://www.youtube.com/embed/MpR0hC3fNFE",
       "images": [
         "https://cdn.cloudflare.steamstatic.com/steam/apps/2344520/header.jpg",
@@ -456,6 +456,7 @@
       "firstName": "naheel",
       "lastName": "muhammed",
       "email": "naheel@gmail.com",
+      "password": "123456",
       "phone": "9876543210",
       "wishlist": [
         4,
@@ -505,7 +506,22 @@
         }
       ],
       "createdAt": "2025-11-06T05:13:51.898Z",
-      "cart": [],
+      "cart": [
+        {
+          "id": "cart_1762598099071_jfggxxjp6",
+          "gameId": "20",
+          "quantity": 8,
+          "addedAt": "2025-11-08T10:34:59.071Z",
+          "updatedAt": "2025-11-08T10:37:53.353Z"
+        },
+        {
+          "id": "cart_1762598240604_j5s4z2oxm",
+          "gameId": "11",
+          "quantity": 1,
+          "addedAt": "2025-11-08T10:37:20.604Z",
+          "updatedAt": "2025-11-08T10:37:20.604Z"
+        }
+      ],
       "addresses": [
         {
           "id": "addr_1762575509673",

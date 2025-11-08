@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from './AuthContext';
 
 const WishlistContext = createContext();
-
+// eslint-disable-next-line react-refresh/only-export-components
 export const useWishlist = () => {
   const context = useContext(WishlistContext);
   if (!context) {
