@@ -1,24 +1,9 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "project/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/project/dist/$1"
-    }
-  ],
+  "buildCommand": "cd project && npm run build",
+  "outputDirectory": "project/dist",
   "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/project/dist/index.html"
-    }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
+
