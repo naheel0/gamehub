@@ -41,7 +41,7 @@ const Profile = () => {
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [orderCount, setOrderCount] = useState(0);
 
-  const API_BASE = 'http://localhost:3001';
+  const API_BASE = 'https://gamehub-db.onrender.com';
 
   // Format rupees
   const formatRupees = (amount) => {
