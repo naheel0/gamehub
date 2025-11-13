@@ -17,7 +17,7 @@ export const CartProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const { user, updateUserPartial } = useAuth();
 
-  const API_BASE = 'http://localhost:3001';
+  const API_BASE = 'https://gamehub-db.onrender.com';
 
   // Use useCallback to prevent unnecessary reloads
   const loadCart = useCallback(async () => {
