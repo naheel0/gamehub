@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const API_BASE = 'http://localhost:3001';
+  const API_BASE = 'https://gamehub-db.onrender.com';
 
   useEffect(() => {
     const savedUser = localStorage.getItem('gameHubUser');
