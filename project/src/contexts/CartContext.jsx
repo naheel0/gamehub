@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useAuth } from './AuthContext';
 
@@ -15,65 +16,65 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { user, updateUserPartial } = useAuth();
+  const { user } = useAuth();
 
+  
   const API_BASE = 'https://gamehub-db.onrender.com';
 
-  // Use useCallback to prevent unnecessary reloads
-  const loadCart = useCallback(async () => {
-    if (!user) {
-      setCart([]);
-      setLoading(false);
-      return;
-    }
-
-    try {
-      setLoading(true);
-      
-      const response = await fetch(`${API_BASE}/users/${user.id}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch user data');
-      }
-      
-      const userData = await response.json();
-      const cartItems = userData.cart || [];
-
-      if (cartItems.length > 0) {
-        const cartPromises = cartItems.map(async (cartItem) => {
-          try {
-            const gameResponse = await fetch(`${API_BASE}/games/${cartItem.gameId}`);
-            if (gameResponse.ok) {
-              const game = await gameResponse.json();
-              return {
-                ...game,
-                quantity: cartItem.quantity,
-                cartItemId: cartItem.id,
-                addedAt: cartItem.addedAt
-              };
-            }
-          } catch (error) {
-            console.error(`Error fetching game ${cartItem.gameId}:`, error);
-          }
-          return null;
-        });
-
-        const cartGames = (await Promise.all(cartPromises)).filter(item => item !== null);
-        setCart(cartGames);
-      } else {
-        setCart([]);
-      }
-      
-      setLoading(false);
-    } catch (error) {
-      console.error('Error loading cart:', error);
-      toast.error('Failed to load cart');
-      setLoading(false);
-    }
-  }, [user]);
-
   useEffect(() => {
+    const loadCart = async () => {
+      if (!user) {
+        setCart([]);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        
+        const response = await fetch(`${API_BASE}/users/${user.id}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+        
+        const userData = await response.json();
+        const cartItems = userData.cart || [];
+
+        if (cartItems.length > 0) {
+          const cartPromises = cartItems.map(async (cartItem) => {
+            try {
+              const gameResponse = await fetch(`${API_BASE}/games/${cartItem.gameId}`);
+              if (gameResponse.ok) {
+                const game = await gameResponse.json();
+                return {
+                  ...game,
+                  quantity: cartItem.quantity,
+                  cartItemId: cartItem.id,
+                  addedAt: cartItem.addedAt
+                };
+              }
+            } catch (error) {
+              console.error(`Error fetching game ${cartItem.gameId}:`, error);
+            }
+            return null;
+          });
+
+          const cartGames = (await Promise.all(cartPromises)).filter(item => item !== null);
+          setCart(cartGames);
+        } else {
+          setCart([]);
+        }
+        
+        setLoading(false);
+      } catch (error) {
+        console.error('Error loading cart:', error);
+        toast.error('Failed to load cart');
+        setLoading(false);
+      }
+    };
+
     loadCart();
-  }, [loadCart]);
+  }, [user]);
 
   const generateCartItemId = () => {
     return 'cart_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
@@ -123,24 +124,47 @@ export const CartProvider = ({ children }) => {
         updatedCart = [...currentCart, newCartItem];
       }
 
-      // Use partial update to avoid affecting other user data
-      await updateUserPartial({ cart: updatedCart });
+      const updateResponse = await fetch(`${API_BASE}/users/${user.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cart: updatedCart
+        }),
+      });
 
-      // Update local state without reloading entire cart
-      const existingCartItemIndex = cart.findIndex(item => item.id === game.id);
-      if (existingCartItemIndex > -1) {
-        setCart(prev => prev.map((item, index) => 
-          index === existingCartItemIndex 
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
-        ));
+      if (!updateResponse.ok) {
+        throw new Error('Failed to update cart');
+      }
+
+      const reloadResponse = await fetch(`${API_BASE}/users/${user.id}`);
+      const updatedUserData = await reloadResponse.json();
+      const updatedCartItems = updatedUserData.cart || [];
+      
+      if (updatedCartItems.length > 0) {
+        const cartPromises = updatedCartItems.map(async (cartItem) => {
+          try {
+            const gameResponse = await fetch(`${API_BASE}/games/${cartItem.gameId}`);
+            if (gameResponse.ok) {
+              const game = await gameResponse.json();
+              return {
+                ...game,
+                quantity: cartItem.quantity,
+                cartItemId: cartItem.id,
+                addedAt: cartItem.addedAt
+              };
+            }
+          } catch (error) {
+            console.error(`Error fetching game ${cartItem.gameId}:`, error);
+          }
+          return null;
+        });
+
+        const cartGames = (await Promise.all(cartPromises)).filter(item => item !== null);
+        setCart(cartGames);
       } else {
-        setCart(prev => [...prev, {
-          ...game,
-          quantity: quantity,
-          cartItemId: generateCartItemId(),
-          addedAt: new Date().toISOString()
-        }]);
+        setCart([]);
       }
       
       toast.success(`${game.name} added to cart!`);
@@ -167,8 +191,19 @@ export const CartProvider = ({ children }) => {
       const userData = await userResponse.json();
       const updatedCart = (userData.cart || []).filter(item => item.gameId !== gameId);
 
-      // Use partial update
-      await updateUserPartial({ cart: updatedCart });
+      const updateResponse = await fetch(`${API_BASE}/users/${user.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cart: updatedCart
+        }),
+      });
+
+      if (!updateResponse.ok) {
+        throw new Error('Failed to update cart');
+      }
 
       const removedGame = cart.find(item => item.id === gameId);
       setCart(prev => prev.filter(item => item.id !== gameId));
@@ -207,8 +242,19 @@ export const CartProvider = ({ children }) => {
           : item
       );
 
-      // Use partial update
-      await updateUserPartial({ cart: updatedCart });
+      const updateResponse = await fetch(`${API_BASE}/users/${user.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cart: updatedCart
+        }),
+      });
+
+      if (!updateResponse.ok) {
+        throw new Error('Failed to update cart');
+      }
 
       setCart(prev => prev.map(item => 
         item.id === gameId ? { ...item, quantity: newQuantity } : item
@@ -228,8 +274,19 @@ export const CartProvider = ({ children }) => {
     }
 
     try {
-      // Use partial update
-      await updateUserPartial({ cart: [] });
+      const updateResponse = await fetch(`${API_BASE}/users/${user.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cart: []
+        }),
+      });
+
+      if (!updateResponse.ok) {
+        throw new Error('Failed to clear cart');
+      }
 
       setCart([]);
       toast.info('Cart cleared successfully');
@@ -269,7 +326,7 @@ export const CartProvider = ({ children }) => {
     return cart.length === 0;
   };
 
-  const checkout = async (paymentMethod = 'card', shippingAddress) => {
+  const checkout = async (paymentMethod = 'card') => {
     if (!user) {
       toast.warning('Please log in to checkout.');
       return { success: false, error: 'User not logged in' };
@@ -305,16 +362,24 @@ export const CartProvider = ({ children }) => {
           total: summary.total
         },
         paymentMethod,
-        shippingAddress,
         status: 'completed',
         date: new Date().toISOString()
       };
 
-      // Use partial update for both purchase history and cart
-      await updateUserPartial({
-        purchaseHistory: [...purchaseHistory, order],
-        cart: []
+      const updateResponse = await fetch(`${API_BASE}/users/${user.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          purchaseHistory: [...purchaseHistory, order],
+          cart: []
+        }),
       });
+
+      if (!updateResponse.ok) {
+        throw new Error('Failed to process checkout');
+      }
 
       setCart([]);
       toast.success('Order placed successfully! Thank you for your purchase.');
