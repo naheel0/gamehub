@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -12,37 +11,20 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useCart } from "../../contexts/CartContext";
 import { useWishlist } from "../../contexts/WishlistContext";
 import Logo from "../common/Logo";
-=======
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCartIcon, HeartIcon, UserIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useAuth } from '../../contexts/AuthContext';
-import { useCart } from '../../contexts/CartContext';
-import { useWishlist } from '../../contexts/WishlistContext';
-import Logo from '../common/Logo';
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const { user, logout } = useAuth();
   const { getCartItemCount, getCartSummary } = useCart();
-<<<<<<< HEAD
   const { getWishlistCount } = useWishlist();
   const navigate = useNavigate();
 
   const handleLogin = () => navigate("/login");
-=======
-  const {  getWishlistCount } = useWishlist();
-  const navigate = useNavigate();
-
-  const handleLogin = () => navigate('/login');
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
   const handleLogout = () => {
     logout();
     setIsMenuOpen(false);
   };
-<<<<<<< HEAD
   const handleCartClick = () => navigate("/cart");
   const handleWishlistClick = () => navigate("/wishlist");
   const handleProfileClick = () => {
@@ -52,15 +34,6 @@ const Navbar = () => {
 
   const userRole = user?.role; // 'admin' or 'user'
   const handleAdminClick = () => navigate("/admin");
-=======
-  const handleCartClick = () => navigate('/cart');
-  const handleWishlistClick = () => navigate('/wishlist');
-  const handleProfileClick = () => {
-    navigate('/profile');
-    setIsMenuOpen(false);
-  };
-
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
   return (
     <nav className="bg-black text-white shadow-lg sticky top-0 z-50 border-b border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -77,13 +50,8 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
-<<<<<<< HEAD
               {["/", "/products", "/about", "/contact"].map((path, idx) => {
                 const names = ["Home", "Products", "About", "Contact"];
-=======
-              {['/', '/products', '/about', '/contact'].map((path, idx) => {
-                const names = ['Home', 'Products', 'About', 'Contact'];
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
                 return (
                   <Link
                     key={idx}
@@ -112,13 +80,9 @@ const Navbar = () => {
               )}
               <div className="absolute top-full right-0 mt-2 w-48 bg-gray-900 text-white rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-700">
                 <div className="p-3 text-sm">
-<<<<<<< HEAD
                   <p className="font-semibold">
                     {getWishlistCount()} items in wishlist
                   </p>
-=======
-                  <p className="font-semibold">{getWishlistCount()} items in wishlist</p>
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
                   <p className="text-gray-300">Click to view</p>
                 </div>
               </div>
@@ -137,17 +101,12 @@ const Navbar = () => {
               )}
               <div className="absolute top-full right-0 mt-2 w-48 bg-gray-900 text-white rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-700">
                 <div className="p-3 text-sm">
-<<<<<<< HEAD
                   <p className="font-semibold">
                     {getCartItemCount()} items in cart
                   </p>
                   <p className="text-gray-300">
                     Total: ₹{getCartSummary().subtotal}
                   </p>
-=======
-                  <p className="font-semibold">{getCartItemCount()} items in cart</p>
-                  <p className="text-gray-300">Total: ₹{getCartSummary().subtotal}</p>
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
                 </div>
               </div>
             </button>
@@ -155,13 +114,9 @@ const Navbar = () => {
             {/* User Account */}
             {user ? (
               <div className="flex items-center space-x-3">
-<<<<<<< HEAD
                 <span className="text-sm text-gray-300 hidden lg:block">
                   Welcome, {user.firstName}
                 </span>
-=======
-                <span className="text-sm text-gray-300 hidden lg:block">Welcome, {user.firstName}</span>
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
                 <div className="relative group">
                   <button className="flex items-center space-x-1 px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 hover:transform hover:scale-105 transition duration-300 border border-red-600">
                     <UserIcon className="h-4 w-4" />
@@ -175,7 +130,6 @@ const Navbar = () => {
                         </p>
                         <p className="text-xs">{user.email}</p>
                       </div>
-<<<<<<< HEAD
                       {userRole === "admin" ? (
                         <button
                           onClick={handleAdminClick}
@@ -206,17 +160,15 @@ const Navbar = () => {
                       >
                         Sign Out
                       </button>
-=======
-                      <button onClick={handleProfileClick} className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 transition duration-300">Profile</button>
-                      <button onClick={handleWishlistClick} className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 transition duration-300">My Wishlist</button>
-                      <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-gray-800 transition duration-300 border-t border-gray-700">Sign Out</button>
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
                     </div>
                   </div>
                 </div>
               </div>
             ) : (
-              <button onClick={handleLogin} className="flex items-center space-x-1 px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 transition duration-300 border border-red-600">
+              <button
+                onClick={handleLogin}
+                className="flex items-center space-x-1 px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 transition duration-300 border border-red-600"
+              >
                 <UserIcon className="h-4 w-4" />
                 <span>Login</span>
               </button>
@@ -225,14 +177,10 @@ const Navbar = () => {
 
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-2">
-<<<<<<< HEAD
             <button
               onClick={handleWishlistClick}
               className="p-2 rounded-md hover:bg-gray-800 transition duration-300 relative"
             >
-=======
-            <button onClick={handleWishlistClick} className="p-2 rounded-md hover:bg-gray-800 transition duration-300 relative">
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
               <HeartIcon className="h-6 w-6" />
               {getWishlistCount() > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-600 text-xs rounded-full h-4 w-4 flex items-center justify-center">
@@ -240,14 +188,10 @@ const Navbar = () => {
                 </span>
               )}
             </button>
-<<<<<<< HEAD
             <button
               onClick={handleCartClick}
               className="p-2 rounded-md hover:bg-gray-800 transition duration-300 relative"
             >
-=======
-            <button onClick={handleCartClick} className="p-2 rounded-md hover:bg-gray-800 transition duration-300 relative">
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
               <ShoppingCartIcon className="h-6 w-6" />
               {getCartItemCount() > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-600 text-xs rounded-full h-4 w-4 flex items-center justify-center">
@@ -255,7 +199,6 @@ const Navbar = () => {
                 </span>
               )}
             </button>
-<<<<<<< HEAD
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="p-2 rounded-md hover:bg-gray-800 transition duration-300"
@@ -265,10 +208,6 @@ const Navbar = () => {
               ) : (
                 <Bars3Icon className="h-6 w-6" />
               )}
-=======
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 rounded-md hover:bg-gray-800 transition duration-300">
-              {isMenuOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
             </button>
           </div>
         </div>
@@ -278,13 +217,8 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-gray-900 border-b border-gray-800">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-<<<<<<< HEAD
             {["/", "/products", "/about", "/contact"].map((path, idx) => {
               const names = ["Home", "Products", "About", "Contact"];
-=======
-            {['/', '/products', '/about', '/contact'].map((path, idx) => {
-              const names = ['Home', 'Products', 'About', 'Contact'];
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
               return (
                 <Link
                   key={idx}
@@ -297,15 +231,11 @@ const Navbar = () => {
               );
             })}
 
-<<<<<<< HEAD
             <Link
               to="/wishlist"
               className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-red-400 transition duration-300"
               onClick={() => setIsMenuOpen(false)}
             >
-=======
-            <Link to="/wishlist" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-red-400 transition duration-300" onClick={() => setIsMenuOpen(false)}>
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
               Wishlist ({getWishlistCount()})
             </Link>
 
@@ -317,11 +247,27 @@ const Navbar = () => {
                     <p className="font-semibold">Welcome, {user.firstName}</p>
                     <p className="text-xs">{user.email}</p>
                   </div>
-                  <button onClick={handleProfileClick} className="block w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-red-400 transition duration-300">Profile</button>
-                  <button onClick={handleLogout} className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-400 hover:bg-gray-800 transition duration-300">Sign Out</button>
+                  <button
+                    onClick={handleProfileClick}
+                    className="block w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 hover:text-red-400 transition duration-300"
+                  >
+                    Profile
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-400 hover:bg-gray-800 transition duration-300"
+                  >
+                    Sign Out
+                  </button>
                 </>
               ) : (
-                <button onClick={() => { handleLogin(); setIsMenuOpen(false); }} className="flex items-center space-x-2 w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 transition duration-300 bg-red-600 hover:bg-red-700">
+                <button
+                  onClick={() => {
+                    handleLogin();
+                    setIsMenuOpen(false);
+                  }}
+                  className="flex items-center space-x-2 w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 transition duration-300 bg-red-600 hover:bg-red-700"
+                >
                   <UserIcon className="h-5 w-5" />
                   <span>Login</span>
                 </button>
