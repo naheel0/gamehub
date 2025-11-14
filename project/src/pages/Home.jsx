@@ -22,7 +22,12 @@ const Home = () => {
   const [featuredGames, setFeaturedGames] = useState([]);
   const [loading, setLoading] = useState(true);
 
+<<<<<<< HEAD
   const API_BASE = "http://localhost:3001";
+=======
+  // JSON Server base URL
+  const API_BASE = "https://gamehub-db.onrender.com";
+>>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
 
   useEffect(() => {
     const fetchGames = async () => {
