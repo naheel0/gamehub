@@ -24,12 +24,10 @@ const ProductDetails = () => {
   const { user } = useAuth();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   
-<<<<<<< HEAD
-  const API_BASE = 'http://localhost:3001';
-=======
+
   // JSON Server base URL
   const API_BASE = 'https://gamehub-db.onrender.com';
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
+
 
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [fullScreenImageIndex, setFullScreenImageIndex] = useState(0);
