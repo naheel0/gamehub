@@ -44,8 +44,8 @@ export function AdminProvider({ children }) {
 
         // Fetch from individual endpoints
         const [productsRes, usersRes] = await Promise.all([
-          fetch('http://localhost:3001/games'),
-          fetch('http://localhost:3001/users')
+          fetch('https://gamehub-db.onrender.com/games'),
+          fetch('https://gamehub-db.onrender.com/users')
         ]);
 
         // Check if responses are ok
@@ -105,7 +105,7 @@ export function AdminProvider({ children }) {
       };
 
       // Add to JSON server
-      const response = await fetch('http://localhost:3001/games', {
+      const response = await fetch('https://gamehub-db.onrender.com/games', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -134,7 +134,7 @@ export function AdminProvider({ children }) {
       };
 
       // Update in JSON server
-      const response = await fetch(`http://localhost:3001/games/${id}`, {
+      const response = await fetch(`https://gamehub-db.onrender.com/games/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -157,7 +157,7 @@ export function AdminProvider({ children }) {
   const deleteProduct = async (id) => {
     try {
       // Delete from JSON server
-      const response = await fetch(`http://localhost:3001/games/${id}`, {
+      const response = await fetch(`https://gamehub-db.onrender.com/games/${id}`, {
         method: 'DELETE',
       });
 
@@ -175,7 +175,7 @@ export function AdminProvider({ children }) {
   // User functions with API persistence
   const updateUser = async (id, userData) => {
     try {
-      const response = await fetch(`http://localhost:3001/users/${id}`, {
+      const response = await fetch(`https://gamehub-db.onrender.com/users/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -212,7 +212,7 @@ export function AdminProvider({ children }) {
   const deleteUser = async (id) => {
     try {
       const userToDelete = users.find(u => u.id === id);
-      const response = await fetch(`http://localhost:3001/users/${id}`, {
+      const response = await fetch(`https://gamehub-db.onrender.com/users/${id}`, {
         method: 'DELETE',
       });
 
@@ -252,7 +252,7 @@ export function AdminProvider({ children }) {
       );
 
       // Update user in JSON server
-      const response = await fetch(`http://localhost:3001/users/${user.id}`, {
+      const response = await fetch(`https://gamehub-db.onrender.com/users/${user.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -294,7 +294,7 @@ export function AdminProvider({ children }) {
       );
 
       // Update user in JSON server
-      const response = await fetch(`http://localhost:3001/users/${user.id}`, {
+      const response = await fetch(`https://gamehub-db.onrender.com/users/${user.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
