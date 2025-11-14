@@ -20,19 +20,15 @@ const ProductDetails = () => {
   const [wishlistLoading, setWishlistLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
   
-  // Get contexts
   const { addToCart } = useCart();
   const { user } = useAuth();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   
-  // JSON Server base URL
   const API_BASE = 'http://localhost:3001';
 
-  // Full screen image viewer state
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [fullScreenImageIndex, setFullScreenImageIndex] = useState(0);
 
-  // Wishlist status
   const [isInWishlistState, setIsInWishlistState] = useState(false);
 
   useEffect(() => {
@@ -61,7 +57,6 @@ const ProductDetails = () => {
     fetchGame();
   }, [id]);
 
-  // Update wishlist status when game or user changes
   useEffect(() => {
     if (game && user) {
       setIsInWishlistState(isInWishlist(game.id));
@@ -70,7 +65,6 @@ const ProductDetails = () => {
     }
   }, [game, user, isInWishlist]);
 
-  // Toggle wishlist using context
   const toggleWishlist = async () => {
     if (!game) return;
     
@@ -98,7 +92,6 @@ const ProductDetails = () => {
     }
   };
 
-  // Full screen image functions
   const openFullScreen = (index) => {
     setFullScreenImageIndex(index);
     setIsFullScreen(true);
@@ -124,7 +117,6 @@ const ProductDetails = () => {
     }
   };
 
-  // Keyboard navigation for full screen
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (!isFullScreen) return;
@@ -144,7 +136,6 @@ const ProductDetails = () => {
 
   const handleAddToCart = () => {
     if (game && game.inStock) {
-      // Add the game multiple times based on quantity
       for (let i = 0; i < quantity; i++) {
         addToCart(game);
       }
@@ -166,9 +157,8 @@ const ProductDetails = () => {
       return;
     }
 
-    // Create order data for single item purchase
     const subtotal = game.price * quantity;
-    const tax = subtotal * 0.1; // 10% tax
+    const tax = subtotal * 0.1;
     const total = subtotal + tax;
 
     const orderData = {
@@ -190,10 +180,9 @@ const ProductDetails = () => {
       },
       status: 'pending',
       date: new Date().toISOString(),
-      type: 'instant_purchase' // Flag to identify this is a single item purchase
+      type: 'instant_purchase'
     };
 
-    // Navigate to payment page with the single item order
     navigate('/payment', { 
       state: { 
         order: orderData,
@@ -383,13 +372,13 @@ const ProductDetails = () => {
 
                 {/* Price */}
                 <div className="flex items-baseline space-x-2">
-                  <span className="text-4xl font-bold text-white">${game.price}</span>
+                  <span className="text-4xl font-bold text-white">₹{game.price}</span>
                   {game.originalPrice && (
                     <span className="text-xl text-gray-400 line-through">${game.originalPrice}</span>
                   )}
                   {quantity > 1 && (
                     <span className="text-lg text-green-400">
-                      Total: ${(game.price * quantity).toFixed(2)}
+                      Total: ₹{(game.price * quantity).toFixed(2)}
                     </span>
                   )}
                 </div>

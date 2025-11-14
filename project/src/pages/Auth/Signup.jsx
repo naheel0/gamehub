@@ -1,70 +1,73 @@
-// src/components/Signup.jsx
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-import Logo from '../../components/common/Logo'
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import Logo from "../../components/common/Logo";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
-    confirmPassword: ''
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
+    role: "user",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  
+
   const { signup } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
-    setError('');
+    setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
-    // Validation
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       setLoading(false);
       return;
     }
 
     if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters long');
+      setError("Password must be at least 6 characters long");
       setLoading(false);
       return;
     }
 
-    // Prepare user data for signup
     const userData = {
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
       phone: formData.phone,
-      password: formData.password
+      password: formData.password,
+      role: formData.role,
     };
 
     const result = await signup(userData);
-    
+
     if (result.success) {
-      navigate('/');
+      if (formData.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     } else {
       setError(result.error);
     }
-    
+
     setLoading(false);
   };
 
@@ -76,9 +79,11 @@ const Signup = () => {
           <Link to="/" className="inline-block">
             <Logo />
           </Link>
-          <h2 className="mt-6 text-3xl font-bold text-white">Create your account</h2>
+          <h2 className="mt-6 text-3xl font-bold text-white">
+            Create your account
+          </h2>
           <p className="mt-2 text-sm text-gray-400">
-            Or{' '}
+            Or{" "}
             <Link
               to="/login"
               className="font-medium text-red-500 hover:text-red-400 transition duration-300"
@@ -89,7 +94,10 @@ const Signup = () => {
         </div>
 
         {/* Form */}
-        <form className="mt-8 space-y-6 bg-gray-900 p-8 rounded-lg border border-gray-800" onSubmit={handleSubmit}>
+        <form
+          className="mt-8 space-y-6 bg-gray-900 p-8 rounded-lg border border-gray-800"
+          onSubmit={handleSubmit}
+        >
           {error && (
             <div className="bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded-lg text-sm">
               {error}
@@ -99,7 +107,10 @@ const Signup = () => {
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-300 mb-2">
+                <label
+                  htmlFor="firstName"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                >
                   First Name
                 </label>
                 <input
@@ -115,7 +126,10 @@ const Signup = () => {
               </div>
 
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-300 mb-2">
+                <label
+                  htmlFor="lastName"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                >
                   Last Name
                 </label>
                 <input
@@ -132,7 +146,10 @@ const Signup = () => {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-300 mb-2"
+              >
                 Email address
               </label>
               <input
@@ -149,7 +166,10 @@ const Signup = () => {
             </div>
 
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-2">
+              <label
+                htmlFor="phone"
+                className="block text-sm font-medium text-gray-300 mb-2"
+              >
                 Phone Number (Optional)
               </label>
               <input
@@ -165,14 +185,17 @@ const Signup = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-300 mb-2"
+              >
                 Password
               </label>
               <div className="relative">
                 <input
                   id="password"
                   name="password"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   autoComplete="new-password"
                   required
                   value={formData.password}
@@ -195,14 +218,17 @@ const Signup = () => {
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-2">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-gray-300 mb-2"
+              >
                 Confirm Password
               </label>
               <div className="relative">
                 <input
                   id="confirmPassword"
                   name="confirmPassword"
-                  type={showConfirmPassword ? 'text' : 'password'}
+                  type={showConfirmPassword ? "text" : "password"}
                   autoComplete="new-password"
                   required
                   value={formData.confirmPassword}
@@ -234,8 +260,11 @@ const Signup = () => {
               className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-600 rounded bg-gray-800"
             />
             <label htmlFor="terms" className="ml-2 block text-sm text-gray-300">
-              I agree to the{' '}
-              <a href="#" className="text-red-500 hover:text-red-400 transition duration-300">
+              I agree to the{" "}
+              <a
+                href="#"
+                className="text-red-500 hover:text-red-400 transition duration-300"
+              >
                 Terms and Conditions
               </a>
             </label>
@@ -250,14 +279,14 @@ const Signup = () => {
               {loading ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
               ) : (
-                'Create Account'
+                "Create Account"
               )}
             </button>
           </div>
 
           <div className="text-center">
             <p className="text-sm text-gray-400">
-              Already have an account?{' '}
+              Already have an account?{" "}
               <Link
                 to="/login"
                 className="font-medium text-red-500 hover:text-red-400 transition duration-300"
@@ -272,5 +301,4 @@ const Signup = () => {
   );
 };
 
-// ✅ CORRECTED: Export Signup component
 export default Signup;

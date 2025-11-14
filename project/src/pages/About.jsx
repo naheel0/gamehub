@@ -139,16 +139,16 @@ const About = () => {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
             <div className="bg-white bg-opacity-10 rounded-lg p-6 border border-white border-opacity-20">
-              <h3 className="text-2xl font-bold mb-3 text-white">Accessibility</h3>
-              <p className="text-gray-200">Making gaming accessible to everyone, everywhere</p>
+              <h3 className="text-2xl font-bold mb-3 text-red-600">Accessibility</h3>
+              <p className="text-gray-800">Making gaming accessible to everyone, everywhere</p>
             </div>
             <div className="bg-white bg-opacity-10 rounded-lg p-6 border border-white border-opacity-20">
-              <h3 className="text-2xl font-bold mb-3 text-white">Innovation</h3>
-              <p className="text-gray-200">Constantly improving and innovating for our community</p>
+              <h3 className="text-2xl font-bold mb-3 text-red-600">Innovation</h3>
+              <p className="text-gray-800">Constantly improving and innovating for our community</p>
             </div>
             <div className="bg-white bg-opacity-10 rounded-lg p-6 border border-white border-opacity-20">
-              <h3 className="text-2xl font-bold mb-3 text-white">Community</h3>
-              <p className="text-gray-200">Building a strong, supportive gaming community</p>
+              <h3 className="text-2xl font-bold mb-3 text-red-600">Community</h3>
+              <p className="text-gray-800">Building a strong, supportive gaming community</p>
             </div>
           </div>
         </div>

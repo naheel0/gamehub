@@ -91,7 +91,6 @@ const OrderConfirmation = () => {
     }
   }, [order]);
 
-  // Format date function with proper try-catch structure
   const formatDate = (dateString) => {
   const options = {
     year: 'numeric',
@@ -105,8 +104,6 @@ const OrderConfirmation = () => {
   return isNaN(date) ? new Date().toLocaleString('en-US', options) : date.toLocaleString('en-US', options);
 };
 
-
-  // Get payment method icon function
   const getPaymentMethodIcon = (method) => {
     if (!method) return <CreditCardIcon className="h-5 w-5" />;
     
@@ -197,7 +194,7 @@ const OrderConfirmation = () => {
               </div>
               <div className="bg-white/20 rounded-lg px-4 py-2 mt-4 sm:mt-0">
                 <span className="text-white font-semibold text-lg">
-                  ${orderSummary.total || '0.00'}
+                  ₹{orderSummary.total || '0.00'}
                 </span>
               </div>
             </div>
@@ -233,9 +230,9 @@ const OrderConfirmation = () => {
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-white font-semibold">${item.price || '0.00'}</p>
+                        <p className="text-white font-semibold">₹{item.price || '0.00'}</p>
                         <p className="text-green-400 text-sm">
-                          ${((item.price || 0) * (item.quantity || 1)).toFixed(2)}
+                          ₹{((item.price || 0) * (item.quantity || 1)).toFixed(2)}
                         </p>
                       </div>
                     </div>
@@ -285,11 +282,11 @@ const OrderConfirmation = () => {
                 <div className="space-y-2 bg-gray-700/30 rounded-lg p-4">
                   <div className="flex justify-between text-gray-300">
                     <span>Subtotal</span>
-                    <span>${orderSummary.subtotal || '0.00'}</span>
+                    <span>₹{orderSummary.subtotal || '0.00'}</span>
                   </div>
                   <div className="flex justify-between text-gray-300">
                     <span>Tax</span>
-                    <span>${orderSummary.tax || '0.00'}</span>
+                    <span>₹{orderSummary.tax || '0.00'}</span>
                   </div>
                   <div className="flex justify-between text-gray-300">
                     <span>Shipping</span>
@@ -298,7 +295,7 @@ const OrderConfirmation = () => {
                   <div className="border-t border-gray-600 pt-2 mt-2">
                     <div className="flex justify-between text-lg font-bold text-white">
                       <span>Total</span>
-                      <span className="text-green-400">${orderSummary.total || '0.00'}</span>
+                      <span className="text-green-400">₹{orderSummary.total || '0.00'}</span>
                     </div>
                   </div>
                 </div>

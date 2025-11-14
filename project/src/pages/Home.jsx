@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useWishlist } from "../contexts/WishlistContext";
 import {
-  FaShoppingCart,
   FaHeart,
   FaStar,
   FaShippingFast,
@@ -11,7 +11,6 @@ import {
   FaGamepad,
 } from "react-icons/fa";
 
-// Import Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css";
@@ -23,7 +22,6 @@ const Home = () => {
   const [featuredGames, setFeaturedGames] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // JSON Server base URL
   const API_BASE = "http://localhost:3001";
 
   useEffect(() => {
@@ -44,7 +42,15 @@ const Home = () => {
 
     fetchGames();
   }, []);
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
+  const handleWishlistToggle = (game) => {
+    if (isInWishlist(game.id)) {
+      removeFromWishlist(game.id);
+    } else {
+      addToWishlist(game);
+    }
+  };
   const features = [
     {
       icon: <FaShippingFast className="text-3xl" />,
@@ -136,7 +142,7 @@ const Home = () => {
                     </div>
                     <span className="text-lg">{game.rating}/5.0</span>
                     <span className="text-lg font-semibold text-red-500">
-                      ${game.price}
+                      ₹{game.price}
                     </span>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -218,7 +224,7 @@ const Home = () => {
                       }}
                     />
                     <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-sm font-semibold">
-                      ${game.price}
+                      ₹{game.price}
                     </div>
                   </div>
                 </Link>
@@ -245,7 +251,14 @@ const Home = () => {
                     >
                       View Details
                     </Link>
-                    <button className="bg-gray-800 hover:bg-gray-700 text-white p-2 rounded transition duration-300 border border-gray-700">
+                    <button
+                      onClick={() => handleWishlistToggle(game)}
+                      className={`p-2 rounded transition duration-300 border ${
+                        isInWishlist(game.id)
+                          ? "bg-red-600 border-red-600 text-white"
+                          : "bg-gray-800 border-gray-700 text-white hover:bg-gray-700"
+                      }`}
+                    >
                       <FaHeart className="h-5 w-5" />
                     </button>
                   </div>

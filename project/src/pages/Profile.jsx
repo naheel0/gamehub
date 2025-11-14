@@ -1,5 +1,5 @@
-// src/components/Profile.jsx
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
 import { useWishlist } from '../contexts/WishlistContext';
@@ -36,6 +36,107 @@ const Profile = () => {
     phone: ''
   });
   const [loading, setLoading] = useState(false);
+  const [orderHistory, setOrderHistory] = useState([]);
+  const [ordersLoading, setOrdersLoading] = useState(true);
+  const [orderCount, setOrderCount] = useState(0);
+
+  const API_BASE = 'http://localhost:3001';
+
+  const formatRupees = (amount) => {
+    if (!amount) return '₹0';
+    return `₹${amount.toLocaleString('en-IN')}`;
+  };
+
+  const fetchOrderCount = async () => {
+    if (!user) return;
+
+    try {
+      const userResponse = await fetch(`${API_BASE}/users/${user.id}`);
+      if (!userResponse.ok) {
+        throw new Error('Failed to fetch user data');
+      }
+      
+      const userData = await userResponse.json();
+      const purchaseHistory = userData.purchaseHistory || [];
+      setOrderCount(purchaseHistory.length);
+    } catch (error) {
+      console.error('Error fetching order count:', error);
+      setOrderCount(0);
+    }
+  };
+
+  const fetchOrderHistory = async () => {
+    if (!user) return;
+
+    try {
+      setOrdersLoading(true);
+      
+      const userResponse = await fetch(`${API_BASE}/users/${user.id}`);
+      if (!userResponse.ok) {
+        throw new Error('Failed to fetch user data');
+      }
+      
+      const userData = await userResponse.json();
+      const purchaseHistory = userData.purchaseHistory || [];
+      
+      setOrderCount(purchaseHistory.length);
+
+      if (purchaseHistory.length === 0) {
+        setOrderHistory([]);
+        setOrdersLoading(false);
+        return;
+      }
+
+      const gamesResponse = await fetch(`${API_BASE}/games`);
+      if (!gamesResponse.ok) {
+        throw new Error('Failed to fetch games data');
+      }
+      
+      const allGames = await gamesResponse.json();
+
+      const enhancedOrders = await Promise.all(
+        purchaseHistory.map(async (order) => {
+          const enhancedItems = await Promise.all(
+            (order.items || []).map(async (item) => {
+              const game = allGames.find(g => g.id === item.gameId || g.id === item.id);
+              
+              if (game) {
+                return {
+                  ...item,
+                  name: game.name,
+                  price: game.price,
+                  image: game.images?.[0] || '/images/placeholder-game.jpg',
+                  genre: game.genre,
+                  platform: game.platform
+                };
+              }
+              
+              return {
+                ...item,
+                image: item.image || '/images/placeholder-game.jpg',
+                name: item.name || 'Unknown Game',
+                price: item.price || 0,
+                genre: item.genre || '',
+                platform: item.platform || ''
+              };
+            })
+          );
+
+          return {
+            ...order,
+            items: enhancedItems
+          };
+        })
+      );
+
+      setOrderHistory(enhancedOrders);
+    } catch (error) {
+      console.error('Error fetching order history:', error);
+      setOrderHistory([]);
+    } finally {
+      setOrdersLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -45,8 +146,20 @@ const Profile = () => {
         email: user.email || '',
         phone: user.phone || ''
       });
+      
+      fetchOrderCount();
+      
+      if (activeTab === 'orders') {
+        fetchOrderHistory();
+      }
     }
   }, [user]);
+
+  useEffect(() => {
+    if (activeTab === 'orders' && user) {
+      fetchOrderHistory();
+    }
+  }, [activeTab, user]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -69,6 +182,7 @@ const Profile = () => {
       const result = await updateUser(updatedUser);
       if (result.success) {
         setIsEditing(false);
+        fetchOrderCount();
       }
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -184,7 +298,7 @@ const Profile = () => {
                   <div className="flex justify-between items-center">
                     <span className="text-gray-400">Total Orders</span>
                     <span className="text-white font-semibold">
-                      {user.purchaseHistory ? user.purchaseHistory.length : 0}
+                      {orderCount}
                     </span>
                   </div>
                 </div>
@@ -255,7 +369,7 @@ const Profile = () => {
                           value={formData.phone}
                           onChange={handleInputChange}
                           className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-white"
-                          placeholder="+1 (555) 123-4567"
+                          placeholder="+91 98765 43210"
                         />
                       </div>
 
@@ -331,14 +445,14 @@ const Profile = () => {
                     <ShoppingBagSolid className="h-12 w-12 text-red-500 mx-auto mb-4" />
                     <h3 className="text-xl font-semibold text-white mb-2">Shopping Cart</h3>
                     <p className="text-gray-400 mb-4">
-                      {cartSummary.totalItems || 0} items • ${cartSummary.subtotal || '0.00'}
+                      {cartSummary.totalItems || 0} items • {formatRupees(cartSummary.subtotal)}
                     </p>
-                    <button
-                      onClick={() => setActiveTab('orders')}
-                      className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition duration-300"
+                    <Link
+                      to="/cart"
+                      className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition duration-300 inline-block"
                     >
                       View Cart
-                    </button>
+                    </Link>
                   </div>
 
                   <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 text-center hover:border-red-500 transition duration-300">
@@ -359,7 +473,7 @@ const Profile = () => {
                     <CreditCardIcon className="h-12 w-12 text-red-500 mx-auto mb-4" />
                     <h3 className="text-xl font-semibold text-white mb-2">Order History</h3>
                     <p className="text-gray-400 mb-4">
-                      {user.purchaseHistory ? user.purchaseHistory.length : 0} total orders
+                      {orderCount} total orders
                     </p>
                     <button
                       onClick={() => setActiveTab('orders')}
@@ -377,9 +491,14 @@ const Profile = () => {
               <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
                 <h2 className="text-2xl font-bold text-white mb-6">Order History</h2>
                 
-                {user.purchaseHistory && user.purchaseHistory.length > 0 ? (
+                {ordersLoading ? (
+                  <div className="text-center py-12">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+                    <p className="text-white text-lg">Loading your orders...</p>
+                  </div>
+                ) : orderHistory.length > 0 ? (
                   <div className="space-y-4">
-                    {user.purchaseHistory.map((order, index) => (
+                    {orderHistory.map((order, index) => (
                       <div key={order.id || index} className="bg-gray-800 rounded-lg p-6 border border-gray-700">
                         <div className="flex justify-between items-start mb-4">
                           <div>
@@ -391,31 +510,70 @@ const Profile = () => {
                             </p>
                           </div>
                           <div className="text-right">
-                            <p className="text-xl font-bold text-red-500">${order.summary?.total || '0.00'}</p>
-                            <span className="inline-block bg-green-500 text-white px-2 py-1 rounded text-xs">
+                            <p className="text-xl font-bold text-red-500">
+                              {formatRupees(order.summary?.total || order.total)}
+                            </p>
+                            <span className={`inline-block px-2 py-1 rounded text-xs ${
+                              (order.status || 'Completed').toLowerCase() === 'completed' ? 'bg-green-500' : 
+                              (order.status || 'Completed').toLowerCase() === 'processing' ? 'bg-yellow-500' : 
+                              (order.status || 'Completed').toLowerCase() === 'cancelled' ? 'bg-red-500' : 
+                              'bg-gray-500'
+                            } text-white`}>
                               {order.status || 'Completed'}
                             </span>
                           </div>
                         </div>
                         
-                        <div className="space-y-2">
+                        <div className="space-y-3">
                           {order.items?.map((item, itemIndex) => (
-                            <div key={itemIndex} className="flex justify-between items-center py-2 border-b border-gray-700 last:border-b-0">
-                              <div className="flex items-center space-x-3">
+                            <div key={itemIndex} className="flex justify-between items-center py-3 border-b border-gray-700 last:border-b-0">
+                              <div className="flex items-center space-x-4">
                                 <img
-                                  src={item.image || '/api/placeholder/40/40'}
+                                  src={item.image || '/images/placeholder-game.jpg'}
                                   alt={item.name}
-                                  className="w-10 h-10 object-cover rounded"
+                                  className="w-12 h-12 object-cover rounded"
+                                  onError={(e) => {
+                                    e.target.src = '/images/placeholder-game.jpg';
+                                  }}
                                 />
                                 <div>
                                   <p className="text-white font-medium">{item.name}</p>
-                                  <p className="text-gray-400 text-sm">Qty: {item.quantity}</p>
+                                  <p className="text-gray-400 text-sm">{item.genre}</p>
+                                  <p className="text-gray-400 text-sm">Qty: {item.quantity || 1}</p>
                                 </div>
                               </div>
-                              <p className="text-white font-semibold">${item.price}</p>
+                              <p className="text-white font-semibold">
+                                {formatRupees(item.price)}
+                              </p>
                             </div>
                           ))}
                         </div>
+
+                        {/* Order Summary */}
+                        {order.summary && (
+                          <div className="mt-4 pt-4 border-t border-gray-700">
+                            <div className="flex justify-between text-sm text-gray-300">
+                              <span>Subtotal:</span>
+                              <span>{formatRupees(order.summary.subtotal)}</span>
+                            </div>
+                            {order.summary.tax > 0 && (
+                              <div className="flex justify-between text-sm text-gray-300">
+                                <span>Tax:</span>
+                                <span>{formatRupees(order.summary.tax)}</span>
+                              </div>
+                            )}
+                            {order.summary.shipping > 0 && (
+                              <div className="flex justify-between text-sm text-gray-300">
+                                <span>Shipping:</span>
+                                <span>{formatRupees(order.summary.shipping)}</span>
+                              </div>
+                            )}
+                            <div className="flex justify-between text-lg font-bold text-white mt-2 pt-2 border-t border-gray-600">
+                              <span>Total:</span>
+                              <span>{formatRupees(order.summary.total)}</span>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -424,12 +582,12 @@ const Profile = () => {
                     <ShoppingBagIcon className="h-24 w-24 text-gray-600 mx-auto mb-4" />
                     <h3 className="text-xl font-semibold text-white mb-2">No Orders Yet</h3>
                     <p className="text-gray-400 mb-6">Start shopping to see your order history here.</p>
-                    <button
-                      onClick={() => window.location.href = '/products'}
-                      className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition duration-300"
+                    <Link
+                      to="/products"
+                      className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition duration-300 inline-block"
                     >
                       Browse Games
-                    </button>
+                    </Link>
                   </div>
                 )}
               </div>
@@ -443,17 +601,20 @@ const Profile = () => {
                 {wishlist.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {wishlist.map((game) => (
-                      <div key={game.id} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                      <div key={game.id} className="bg-gray-800 rounded-lg p-4 border border-gray-700 hover:border-red-500 transition duration-300">
                         <div className="flex items-center space-x-4">
                           <img
-                            src={game.images?.[0] || '/api/placeholder/80/80'}
+                            src={game.images?.[0] || '/images/placeholder-game.jpg'}
                             alt={game.name}
                             className="w-16 h-16 object-cover rounded"
+                            onError={(e) => {
+                              e.target.src = '/images/placeholder-game.jpg';
+                            }}
                           />
                           <div className="flex-1">
                             <h3 className="text-lg font-semibold text-white mb-1">{game.name}</h3>
                             <p className="text-gray-400 text-sm mb-2">{game.genre}</p>
-                            <p className="text-red-500 font-bold">${game.price}</p>
+                            <p className="text-red-500 font-bold">{formatRupees(game.price)}</p>
                           </div>
                         </div>
                       </div>
@@ -464,12 +625,12 @@ const Profile = () => {
                     <HeartIcon className="h-24 w-24 text-gray-600 mx-auto mb-4" />
                     <h3 className="text-xl font-semibold text-white mb-2">Wishlist Empty</h3>
                     <p className="text-gray-400 mb-6">Add games you love to your wishlist!</p>
-                    <button
-                      onClick={() => window.location.href = '/products'}
-                      className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition duration-300"
+                    <Link
+                      to="/products"
+                      className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition duration-300 inline-block"
                     >
                       Browse Games
-                    </button>
+                    </Link>
                   </div>
                 )}
               </div>

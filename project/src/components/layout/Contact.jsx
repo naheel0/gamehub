@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import emailjs from 'emailjs-com'
 
-// Initialize EmailJS (use your actual public key)
 emailjs.init("VLxM2t4JmL7HsMc4F")
 
 const Contact = () => {

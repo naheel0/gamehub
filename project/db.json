@@ -5,7 +5,7 @@
       "name": "Elden Ring",
       "genre": "Action RPG",
       "platform": "PC, PlayStation, Xbox",
-      "price": 59.99,
+      "price": 3999,
       "rating": 4.9,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/E3Huy2cdih0",
@@ -22,9 +22,9 @@
       "name": "God of War",
       "genre": "Action Adventure",
       "platform": "PC, PlayStation",
-      "price": 49.99,
+      "price": 3499,
       "rating": 4.8,
-      "inStock": true,
+      "inStock": false,
       "trailer": "https://www.youtube.com/embed/K0u_kAWLJOA",
       "images": [
         "https://cdn.cloudflare.steamstatic.com/steam/apps/1593500/header.jpg",
@@ -39,7 +39,7 @@
       "name": "Cyberpunk 2077",
       "genre": "Action RPG",
       "platform": "PC, PlayStation, Xbox",
-      "price": 39.99,
+      "price": 2499,
       "rating": 4.3,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/qIcTM8WXFjk",
@@ -56,7 +56,7 @@
       "name": "Call of Duty: Modern Warfare III",
       "genre": "Shooter",
       "platform": "PC, PlayStation, Xbox",
-      "price": 69.99,
+      "price": 4999,
       "rating": 4.5,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/r72GP1PIZa0",
@@ -73,7 +73,7 @@
       "name": "Marvel's Spider-Man Remastered",
       "genre": "Action Adventure",
       "platform": "PC, PlayStation",
-      "price": 59.99,
+      "price": 3999,
       "rating": 4.9,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/iqysmS4lxwQ",
@@ -90,7 +90,7 @@
       "name": "Hogwarts Legacy",
       "genre": "Action RPG",
       "platform": "PC, PlayStation, Xbox",
-      "price": 59.99,
+      "price": 3999,
       "rating": 4.7,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/1O6Qstncpnc",
@@ -107,7 +107,7 @@
       "name": "Red Dead Redemption 2",
       "genre": "Open World",
       "platform": "PC, PlayStation, Xbox",
-      "price": 49.99,
+      "price": 2999,
       "rating": 4.9,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/eaW0tYpxyp0",
@@ -124,7 +124,7 @@
       "name": "Resident Evil 4 Remake",
       "genre": "Survival Horror",
       "platform": "PC, PlayStation, Xbox",
-      "price": 59.99,
+      "price": 3999,
       "rating": 4.8,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/IdG7JbO3Mlk",
@@ -141,7 +141,7 @@
       "name": "Assassin's Creed Mirage",
       "genre": "Action Adventure",
       "platform": "PC, PlayStation, Xbox",
-      "price": 49.99,
+      "price": 2999,
       "rating": 4.2,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/x55lAlFtXmw",
@@ -158,7 +158,7 @@
       "name": "Starfield",
       "genre": "Sci-Fi RPG",
       "platform": "PC, Xbox",
-      "price": 69.99,
+      "price": 4999,
       "rating": 4.1,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/kfYEiTdsyas",
@@ -177,7 +177,7 @@
       "name": "Baldur's Gate 3",
       "genre": "RPG",
       "platform": "PC, PlayStation",
-      "price": 59.99,
+      "price": 3999,
       "rating": 5,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/OcP0WdH7rTs",
@@ -195,7 +195,7 @@
       "name": "Forza Horizon 5",
       "genre": "Racing",
       "platform": "PC, Xbox",
-      "price": 59.99,
+      "price": 3999,
       "rating": 4.7,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/FYH9n37B7Yw",
@@ -213,7 +213,7 @@
       "name": "The Witcher 3: Wild Hunt",
       "genre": "Action RPG",
       "platform": "PC, PlayStation, Xbox",
-      "price": 29.99,
+      "price": 1999,
       "rating": 4.9,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/c0i88t0Kacs",
@@ -231,7 +231,7 @@
       "name": "FIFA 24",
       "genre": "Sports",
       "platform": "PC, PlayStation, Xbox",
-      "price": 69.99,
+      "price": 4999,
       "rating": 4,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/o3V-GvvzjE4",
@@ -249,7 +249,7 @@
       "name": "Grand Theft Auto V",
       "genre": "Open World",
       "platform": "PC, PlayStation, Xbox",
-      "price": 19.99,
+      "price": 1499,
       "rating": 4.8,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/QkkoHAzjnUs",
@@ -268,7 +268,7 @@
       "name": "Minecraft",
       "genre": "Sandbox",
       "platform": "PC, PlayStation, Xbox, Switch",
-      "price": 26.95,
+      "price": 1999,
       "rating": 4.9,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/MmB9b5njVbA",
@@ -285,7 +285,7 @@
       "name": "The Last of Us Part I",
       "genre": "Action Adventure",
       "platform": "PC, PlayStation",
-      "price": 59.99,
+      "price": 3999,
       "rating": 4.7,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/W01L70IGBgE",
@@ -304,7 +304,7 @@
       "name": "Sekiro: Shadows Die Twice",
       "genre": "Action Adventure",
       "platform": "PC, PlayStation, Xbox",
-      "price": 49.99,
+      "price": 2999,
       "rating": 4.8,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/rXMX4YJ7Lks",
@@ -322,9 +322,9 @@
       "name": "Diablo IV",
       "genre": "Action RPG",
       "platform": "PC, PlayStation, Xbox",
-      "price": 69.99,
+      "price": 4999,
       "rating": 4.5,
-      "inStock": false,
+      "inStock": true,
       "trailer": "https://www.youtube.com/embed/MpR0hC3fNFE",
       "images": [
         "https://cdn.cloudflare.steamstatic.com/steam/apps/2344520/header.jpg",
@@ -340,7 +340,7 @@
       "name": "Dying Light 2 Stay Human",
       "genre": "Action Survival",
       "platform": "PC, PlayStation, Xbox",
-      "price": 49.99,
+      "price": 2999,
       "rating": 4.3,
       "inStock": true,
       "trailer": "https://www.youtube.com/embed/2MD4gTitmzw",
@@ -363,11 +363,11 @@
       "firstName": "Demo",
       "lastName": "User",
       "phone": "+1234567890",
+      "role": "user",
       "wishlist": [
         1,
         3,
-        5,
-        "16"
+        5
       ],
       "purchaseHistory": [
         2,
@@ -396,7 +396,7 @@
             "total": "175.97"
           },
           "paymentMethod": "google",
-          "status": "completed",
+          "status": "Pending",
           "date": "2025-11-07T14:32:08.186Z"
         },
         {
@@ -416,7 +416,7 @@
             "total": "65.99"
           },
           "paymentMethod": "paypal",
-          "status": "completed",
+          "status": "Delivered",
           "date": "2025-11-07T15:25:57.228Z"
         },
         {
@@ -436,335 +436,142 @@
             "total": "65.99"
           },
           "paymentMethod": "paypal",
-          "status": "completed",
+          "status": "Delivered",
           "date": "2025-11-07T15:28:19.409Z"
         }
       ],
       "createdAt": "2024-01-15T10:30:00Z",
-      "cart": [
-        {
-          "id": "cart_1762529530386_2mt3ghxjv",
-          "gameId": "11",
-          "quantity": 1,
-          "addedAt": "2025-11-07T15:32:10.386Z",
-          "updatedAt": "2025-11-07T15:32:10.386Z"
-        }
-      ]
+      "cart": []
     },
     {
-      "id": "2",
+      "id": "4e6c",
       "firstName": "naheel",
       "lastName": "muhammed",
-      "email": "naheel@gmail.com",
       "password": "123456",
-      "phone": "9876543210",
-      "wishlist": [
-        4,
-        20,
-        9
-      ],
-      "purchaseHistory": [
-        {
-          "id": "cart_1762421635795_7as0d998a",
-          "items": [
-            {
-              "gameId": 4,
-              "name": "Call of Duty: Modern Warfare III",
-              "price": 69.99,
-              "quantity": 1,
-              "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3595270/7d0f21912a075c33bbb5ea558100e187ceb234ac/header.jpg?t=1758060267"
-            }
-          ],
-          "summary": {
-            "subtotal": "69.99",
-            "tax": "7.00",
-            "total": "76.99"
-          },
-          "paymentMethod": "paypal",
-          "status": "completed",
-          "date": "2025-11-06T09:33:55.795Z"
-        },
-        {
-          "id": "cart_1762512966567_8a9r9b3bd",
-          "items": [
-            {
-              "gameId": "20",
-              "name": "Dying Light 2 Stay Human",
-              "price": 49.99,
-              "quantity": 1,
-              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/534380/header.jpg"
-            }
-          ],
-          "summary": {
-            "subtotal": "49.99",
-            "tax": "5.00",
-            "total": "54.99"
-          },
-          "paymentMethod": "google",
-          "status": "completed",
-          "date": "2025-11-07T10:56:06.568Z"
-        }
-      ],
-      "createdAt": "2025-11-06T05:13:51.898Z",
-      "cart": [
-        {
-          "id": "cart_1762598099071_jfggxxjp6",
-          "gameId": "20",
-          "quantity": 8,
-          "addedAt": "2025-11-08T10:34:59.071Z",
-          "updatedAt": "2025-11-08T10:37:53.353Z"
-        },
-        {
-          "id": "cart_1762598240604_j5s4z2oxm",
-          "gameId": "11",
-          "quantity": 1,
-          "addedAt": "2025-11-08T10:37:20.604Z",
-          "updatedAt": "2025-11-08T10:37:20.604Z"
-        }
-      ],
-      "addresses": [
-        {
-          "id": "addr_1762575509673",
-          "fullName": "github naheel",
-          "addressLine1": "zdxchgjhjn",
-          "addressLine2": "",
-          "city": "kerala",
-          "state": "zsdxgfchgv",
-          "zipCode": "12345",
-          "country": "india",
-          "phone": "9877613021",
-          "isDefault": false
-        }
-      ]
-    },
-    {
-      "id": "9874",
-      "firstName": "muhammed",
-      "lastName": "safvan",
-      "email": "mhdsafvan15@gmail.com",
-      "phone": "9497521874",
-      "wishlist": [
-        "19"
-      ],
+      "email": "naheel@gmail.com",
+      "phone": "+919876543210",
+      "role": "user",
+      "wishlist": [],
       "cart": [],
       "purchaseHistory": [
         {
-          "id": "cart_1762424682921_nwvjiaspw",
+          "id": "cart_1762768225825_a4ruf0a2u",
           "items": [
             {
               "gameId": "11",
               "name": "Baldur's Gate 3",
-              "price": 59.99,
-              "quantity": 14,
-              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
-            },
-            {
-              "gameId": "19",
-              "name": "Diablo IV",
-              "price": 69.99,
-              "quantity": 18,
-              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/2344520/header.jpg"
-            }
-          ],
-          "summary": {
-            "subtotal": "2099.68",
-            "tax": "209.97",
-            "total": "2309.65"
-          },
-          "paymentMethod": "card",
-          "status": "completed",
-          "date": "2025-11-06T10:24:42.921Z"
-        },
-        {
-          "id": "cart_1762424812228_zn6iq66qb",
-          "items": [
-            {
-              "gameId": "11",
-              "name": "Baldur's Gate 3",
-              "price": 59.99,
+              "price": 3999,
               "quantity": 1,
               "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
             }
           ],
           "summary": {
-            "subtotal": "59.99",
-            "tax": "6.00",
-            "total": "65.99"
-          },
-          "paymentMethod": "card",
-          "status": "completed",
-          "date": "2025-11-06T10:26:52.228Z"
-        },
-        {
-          "id": "cart_1762425138378_cgv6n51tj",
-          "items": [
-            {
-              "gameId": "11",
-              "name": "Baldur's Gate 3",
-              "price": 59.99,
-              "quantity": 1,
-              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
-            }
-          ],
-          "summary": {
-            "subtotal": "59.99",
-            "tax": "6.00",
-            "total": "65.99"
-          },
-          "paymentMethod": "card",
-          "status": "completed",
-          "date": "2025-11-06T10:32:18.378Z"
-        },
-        {
-          "id": "cart_1762491835244_kf0pktbvw",
-          "items": [
-            {
-              "gameId": "11",
-              "name": "Baldur's Gate 3",
-              "price": 59.99,
-              "quantity": 1,
-              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
-            }
-          ],
-          "summary": {
-            "subtotal": "59.99",
-            "tax": "6.00",
-            "total": "65.99"
-          },
-          "paymentMethod": "card",
-          "status": "completed",
-          "date": "2025-11-07T05:03:55.244Z"
-        },
-        {
-          "id": "cart_1762491862599_hdv83uaml",
-          "items": [
-            {
-              "gameId": "19",
-              "name": "Diablo IV",
-              "price": 69.99,
-              "quantity": 1,
-              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/2344520/header.jpg"
-            }
-          ],
-          "summary": {
-            "subtotal": "69.99",
-            "tax": "7.00",
-            "total": "76.99"
-          },
-          "paymentMethod": "card",
-          "status": "completed",
-          "date": "2025-11-07T05:04:22.599Z"
-        },
-        {
-          "id": "cart_1762496424683_bx255j7ms",
-          "items": [
-            {
-              "gameId": "3",
-              "name": "Cyberpunk 2077",
-              "price": 39.99,
-              "quantity": 1,
-              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg"
-            },
-            {
-              "gameId": "11",
-              "name": "Baldur's Gate 3",
-              "price": 59.99,
-              "quantity": 1,
-              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
-            },
-            {
-              "gameId": "4",
-              "name": "Call of Duty: Modern Warfare III",
-              "price": 69.99,
-              "quantity": 1,
-              "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3595270/7d0f21912a075c33bbb5ea558100e187ceb234ac/header.jpg?t=1758060267"
-            }
-          ],
-          "summary": {
-            "subtotal": "169.97",
-            "tax": "17.00",
-            "total": "186.97"
-          },
-          "paymentMethod": "card",
-          "status": "completed",
-          "date": "2025-11-07T06:20:24.683Z"
-        },
-        {
-          "id": "cart_1762497921158_46seyln35",
-          "items": [
-            {
-              "gameId": "11",
-              "name": "Baldur's Gate 3",
-              "price": 59.99,
-              "quantity": 1,
-              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
-            }
-          ],
-          "summary": {
-            "subtotal": "59.99",
-            "tax": "6.00",
-            "total": "65.99"
-          },
-          "paymentMethod": "apple",
-          "status": "completed",
-          "date": "2025-11-07T06:45:21.158Z"
-        },
-        {
-          "id": "cart_1762498035104_li0l7qhkw",
-          "items": [
-            {
-              "gameId": "11",
-              "name": "Baldur's Gate 3",
-              "price": 59.99,
-              "quantity": 1,
-              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
-            }
-          ],
-          "summary": {
-            "subtotal": "59.99",
-            "tax": "6.00",
-            "total": "65.99"
+            "subtotal": "3999.00",
+            "tax": "399.90",
+            "total": "4398.90"
           },
           "paymentMethod": "paypal",
-          "status": "completed",
-          "date": "2025-11-07T06:47:15.104Z"
+          "status": "Delivered",
+          "date": "2025-11-10T09:50:25.825Z"
         },
         {
-          "id": "cart_1762579494014_05unwk3f6",
+          "id": "cart_1762769506376_i770bubo0",
           "items": [
+            {
+              "gameId": "11",
+              "name": "Baldur's Gate 3",
+              "price": 3999,
+              "quantity": 1,
+              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
+            },
             {
               "gameId": "4",
               "name": "Call of Duty: Modern Warfare III",
-              "price": 69.99,
+              "price": 4999,
               "quantity": 1,
               "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3595270/7d0f21912a075c33bbb5ea558100e187ceb234ac/header.jpg?t=1758060267"
             }
           ],
           "summary": {
-            "subtotal": "69.99",
-            "tax": "7.00",
-            "total": "76.99"
+            "subtotal": "8998.00",
+            "tax": "899.80",
+            "total": "9897.80"
+          },
+          "paymentMethod": "paypal",
+          "status": "Delivered",
+          "date": "2025-11-10T10:11:46.376Z"
+        },
+        {
+          "id": "cart_1762771370600_6mk0lh50b",
+          "items": [
+            {
+              "gameId": "11",
+              "name": "Baldur's Gate 3",
+              "price": 3999,
+              "quantity": 1,
+              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
+            }
+          ],
+          "summary": {
+            "subtotal": "3999.00",
+            "tax": "399.90",
+            "total": "4398.90"
           },
           "paymentMethod": "google",
-          "status": "completed",
-          "date": "2025-11-08T05:24:54.014Z"
+          "status": "Delivered",
+          "date": "2025-11-10T10:42:50.600Z"
+        },
+        {
+          "id": "cart_1762926215696_aertrf4ij",
+          "items": [
+            {
+              "gameId": "2",
+              "name": "God of War",
+              "price": 3499,
+              "quantity": 4,
+              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1593500/header.jpg"
+            }
+          ],
+          "summary": {
+            "subtotal": "13996.00",
+            "tax": "1399.60",
+            "total": "15395.60"
+          },
+          "paymentMethod": "card",
+          "status": "Cancelled",
+          "date": "2025-11-12T05:43:35.696Z"
         }
       ],
-      "createdAt": "2025-11-06T10:24:03.445Z",
+      "createdAt": "2025-11-10T09:43:36.569Z",
       "addresses": [
         {
-          "id": "addr_1762579436373",
-          "fullName": "muhammed safvan",
-          "addressLine1": "wertyuiop[",
+          "id": "addr_1762768206267",
+          "fullName": "naheel muhammed",
+          "addressLine1": "zdxchgjhjn",
           "addressLine2": "wertyuiop[]fghjkl;'",
-          "city": "malapppuram",
-          "state": "kerala",
-          "zipCode": "12345",
+          "city": "adgfhjk",
+          "state": "zsdxgfchgv",
+          "zipCode": "46567",
           "country": "india",
-          "phone": "0987761302",
-          "isDefault": false
+          "phone": "0987654321",
+          "isDefault": true
         }
-      ]
+      ],
+      "status": "active"
+    },
+    {
+      "id": "5b6c",
+      "firstName": "ADMIN",
+      "lastName": "a",
+      "email": "admin@gmail.com",
+      "phone": "",
+      "password": "123456",
+      "role": "admin",
+      "wishlist": [],
+      "cart": [],
+      "purchaseHistory": [],
+      "addresses": [],
+      "createdAt": "2025-11-14T05:31:13.818Z"
     }
   ]
 }

@@ -1,4 +1,4 @@
-// src/contexts/CartContext.js
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useAuth } from './AuthContext';
@@ -18,10 +18,9 @@ export const CartProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
 
-  // JSON Server base URL
+  
   const API_BASE = 'http://localhost:3001';
 
-  // Load cart from JSON Server when user changes
   useEffect(() => {
     const loadCart = async () => {
       if (!user) {
@@ -33,7 +32,6 @@ export const CartProvider = ({ children }) => {
       try {
         setLoading(true);
         
-        // Fetch user's cart from JSON Server
         const response = await fetch(`${API_BASE}/users/${user.id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch user data');
@@ -42,7 +40,6 @@ export const CartProvider = ({ children }) => {
         const userData = await response.json();
         const cartItems = userData.cart || [];
 
-        // Fetch full game details for each cart item
         if (cartItems.length > 0) {
           const cartPromises = cartItems.map(async (cartItem) => {
             try {
@@ -79,12 +76,10 @@ export const CartProvider = ({ children }) => {
     loadCart();
   }, [user]);
 
-  // Generate unique ID for cart items
   const generateCartItemId = () => {
     return 'cart_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
   };
 
-  // Add item to cart
   const addToCart = async (game, quantity = 1) => {
     if (!user) {
       toast.warning('Please log in to add items to your cart.');
@@ -97,7 +92,6 @@ export const CartProvider = ({ children }) => {
     }
 
     try {
-      // Get current user data
       const userResponse = await fetch(`${API_BASE}/users/${user.id}`);
       if (!userResponse.ok) {
         throw new Error('Failed to fetch user data');
@@ -106,12 +100,10 @@ export const CartProvider = ({ children }) => {
       const userData = await userResponse.json();
       const currentCart = userData.cart || [];
 
-      // Check if game is already in cart
       const existingItemIndex = currentCart.findIndex(item => item.gameId === game.id);
       let updatedCart;
 
       if (existingItemIndex > -1) {
-        // Update quantity if item exists
         updatedCart = currentCart.map((item, index) => 
           index === existingItemIndex 
             ? { 
@@ -122,7 +114,6 @@ export const CartProvider = ({ children }) => {
             : item
         );
       } else {
-        // Add new item to cart
         const newCartItem = {
           id: generateCartItemId(),
           gameId: game.id,
@@ -133,7 +124,6 @@ export const CartProvider = ({ children }) => {
         updatedCart = [...currentCart, newCartItem];
       }
 
-      // Update user's cart in JSON Server
       const updateResponse = await fetch(`${API_BASE}/users/${user.id}`, {
         method: 'PATCH',
         headers: {
@@ -148,7 +138,6 @@ export const CartProvider = ({ children }) => {
         throw new Error('Failed to update cart');
       }
 
-      // Reload cart
       const reloadResponse = await fetch(`${API_BASE}/users/${user.id}`);
       const updatedUserData = await reloadResponse.json();
       const updatedCartItems = updatedUserData.cart || [];
@@ -187,7 +176,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // Remove item from cart
   const removeFromCart = async (gameId) => {
     if (!user) {
       toast.warning('Please log in to manage your cart.');
@@ -195,7 +183,6 @@ export const CartProvider = ({ children }) => {
     }
 
     try {
-      // Get current user data
       const userResponse = await fetch(`${API_BASE}/users/${user.id}`);
       if (!userResponse.ok) {
         throw new Error('Failed to fetch user data');
@@ -204,7 +191,6 @@ export const CartProvider = ({ children }) => {
       const userData = await userResponse.json();
       const updatedCart = (userData.cart || []).filter(item => item.gameId !== gameId);
 
-      // Update user's cart in JSON Server
       const updateResponse = await fetch(`${API_BASE}/users/${user.id}`, {
         method: 'PATCH',
         headers: {
@@ -219,7 +205,6 @@ export const CartProvider = ({ children }) => {
         throw new Error('Failed to update cart');
       }
 
-      // Update local state
       const removedGame = cart.find(item => item.id === gameId);
       setCart(prev => prev.filter(item => item.id !== gameId));
       
@@ -234,7 +219,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // Update item quantity
   const updateQuantity = async (gameId, newQuantity) => {
     if (!user) {
       toast.warning('Please log in to manage your cart.');
@@ -246,7 +230,6 @@ export const CartProvider = ({ children }) => {
     }
 
     try {
-      // Get current user data
       const userResponse = await fetch(`${API_BASE}/users/${user.id}`);
       if (!userResponse.ok) {
         throw new Error('Failed to fetch user data');
@@ -259,7 +242,6 @@ export const CartProvider = ({ children }) => {
           : item
       );
 
-      // Update user's cart in JSON Server
       const updateResponse = await fetch(`${API_BASE}/users/${user.id}`, {
         method: 'PATCH',
         headers: {
@@ -274,7 +256,6 @@ export const CartProvider = ({ children }) => {
         throw new Error('Failed to update cart');
       }
 
-      // Update local state
       setCart(prev => prev.map(item => 
         item.id === gameId ? { ...item, quantity: newQuantity } : item
       ));
@@ -286,7 +267,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // Clear entire cart
   const clearCart = async () => {
     if (!user) {
       toast.warning('Please log in to manage your cart.');
@@ -294,7 +274,6 @@ export const CartProvider = ({ children }) => {
     }
 
     try {
-      // Update user's cart in JSON Server
       const updateResponse = await fetch(`${API_BASE}/users/${user.id}`, {
         method: 'PATCH',
         headers: {
@@ -309,7 +288,6 @@ export const CartProvider = ({ children }) => {
         throw new Error('Failed to clear cart');
       }
 
-      // Update local state
       setCart([]);
       toast.info('Cart cleared successfully');
       return true;
@@ -320,7 +298,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // Get cart summary - FIXED THIS FUNCTION
   const getCartSummary = () => {
     const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
     const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -336,23 +313,19 @@ export const CartProvider = ({ children }) => {
     };
   };
 
-  // Get item quantity
   const getItemQuantity = (gameId) => {
     const item = cart.find(item => item.id === gameId);
     return item ? item.quantity : 0;
   };
 
-  // Check if item is in cart
   const isInCart = (gameId) => {
     return cart.some(item => item.id === gameId);
   };
 
-  // Check if cart is empty
   const isEmpty = () => {
     return cart.length === 0;
   };
 
-  // Checkout process
   const checkout = async (paymentMethod = 'card') => {
     if (!user) {
       toast.warning('Please log in to checkout.');
@@ -365,7 +338,6 @@ export const CartProvider = ({ children }) => {
     }
 
     try {
-      // Get current user data
       const userResponse = await fetch(`${API_BASE}/users/${user.id}`);
       if (!userResponse.ok) {
         throw new Error('Failed to fetch user data');
@@ -375,7 +347,6 @@ export const CartProvider = ({ children }) => {
       const purchaseHistory = userData.purchaseHistory || [];
       const summary = getCartSummary();
 
-      // Create order
       const order = {
         id: generateCartItemId(),
         items: cart.map(item => ({
@@ -395,7 +366,6 @@ export const CartProvider = ({ children }) => {
         date: new Date().toISOString()
       };
 
-      // Update user's purchase history and clear cart
       const updateResponse = await fetch(`${API_BASE}/users/${user.id}`, {
         method: 'PATCH',
         headers: {
@@ -411,7 +381,6 @@ export const CartProvider = ({ children }) => {
         throw new Error('Failed to process checkout');
       }
 
-      // Update local state
       setCart([]);
       toast.success('Order placed successfully! Thank you for your purchase.');
       return { success: true, order };
@@ -422,7 +391,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // Refresh cart data
   const refreshCart = async () => {
     if (!user) {
       setCart([]);
@@ -468,11 +436,9 @@ export const CartProvider = ({ children }) => {
   };
 
   const value = {
-    // State
     cart,
     loading,
     
-    // Actions
     addToCart,
     removeFromCart,
     updateQuantity,
@@ -480,13 +446,11 @@ export const CartProvider = ({ children }) => {
     checkout,
     refreshCart,
     
-    // Getters
     getCartSummary,
     getItemQuantity,
     isInCart,
     isEmpty,
     
-    // Computed values
     getCartItemCount: () => getCartSummary().totalItems,
     getTotalPrice: () => parseFloat(getCartSummary().subtotal),
     isCartEmpty: isEmpty

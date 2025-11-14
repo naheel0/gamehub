@@ -47,7 +47,7 @@ const Wishlist = () => {
           <div>
             <h1 className="text-3xl font-bold text-white">My Wishlist</h1>
             <p className="text-gray-400 mt-2">
-              {wishlist.length} {wishlist.length === 1 ? 'game' : 'games'} • Total: ${getWishlistTotal().toFixed(2)}
+              {wishlist.length} {wishlist.length === 1 ? 'game' : 'games'} • Total: ₹{getWishlistTotal().toFixed(2)}
             </p>
           </div>
           <button
@@ -88,7 +88,7 @@ const Wishlist = () => {
                 </div>
 
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-2xl font-bold text-white">${game.price}</span>
+                  <span className="text-2xl font-bold text-white">₹{game.price}</span>
                   <span className={`text-sm ${game.inStock ? 'text-green-500' : 'text-red-500'}`}>
                     {game.inStock ? 'In Stock' : 'Out of Stock'}
                   </span>
