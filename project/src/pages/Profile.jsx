@@ -40,23 +40,13 @@ const Profile = () => {
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [orderCount, setOrderCount] = useState(0);
 
-<<<<<<< HEAD
-  const API_BASE = 'http://localhost:3001';
-
-=======
   const API_BASE = 'https://gamehub-db.onrender.com';
 
-  // Format rupees
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
   const formatRupees = (amount) => {
     if (!amount) return '₹0';
     return `₹${amount.toLocaleString('en-IN')}`;
   };
 
-<<<<<<< HEAD
-=======
-  // Fetch order count from user data (quick and always available)
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
   const fetchOrderCount = async () => {
     if (!user) return;
 
@@ -75,20 +65,12 @@ const Profile = () => {
     }
   };
 
-<<<<<<< HEAD
-=======
-  // Fetch detailed order history with game details
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
   const fetchOrderHistory = async () => {
     if (!user) return;
 
     try {
       setOrdersLoading(true);
       
-<<<<<<< HEAD
-=======
-      // Fetch user data to get purchase history
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
       const userResponse = await fetch(`${API_BASE}/users/${user.id}`);
       if (!userResponse.ok) {
         throw new Error('Failed to fetch user data');
@@ -97,25 +79,14 @@ const Profile = () => {
       const userData = await userResponse.json();
       const purchaseHistory = userData.purchaseHistory || [];
       
-<<<<<<< HEAD
       setOrderCount(purchaseHistory.length);
 
-=======
-      // Update order count
-      setOrderCount(purchaseHistory.length);
-
-      // If no purchase history, set empty array
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
       if (purchaseHistory.length === 0) {
         setOrderHistory([]);
         setOrdersLoading(false);
         return;
       }
 
-<<<<<<< HEAD
-=======
-      // Fetch all games to get detailed information
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
       const gamesResponse = await fetch(`${API_BASE}/games`);
       if (!gamesResponse.ok) {
         throw new Error('Failed to fetch games data');
@@ -123,18 +94,10 @@ const Profile = () => {
       
       const allGames = await gamesResponse.json();
 
-<<<<<<< HEAD
-=======
-      // Enhance order history with game details
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
       const enhancedOrders = await Promise.all(
         purchaseHistory.map(async (order) => {
           const enhancedItems = await Promise.all(
             (order.items || []).map(async (item) => {
-<<<<<<< HEAD
-=======
-              // Find the game in our games data
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
               const game = allGames.find(g => g.id === item.gameId || g.id === item.id);
               
               if (game) {
@@ -148,10 +111,6 @@ const Profile = () => {
                 };
               }
               
-<<<<<<< HEAD
-=======
-              // Fallback to item data if game not found
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
               return {
                 ...item,
                 image: item.image || '/images/placeholder-game.jpg',
@@ -188,25 +147,14 @@ const Profile = () => {
         phone: user.phone || ''
       });
       
-<<<<<<< HEAD
       fetchOrderCount();
       
-=======
-      // Always fetch order count
-      fetchOrderCount();
-      
-      // Fetch detailed order history only when orders tab is active
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
       if (activeTab === 'orders') {
         fetchOrderHistory();
       }
     }
   }, [user]);
 
-<<<<<<< HEAD
-=======
-  // Fetch detailed orders only when orders tab is activated
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
   useEffect(() => {
     if (activeTab === 'orders' && user) {
       fetchOrderHistory();
@@ -234,10 +182,6 @@ const Profile = () => {
       const result = await updateUser(updatedUser);
       if (result.success) {
         setIsEditing(false);
-<<<<<<< HEAD
-=======
-        // Refresh order count after profile update
->>>>>>> 2635619b1707c83d076f291dc0c9aa0db129ebe4
         fetchOrderCount();
       }
     } catch (error) {
