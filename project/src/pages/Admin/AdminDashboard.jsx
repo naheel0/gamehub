@@ -1,6 +1,7 @@
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { NavLink, useNavigate, Outlet } from "react-router-dom";
+import { FiLogOut } from 'react-icons/fi';
 
 export default function AdminDashboard() {
   const [isOpen, setIsOpen] = useState(false);
@@ -105,9 +106,9 @@ export default function AdminDashboard() {
         <div className="border-t border-gray-800 pt-4">
           <button
             onClick={handleLogout}
-            className="w-full px-4 py-3 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-300 shadow-lg"
+            className="w-full px-4 py-3 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900 shadow-lg transition duration-300 transform hover:scale-105"
           >
-            🚪 Logout
+             <div className="flex flex-row gap-3 "><FiLogOut  size={24} /> Log out</div>
           </button>
         </div>
       </aside>
