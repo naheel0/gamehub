@@ -1,7 +1,7 @@
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { NavLink, useNavigate, Outlet } from "react-router-dom";
-import { FiLogOut } from 'react-icons/fi';
+import { FiLogOut } from "react-icons/fi";
 
 export default function AdminDashboard() {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,18 +25,18 @@ export default function AdminDashboard() {
       </header>
 
       {/* Sidebar */}
-      <aside className={`
-        fixed md:static top-0 left-0 h-screen w-64
+      <aside
+        className={`
+        fixed md:sticky top-0 left-0 h-screen w-64
         bg-gray-900 backdrop-blur-xl border-r border-gray-800
         text-white p-6 flex flex-col z-40
         transform transition-transform duration-300
-        ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-      `}>
+        ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+      `}
+      >
         {/* Logo */}
         <div className="mb-10">
-          <h2 className="text-2xl font-bold text-white">
-            GameHub Admin
-          </h2>
+          <h2 className="text-2xl font-bold text-white">GameHub Admin</h2>
           <p className="text-gray-400 text-sm mt-2">Management Panel</p>
         </div>
 
@@ -108,7 +108,9 @@ export default function AdminDashboard() {
             onClick={handleLogout}
             className="w-full px-4 py-3 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900 shadow-lg transition duration-300 transform hover:scale-105"
           >
-             <div className="flex flex-row gap-3 "><FiLogOut  size={24} /> Log out</div>
+            <div className="flex flex-row gap-3 ">
+              <FiLogOut size={24} /> Log out
+            </div>
           </button>
         </div>
       </aside>

@@ -2,21 +2,39 @@
 import { motion } from "framer-motion";
 import { useAdmin } from "./contexts/AdminContext";
 import {
-  Shield,
-  UserCog,
-  UserX,
   Crown,
   User,
   Ban,
   CheckCircle,
   Trash2,
   Users,
+  Search,
+  X,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 export default function AdminUsers() {
   const { users, updateUser, deleteUser } = useAdmin();
   const [updatingUserId, setUpdatingUserId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Filter users based on search term
+  const filteredUsers = useMemo(() => {
+    if (!searchTerm) return users;
+    
+    const term = searchTerm.toLowerCase();
+    return users.filter(user => 
+      user.firstName?.toLowerCase().includes(term) ||
+      user.lastName?.toLowerCase().includes(term) ||
+      user.email?.toLowerCase().includes(term) ||
+      user.phone?.includes(term) ||
+      user.role?.toLowerCase().includes(term) ||
+      user.status?.toLowerCase().includes(term)
+    );
+  }, [users, searchTerm]);
 
   // ✅ Update Role (Saves to DB)
   const handleRoleChange = async (id, newRole) => {
@@ -74,6 +92,80 @@ export default function AdminUsers() {
     );
   };
 
+  // Pagination calculations
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentUsers = filteredUsers?.slice(indexOfFirstItem, indexOfLastItem) || [];
+  const totalPages = Math.ceil((filteredUsers?.length || 0) / itemsPerPage);
+
+  // Reset to first page when search term changes
+  useState(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
+  // Page change handlers
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const goToPrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const goToPage = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxVisiblePages = 5;
+    
+    if (totalPages <= maxVisiblePages) {
+      // Show all pages if total pages are less than max visible
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      // Show limited pages with ellipsis
+      if (currentPage <= 3) {
+        // Near the start
+        for (let i = 1; i <= 4; i++) {
+          pageNumbers.push(i);
+        }
+        pageNumbers.push('...');
+        pageNumbers.push(totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        // Near the end
+        pageNumbers.push(1);
+        pageNumbers.push('...');
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pageNumbers.push(i);
+        }
+      } else {
+        // In the middle
+        pageNumbers.push(1);
+        pageNumbers.push('...');
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pageNumbers.push(i);
+        }
+        pageNumbers.push('...');
+        pageNumbers.push(totalPages);
+      }
+    }
+    
+    return pageNumbers;
+  };
+
+  // Clear search
+  const clearSearch = () => {
+    setSearchTerm("");
+  };
+
   return (
     <div className="min-h-screen bg-black/70 backdrop-blur-md px-4 py-8">
       <motion.div
@@ -83,155 +175,274 @@ export default function AdminUsers() {
         className="bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700/50 rounded-3xl p-6 sm:p-8 w-full max-w-6xl mx-auto shadow-2xl overflow-hidden"
       >
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-red-500/10 rounded-xl">
-              <Users className="w-6 h-6 text-red-400" />
+        <div className="flex flex-col gap-6 mb-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-red-500/10 rounded-xl">
+                <Users className="w-6 h-6 text-red-400" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                  User Management
+                </h2>
+                <p className="text-sm text-gray-400">
+                  {searchTerm ? (
+                    <>Showing {filteredUsers.length} of {users.length} users for "{searchTerm}"</>
+                  ) : (
+                    <>Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredUsers.length)} of {filteredUsers.length} users</>
+                  )}
+                </p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                User Management
-              </h2>
-              <p className="text-sm text-gray-400">
-                Manage user roles and status ({users.length} users)
+            
+            {/* Items Per Page Selector */}
+            <div className="flex items-center gap-2 text-sm text-gray-400">
+              <span>Show:</span>
+              <select 
+                value={itemsPerPage}
+                onChange={(e) => {
+                  setItemsPerPage(Number(e.target.value));
+                  setCurrentPage(1);
+                }}
+                className="bg-gray-800 border border-gray-700 rounded-lg px-2 py-1 text-white text-sm"
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+              </select>
+              <span>per page</span>
+            </div>
+          </div>
+
+          {/* Search Bar */}
+          <div className="relative max-w-md">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Search users by name, email, phone, role, or status..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full bg-gray-800/50 border border-gray-700 rounded-xl pl-10 pr-10 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 transition-all duration-200"
+              />
+              {searchTerm && (
+                <button
+                  onClick={clearSearch}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+            {searchTerm && (
+              <p className="text-xs text-gray-500 mt-2">
+                Search results: {filteredUsers.length} user{filteredUsers.length !== 1 ? 's' : ''} found
               </p>
-            </div>
+            )}
           </div>
         </div>
 
-        {users.length === 0 ? (
+        {filteredUsers.length === 0 ? (
           <div className="text-center py-12">
             <User className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-            <p className="text-gray-400 text-lg">No users found</p>
+            <p className="text-gray-400 text-lg">
+              {searchTerm ? 'No users found matching your search' : 'No users found'}
+            </p>
+            {searchTerm && (
+              <p className="text-gray-500 text-sm mt-2">
+                Try searching with different terms
+              </p>
+            )}
           </div>
         ) : (
-          <div className="overflow-x-auto rounded-2xl border border-gray-700/50">
-            <table className="w-full">
-              <thead className="bg-gray-800/50">
-                <tr>
-                  <th className="p-4 text-left text-gray-300 font-semibold text-sm uppercase tracking-wider">
-                    User
-                  </th>
-                  <th className="p-4 text-left text-gray-300 font-semibold text-sm uppercase tracking-wider">
-                    Contact
-                  </th>
-                  <th className="p-4 text-center text-gray-300 font-semibold text-sm uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="p-4 text-center text-gray-300 font-semibold text-sm uppercase tracking-wider">
-                    Role
-                  </th>
-                  <th className="p-4 text-center text-gray-300 font-semibold text-sm uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
+          <>
+            <div className="overflow-x-auto rounded-2xl border border-gray-700/50">
+              <table className="w-full">
+                <thead className="bg-gray-800/50">
+                  <tr>
+                    <th className="p-4 text-left text-gray-300 font-semibold text-sm uppercase tracking-wider">
+                      User
+                    </th>
+                    <th className="p-4 text-left text-gray-300 font-semibold text-sm uppercase tracking-wider">
+                      Contact
+                    </th>
+                    <th className="p-4 text-center text-gray-300 font-semibold text-sm uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="p-4 text-center text-gray-300 font-semibold text-sm uppercase tracking-wider">
+                      Role
+                    </th>
+                    <th className="p-4 text-center text-gray-300 font-semibold text-sm uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
 
-              <tbody className="divide-y divide-gray-700/50">
-                {users.map((u) => (
-                  <motion.tr
-                    key={u.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="hover:bg-gray-800/30 transition-all duration-200 group"
+                <tbody className="divide-y divide-gray-700/50">
+                  {currentUsers.map((u) => (
+                    <motion.tr
+                      key={u.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="hover:bg-gray-800/30 transition-all duration-200 group"
+                    >
+                      {/* User Info */}
+                      <td className="p-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                            {u.firstName?.[0]}
+                            {u.lastName?.[0]}
+                          </div>
+                          <div>
+                            <div className="text-white font-medium">
+                              {u.firstName} {u.lastName}
+                            </div>
+                            <div className="text-gray-400 text-sm">
+                              ID: {u.id.slice(0, 8)}...
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Contact */}
+                      <td className="p-4">
+                        <div className="text-gray-300">{u.email}</div>
+                        {u.phone && (
+                          <div className="text-gray-400 text-sm">{u.phone}</div>
+                        )}
+                      </td>
+
+                      {/* Status */}
+                      <td className="p-4">
+                        <div className="flex justify-center items-center gap-2">
+                          {getStatusIcon(u.status)}
+                          <select
+                            value={u.status ?? "active"}
+                            onChange={(e) =>
+                              handleStatusChange(u.id, e.target.value)
+                            }
+                            disabled={updatingUserId === u.id}
+                            className={`bg-gray-700/50 border border-gray-600 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 transition-all duration-200 text-white ${
+                              updatingUserId === u.id
+                                ? "opacity-50 cursor-not-allowed"
+                                : "hover:border-gray-500 cursor-pointer"
+                            }`}
+                          >
+                            <option value="active" className="bg-gray-800 text-green-400">
+                              Active
+                            </option>
+                            <option value="blocked" className="bg-gray-800 text-red-400">
+                              Blocked
+                            </option>
+                          </select>
+                        </div>
+                      </td>
+
+                      {/* Role */}
+                      <td className="p-4">
+                        <div className="flex justify-center items-center gap-2">
+                          {getRoleIcon(u.role)}
+                          <select
+                            value={u.role || "user"}
+                            onChange={(e) =>
+                              handleRoleChange(u.id, e.target.value)
+                            }
+                            disabled={updatingUserId === u.id}
+                            className={`bg-gray-700/50 border border-gray-600 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 transition-all duration-200 text-white ${
+                              updatingUserId === u.id
+                                ? "opacity-50 cursor-not-allowed"
+                                : "hover:border-gray-500 cursor-pointer"
+                            }`}
+                          >
+                            <option value="user" className="bg-gray-800">
+                              User
+                            </option>
+                            <option value="admin" className="bg-gray-800">
+                              Admin
+                            </option>
+                          </select>
+                        </div>
+                      </td>
+
+                      {/* Actions - Direct Delete Button */}
+                      <td className="p-4">
+                        <div className="flex justify-center">
+                          <button
+                            onClick={() => handleDeleteUser(u.id)}
+                            disabled={updatingUserId === u.id}
+                            className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-all duration-200 flex items-center gap-2 group"
+                            title="Delete User"
+                          >
+                            <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
+                            <span className="text-sm font-medium">Delete</span>
+                          </button>
+                        </div>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination Controls */}
+            {filteredUsers.length > 0 && (
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 p-4 bg-gray-800/30 rounded-2xl border border-gray-700/50">
+                <div className="text-gray-400 text-sm">
+                  Page {currentPage} of {totalPages}
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  {/* Previous Button */}
+                  <button
+                    onClick={goToPrevPage}
+                    disabled={currentPage === 1}
+                    className={`flex items-center gap-1 px-3 py-2 rounded-lg transition duration-200 ${
+                      currentPage === 1
+                        ? "bg-gray-800 text-gray-500 cursor-not-allowed"
+                        : "bg-gray-700 hover:bg-gray-600 text-white"
+                    }`}
                   >
-                    {/* User Info */}
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                          {u.firstName?.[0]}
-                          {u.lastName?.[0]}
-                        </div>
-                        <div>
-                          <div className="text-white font-medium">
-                            {u.firstName} {u.lastName}
-                          </div>
-                          <div className="text-gray-400 text-sm">
-                            ID: {u.id.slice(0, 8)}...
-                          </div>
-                        </div>
-                      </div>
-                    </td>
+                     <ChevronLeftIcon className="h-6 w-5" />
+                  </button>
 
-                    {/* Contact */}
-                    <td className="p-4">
-                      <div className="text-gray-300">{u.email}</div>
-                      {u.phone && (
-                        <div className="text-gray-400 text-sm">{u.phone}</div>
-                      )}
-                    </td>
+                  {/* Page Numbers */}
+                  <div className="flex items-center gap-1">
+                    {getPageNumbers().map((pageNumber, index) => (
+                      <button
+                        key={index}
+                        onClick={() => typeof pageNumber === 'number' && goToPage(pageNumber)}
+                        disabled={pageNumber === '...'}
+                        className={`min-w-[40px] h-10 flex items-center justify-center rounded-lg transition duration-200 ${
+                          pageNumber === currentPage
+                            ? "bg-red-600 text-white"
+                            : pageNumber === '...'
+                            ? "text-gray-500 cursor-default"
+                            : "bg-gray-700 hover:bg-gray-600 text-white"
+                        }`}
+                      >
+                        {pageNumber}
+                      </button>
+                    ))}
+                  </div>
 
-                    {/* Status */}
-                    <td className="p-4">
-                      <div className="flex justify-center items-center gap-2">
-                        {getStatusIcon(u.status)}
-                        <select
-                          value={u.status ?? "active"}
-                          onChange={(e) =>
-                            handleStatusChange(u.id, e.target.value)
-                          }
-                          disabled={updatingUserId === u.id}
-                          className={`bg-gray-700/50 border border-gray-600 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 transition-all duration-200 text-white ${
-                            updatingUserId === u.id
-                              ? "opacity-50 cursor-not-allowed"
-                              : "hover:border-gray-500 cursor-pointer"
-                          }`}
-                        >
-                          <option value="active" className="bg-gray-800 text-green-400">
-                            Active
-                          </option>
-                          <option value="blocked" className="bg-gray-800 text-red-400">
-                            Blocked
-                          </option>
-                        </select>
-                      </div>
-                    </td>
-
-                    {/* Role */}
-                    <td className="p-4">
-                      <div className="flex justify-center items-center gap-2">
-                        {getRoleIcon(u.role)}
-                        <select
-                          value={u.role || "user"}
-                          onChange={(e) =>
-                            handleRoleChange(u.id, e.target.value)
-                          }
-                          disabled={updatingUserId === u.id}
-                          className={`bg-gray-700/50 border border-gray-600 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 transition-all duration-200 text-white ${
-                            updatingUserId === u.id
-                              ? "opacity-50 cursor-not-allowed"
-                              : "hover:border-gray-500 cursor-pointer"
-                          }`}
-                        >
-                          <option value="user" className="bg-gray-800">
-                            User
-                          </option>
-                          <option value="admin" className="bg-gray-800">
-                            Admin
-                          </option>
-                        </select>
-                      </div>
-                    </td>
-
-                    {/* Actions - Direct Delete Button */}
-                    <td className="p-4">
-                      <div className="flex justify-center">
-                        <button
-                          onClick={() => handleDeleteUser(u.id)}
-                          disabled={updatingUserId === u.id}
-                          className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-all duration-200 flex items-center gap-2 group"
-                          title="Delete User"
-                        >
-                          <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
-                          <span className="text-sm font-medium">Delete</span>
-                        </button>
-                      </div>
-                    </td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                  {/* Next Button */}
+                  <button
+                    onClick={goToNextPage}
+                    disabled={currentPage === totalPages}
+                    className={`flex items-center gap-1 px-3 py-2 rounded-lg transition duration-200 ${
+                      currentPage === totalPages
+                        ? "bg-gray-800 text-gray-500 cursor-not-allowed"
+                        : "bg-gray-700 hover:bg-gray-600 text-white"
+                    }`}
+                  >
+                    
+                     <ChevronRightIcon className="h-6 w-5" />
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
         )}
 
         {/* Loading Overlay */}

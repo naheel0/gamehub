@@ -1,16 +1,31 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useAdmin } from "./contexts/AdminContext";
-import { Edit3, Plus, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Edit3, Plus, Trash2,  Search, X } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import AdminAddProducts from "./AdminAddProducts";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 export default function AdminProducts() {
   const { products, deleteProduct } = useAdmin();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10); // Add setItemsPerPage here
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Filter products based on search term
+  const filteredProducts = useMemo(() => {
+    if (!searchTerm) return products;
+    
+    const term = searchTerm.toLowerCase();
+    return products.filter(product => 
+      product.name?.toLowerCase().includes(term) ||
+      product.genre?.toLowerCase().includes(term) ||
+      product.description?.toLowerCase().includes(term) ||
+      product.price?.toString().includes(term)
+    );
+  }, [products, searchTerm]);
 
   const handleAdd = () => {
     setEditingProduct(null);
@@ -22,11 +37,21 @@ export default function AdminProducts() {
     setIsModalOpen(true);
   };
 
+  // Clear search
+  const clearSearch = () => {
+    setSearchTerm("");
+  };
+
+  // Reset to first page when search term changes
+  useState(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
   // Pagination calculations
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentProducts = products?.slice(indexOfFirstItem, indexOfLastItem) || [];
-  const totalPages = Math.ceil((products?.length || 0) / itemsPerPage);
+  const currentProducts = filteredProducts?.slice(indexOfFirstItem, indexOfLastItem) || [];
+  const totalPages = Math.ceil((filteredProducts?.length || 0) / itemsPerPage);
 
   // Page change handlers
   const goToNextPage = () => {
@@ -89,20 +114,53 @@ export default function AdminProducts() {
   return (
     <div className="min-h-screen bg-gray-950 px-4 py-10">
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
-          <div>
-            <h1 className="text-3xl font-semibold text-white">Manage Products</h1>
-            <p className="text-gray-400 mt-1">
-              Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, products?.length || 0)} of {products?.length || 0} products
-            </p>
+        <div className="flex flex-col gap-6 mb-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+              <h1 className="text-3xl font-semibold text-white">Manage Products</h1>
+              <p className="text-gray-400 mt-1">
+                {searchTerm ? (
+                  <>Showing {filteredProducts.length} of {products?.length || 0} products for "{searchTerm}"</>
+                ) : (
+                  <>Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredProducts.length)} of {filteredProducts.length} products</>
+                )}
+              </p>
+            </div>
+
+            <button
+              onClick={handleAdd}
+              className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 rounded-lg text-white transition duration-300 transform hover:scale-105"
+            >
+              <Plus size={18} /> Add Product
+            </button>
           </div>
 
-          <button
-            onClick={handleAdd}
-            className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 rounded-lg text-white transition duration-300 transform hover:scale-105"
-          >
-            <Plus size={18} /> Add Product
-          </button>
+          {/* Search Bar */}
+          <div className="relative max-w-md">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Search products by name, category, description, or price..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full bg-gray-800/80 border border-gray-700 rounded-xl pl-10 pr-10 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 transition-all duration-200"
+              />
+              {searchTerm && (
+                <button
+                  onClick={clearSearch}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+            {searchTerm && (
+              <p className="text-xs text-gray-500 mt-2">
+                Search results: {filteredProducts.length} product{filteredProducts.length !== 1 ? 's' : ''} found
+              </p>
+            )}
+          </div>
         </div>
 
         <div className="overflow-x-auto bg-gray-900 rounded-lg border border-gray-800">
@@ -128,7 +186,7 @@ export default function AdminProducts() {
               ) : currentProducts.length === 0 ? (
                 <tr>
                   <td colSpan="6" className="text-center p-6 text-slate-400">
-                    No products found.
+                    {searchTerm ? 'No products found matching your search' : 'No products found.'}
                   </td>
                 </tr>
               ) : (
@@ -181,7 +239,7 @@ export default function AdminProducts() {
         </div>
 
         {/* Pagination Controls */}
-        {products && products.length > 0 && (
+        {filteredProducts && filteredProducts.length > 0 && (
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 p-4 bg-gray-900 rounded-lg border border-gray-800">
             <div className="text-gray-400 text-sm">
               Page {currentPage} of {totalPages}
@@ -198,8 +256,8 @@ export default function AdminProducts() {
                     : "bg-gray-700 hover:bg-gray-600 text-white"
                 }`}
               >
-                <ChevronLeft size={16} />
-                Previous
+                <ChevronLeftIcon className="h-6 w-5" />
+                
               </button>
 
               {/* Page Numbers */}
@@ -232,8 +290,7 @@ export default function AdminProducts() {
                     : "bg-gray-700 hover:bg-gray-600 text-white"
                 }`}
               >
-                Next
-                <ChevronRight size={16} />
+               <ChevronRightIcon className="h-6 w-5" />
               </button>
             </div>
 
