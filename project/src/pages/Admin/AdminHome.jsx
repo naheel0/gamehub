@@ -1,7 +1,6 @@
 import {
   PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend,
-  BarChart, Bar, XAxis, YAxis, CartesianGrid,
-  LineChart, Line
+  BarChart, Bar, XAxis, YAxis, CartesianGrid
 } from "recharts";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
@@ -17,29 +16,29 @@ export default function AdminHome() {
       title: "Total Products",
       value: products.length,
       icon: Package,
-      color: "bg-blue-500",
-      change: "+12%"
+      change: "+12%",
+      color: "from-indigo-500 to-purple-600"
     },
     {
       title: "Total Users",
       value: users.length,
       icon: Users,
-      color: "bg-green-500",
-      change: "+8%"
+      change: "+8%",
+      color: "from-emerald-500 to-teal-600"
     },
     {
       title: "Total Orders",
       value: orders.length,
       icon: ShoppingCart,
-      color: "bg-purple-500",
-      change: "+23%"
+      change: "+23%",
+      color: "from-amber-500 to-orange-600"
     },
     {
       title: "Revenue",
-      value: `₹${orders.reduce((sum, order) => sum + (order.total || 0), 0)}`,
+      value: `₹${orders.reduce((sum, order) => sum + (order.total || 0), 0).toLocaleString()}`,
       icon: TrendingUp,
-      color: "bg-orange-500",
-      change: "+15%"
+      change: "+15%",
+      color: "from-cyan-500 to-blue-600"
     }
   ];
 
@@ -55,7 +54,8 @@ export default function AdminHome() {
     value: orderStatusData[status]
   }));
 
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  // Modern color palette
+  const CHART_COLORS = ["#8b5cf6", "#06b6d4", "#10b981", "#f59e0b", "#ef4444"];
 
   // Sales Data for Bar Chart (Last 7 days)
   const salesData = Array.from({ length: 7 }, (_, i) => {
@@ -71,6 +71,9 @@ export default function AdminHome() {
     };
   }).reverse();
 
+  // Recent orders for activity section
+  const recentOrders = orders.slice(-5).reverse();
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -80,10 +83,10 @@ export default function AdminHome() {
         className="flex justify-between items-center"
       >
         <div>
-          <h1 className="text-3xl font-bold text-white">Dashboard Overview</h1>
-          <p className="text-gray-400">Welcome to your admin dashboard</p>
+          <h1 className="text-3xl font-bold text-slate-800 dark:text-white">Dashboard Overview</h1>
+          <p className="text-slate-600 dark:text-slate-300">Welcome to your admin dashboard</p>
         </div>
-        <div className="text-sm text-gray-400">
+        <div className="text-sm text-slate-500 dark:text-slate-400">
           Last updated: {new Date().toLocaleDateString()}
         </div>
       </motion.div>
@@ -96,15 +99,15 @@ export default function AdminHome() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="bg-gray-800/50 backdrop-blur-lg border border-gray-700 rounded-xl p-6"
+            className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700"
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-sm">{stat.title}</p>
-                <p className="text-2xl font-bold text-white mt-2">{stat.value}</p>
-                <p className="text-green-400 text-xs mt-1">{stat.change} from last month</p>
+                <p className="text-slate-600 dark:text-slate-300 text-sm">{stat.title}</p>
+                <p className="text-2xl font-bold text-slate-800 dark:text-white mt-2">{stat.value}</p>
+                <p className="text-emerald-500 text-xs mt-1">{stat.change} from last month</p>
               </div>
-              <div className={`p-3 rounded-full ${stat.color}`}>
+              <div className={`p-3 rounded-xl bg-gradient-to-r ${stat.color} shadow-lg`}>
                 <stat.icon className="w-6 h-6 text-white" />
               </div>
             </div>
@@ -118,9 +121,9 @@ export default function AdminHome() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-gray-800/50 backdrop-blur-lg border border-gray-700 rounded-xl p-6"
+          className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700"
         >
-          <h3 className="text-lg font-semibold text-white mb-4">Order Status</h3>
+          <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Order Status</h3>
           {pieChartData.length > 0 ? (
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
@@ -138,16 +141,26 @@ export default function AdminHome() {
                     }
                   >
                     {pieChartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={CHART_COLORS[index % CHART_COLORS.length]} 
+                      />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#1e293b', 
+                      border: '1px solid #334155',
+                      borderRadius: '8px',
+                      color: '#f8fafc'
+                    }} 
+                  />
                   <Legend />
                 </PieChart>
               </ResponsiveContainer>
             </div>
           ) : (
-            <div className="h-80 flex items-center justify-center text-gray-400">
+            <div className="h-80 flex items-center justify-center text-slate-500 dark:text-slate-400">
               No order data available
             </div>
           )}
@@ -158,24 +171,37 @@ export default function AdminHome() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2 }}
-          className="bg-gray-800/50 backdrop-blur-lg border border-gray-700 rounded-xl p-6"
+          className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700"
         >
-          <h3 className="text-lg font-semibold text-white mb-4">Recent Sales</h3>
+          <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Recent Sales</h3>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={salesData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                <XAxis dataKey="day" stroke="#9CA3AF" />
-                <YAxis stroke="#9CA3AF" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#cbd5e1" />
+                <XAxis 
+                  dataKey="day" 
+                  stroke="#64748b" 
+                  fontSize={12}
+                />
+                <YAxis 
+                  stroke="#64748b" 
+                  fontSize={12}
+                  tickFormatter={(value) => `₹${value}`}
+                />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: '#1F2937', 
-                    border: 'none',
+                    backgroundColor: '#1e293b', 
+                    border: '1px solid #334155',
                     borderRadius: '8px',
-                    color: '#FFF'
-                  }} 
+                    color: '#f8fafc'
+                  }}
+                  formatter={(value) => [`₹${value}`, 'Sales']}
                 />
-                <Bar dataKey="sales" fill="#8B5CF6" radius={[4, 4, 0, 0]} />
+                <Bar 
+                  dataKey="sales" 
+                  fill="#8b5cf6" 
+                  radius={[4, 4, 0, 0]}
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -187,28 +213,39 @@ export default function AdminHome() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="bg-gray-800/50 backdrop-blur-lg border border-gray-700 rounded-xl p-6"
+        className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700"
       >
-        <h3 className="text-lg font-semibold text-white mb-4">Recent Activity</h3>
+        <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Recent Orders</h3>
         <div className="space-y-3">
-          {orders.slice(-5).reverse().map((order) => (
-            <div key={order.id} className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg">
-              <div>
-                <p className="text-white font-medium">Order #{order.orderId}</p>
-                <p className="text-gray-400 text-sm">{order.email}</p>
+          {recentOrders.length > 0 ? (
+            recentOrders.map((order) => (
+              <div 
+                key={order.id} 
+                className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600"
+              >
+                <div>
+                  <p className="text-slate-800 dark:text-white font-medium">Order #{order.orderId}</p>
+                  <p className="text-slate-600 dark:text-slate-300 text-sm">{order.email}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-slate-800 dark:text-white font-semibold">₹{(order.total || 0).toLocaleString()}</p>
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    order.status === 'Delivered' ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800' :
+                    order.status === 'Pending' ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800' :
+                    order.status === 'Cancelled' ? 'bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800' :
+                    'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800'
+                  }`}>
+                    {order.status}
+                  </span>
+                </div>
               </div>
-              <div className="text-right">
-                <p className="text-white">₹{order.total || '0'}</p>
-                <span className={`px-2 py-1 rounded-full text-xs ${
-                  order.status === 'Delivered' ? 'bg-green-500/20 text-green-400' :
-                  order.status === 'Pending' ? 'bg-yellow-500/20 text-yellow-400' :
-                  'bg-blue-500/20 text-blue-400'
-                }`}>
-                  {order.status}
-                </span>
-              </div>
+            ))
+          ) : (
+            <div className="text-center py-8 text-slate-500 dark:text-slate-400">
+              <ShoppingCart className="w-12 h-12 mx-auto mb-3 opacity-50" />
+              <p>No recent orders</p>
             </div>
-          ))}
+          )}
         </div>
       </motion.div>
     </div>
