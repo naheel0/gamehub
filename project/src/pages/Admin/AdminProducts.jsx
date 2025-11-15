@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAdmin } from "./contexts/AdminContext";
-import { Edit3, Plus, Trash2 } from "lucide-react";
+import { Edit3, Plus, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import AdminAddProducts from "./AdminAddProducts";
@@ -9,6 +9,8 @@ export default function AdminProducts() {
   const { products, deleteProduct } = useAdmin();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10); // Add setItemsPerPage here
 
   const handleAdd = () => {
     setEditingProduct(null);
@@ -20,11 +22,80 @@ export default function AdminProducts() {
     setIsModalOpen(true);
   };
 
+  // Pagination calculations
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentProducts = products?.slice(indexOfFirstItem, indexOfLastItem) || [];
+  const totalPages = Math.ceil((products?.length || 0) / itemsPerPage);
+
+  // Page change handlers
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const goToPrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const goToPage = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxVisiblePages = 5;
+    
+    if (totalPages <= maxVisiblePages) {
+      // Show all pages if total pages are less than max visible
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      // Show limited pages with ellipsis
+      if (currentPage <= 3) {
+        // Near the start
+        for (let i = 1; i <= 4; i++) {
+          pageNumbers.push(i);
+        }
+        pageNumbers.push('...');
+        pageNumbers.push(totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        // Near the end
+        pageNumbers.push(1);
+        pageNumbers.push('...');
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pageNumbers.push(i);
+        }
+      } else {
+        // In the middle
+        pageNumbers.push(1);
+        pageNumbers.push('...');
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pageNumbers.push(i);
+        }
+        pageNumbers.push('...');
+        pageNumbers.push(totalPages);
+      }
+    }
+    
+    return pageNumbers;
+  };
+
   return (
     <div className="min-h-screen bg-gray-950 px-4 py-10">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
-          <h1 className="text-3xl font-semibold text-white">Manage Products</h1>
+          <div>
+            <h1 className="text-3xl font-semibold text-white">Manage Products</h1>
+            <p className="text-gray-400 mt-1">
+              Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, products?.length || 0)} of {products?.length || 0} products
+            </p>
+          </div>
 
           <button
             onClick={handleAdd}
@@ -34,16 +105,16 @@ export default function AdminProducts() {
           </button>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full border border-gray-800 text-sm text-white">
+        <div className="overflow-x-auto bg-gray-900 rounded-lg border border-gray-800">
+          <table className="w-full text-sm text-white">
             <thead className="bg-gray-800">
               <tr>
-                <th className="p-3 text-left">Image</th>
-                <th className="p-3 text-left">Name</th>
-                <th className="p-3 text-left">Category</th>
-                <th className="p-3 text-left">Price</th>
-                <th className="p-3 text-left">Stock</th>
-                <th className="p-3 text-center">Actions</th>
+                <th className="p-4 text-left">Image</th>
+                <th className="p-4 text-left">Name</th>
+                <th className="p-4 text-left">Category</th>
+                <th className="p-4 text-left">Price</th>
+                <th className="p-4 text-left">Stock</th>
+                <th className="p-4 text-center">Actions</th>
               </tr>
             </thead>
 
@@ -54,49 +125,53 @@ export default function AdminProducts() {
                     Loading products...
                   </td>
                 </tr>
-              ) : products.length === 0 ? (
+              ) : currentProducts.length === 0 ? (
                 <tr>
                   <td colSpan="6" className="text-center p-6 text-slate-400">
                     No products found.
                   </td>
                 </tr>
               ) : (
-                products.map((p) => (
-                  <tr key={p.id} className="border-t border-gray-800">
-                    <td className="p-3">
+                currentProducts.map((p) => (
+                  <tr key={p.id} className="border-t border-gray-800 hover:bg-gray-800/50 transition-colors">
+                    <td className="p-4">
                       <img
                         src={p.images?.[0] || "/placeholder-game.jpg"}
                         alt={p.name}
                         className="w-16 h-16 object-cover rounded-lg"
                       />
                     </td>
-                    <td className="p-3">{p.name}</td>
-                    <td className="p-3">{p.genre}</td>
-                    <td className="p-3">₹ {p.price}</td>
-                    <td className="p-3">
+                    <td className="p-4 font-medium">{p.name}</td>
+                    <td className="p-4 text-gray-300">{p.genre}</td>
+                    <td className="p-4 font-semibold">₹ {p.price}</td>
+                    <td className="p-4">
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${
                           p.inStock
-                            ? "bg-green-900 text-green-300"
-                            : "bg-red-900 text-red-300"
+                            ? "bg-green-900/50 text-green-300 border border-green-700"
+                            : "bg-red-900/50 text-red-300 border border-red-700"
                         }`}
                       >
                         {p.inStock ? "In Stock" : "Out of Stock"}
                       </span>
                     </td>
-                    <td className="p-3 flex items-center justify-center gap-4">
-                      <button
-                        onClick={() => handleEdit(p)}
-                        className="text-blue-400 hover:text-blue-300 mx-2"
-                      >
-                        <Edit3 size={18} />
-                      </button>
-                      <button
-                        onClick={() => deleteProduct(p.id)}
-                        className="text-red-500 hover:text-red-400 mx-2"
-                      >
-                        <Trash2 size={20} />
-                      </button>
+                    <td className="p-4">
+                      <div className="flex items-center justify-center gap-3">
+                        <button
+                          onClick={() => handleEdit(p)}
+                          className="flex items-center gap-1 px-3 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-white transition duration-200"
+                        >
+                          <Edit3 size={16} />
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => deleteProduct(p.id)}
+                          className="flex items-center gap-1 px-3 py-2 bg-red-600 hover:bg-red-500 rounded-lg text-white transition duration-200"
+                        >
+                          <Trash2 size={16} />
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -104,6 +179,84 @@ export default function AdminProducts() {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination Controls */}
+        {products && products.length > 0 && (
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 p-4 bg-gray-900 rounded-lg border border-gray-800">
+            <div className="text-gray-400 text-sm">
+              Page {currentPage} of {totalPages}
+            </div>
+            
+            <div className="flex items-center gap-2">
+              {/* Previous Button */}
+              <button
+                onClick={goToPrevPage}
+                disabled={currentPage === 1}
+                className={`flex items-center gap-1 px-3 py-2 rounded-lg transition duration-200 ${
+                  currentPage === 1
+                    ? "bg-gray-800 text-gray-500 cursor-not-allowed"
+                    : "bg-gray-700 hover:bg-gray-600 text-white"
+                }`}
+              >
+                <ChevronLeft size={16} />
+                Previous
+              </button>
+
+              {/* Page Numbers */}
+              <div className="flex items-center gap-1">
+                {getPageNumbers().map((pageNumber, index) => (
+                  <button
+                    key={index}
+                    onClick={() => typeof pageNumber === 'number' && goToPage(pageNumber)}
+                    disabled={pageNumber === '...'}
+                    className={`min-w-[40px] h-10 flex items-center justify-center rounded-lg transition duration-200 ${
+                      pageNumber === currentPage
+                        ? "bg-red-600 text-white"
+                        : pageNumber === '...'
+                        ? "text-gray-500 cursor-default"
+                        : "bg-gray-700 hover:bg-gray-600 text-white"
+                    }`}
+                  >
+                    {pageNumber}
+                  </button>
+                ))}
+              </div>
+
+              {/* Next Button */}
+              <button
+                onClick={goToNextPage}
+                disabled={currentPage === totalPages}
+                className={`flex items-center gap-1 px-3 py-2 rounded-lg transition duration-200 ${
+                  currentPage === totalPages
+                    ? "bg-gray-800 text-gray-500 cursor-not-allowed"
+                    : "bg-gray-700 hover:bg-gray-600 text-white"
+                }`}
+              >
+                Next
+                <ChevronRight size={16} />
+              </button>
+            </div>
+
+            {/* Items Per Page Selector */}
+            <div className="flex items-center gap-2 text-sm text-gray-400">
+              <span>Show:</span>
+              <select 
+                value={itemsPerPage}
+                onChange={(e) => {
+                  setItemsPerPage(Number(e.target.value));
+                  setCurrentPage(1);
+                }}
+                className="bg-gray-800 border border-gray-700 rounded-lg px-2 py-1 text-white"
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+              </select>
+              <span>per page</span>
+            </div>
+          </div>
+        )}
       </div>
 
       {isModalOpen && (
