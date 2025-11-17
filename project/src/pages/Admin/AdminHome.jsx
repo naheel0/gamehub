@@ -18,7 +18,6 @@ import { Package, Users, ShoppingCart, TrendingUp } from "lucide-react";
 
 export default function AdminHome() {
   const { products, users, orders } = useAdmin();
-
   // Stats Cards Data
   const stats = [
     {

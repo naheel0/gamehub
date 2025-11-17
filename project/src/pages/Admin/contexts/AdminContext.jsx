@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 
+const BASE_API = 'http://localhost:3001';
+
 const AdminContext = createContext();
 
 export function AdminProvider({ children }) {
@@ -42,10 +44,10 @@ export function AdminProvider({ children }) {
 
         console.log('Loading admin data...');
 
-        // Fetch from individual endpoints
+        // Fetch from individual endpoints using BASE_API
         const [productsRes, usersRes] = await Promise.all([
-          fetch('http://localhost:3001/games'),
-          fetch('http://localhost:3001/users')
+          fetch(`${BASE_API}/games`),
+          fetch(`${BASE_API}/users`)
         ]);
 
         // Check if responses are ok
@@ -104,8 +106,8 @@ export function AdminProvider({ children }) {
         inStock: true
       };
 
-      // Add to JSON server
-      const response = await fetch('http://localhost:3001/games', {
+      // Add to JSON server using BASE_API
+      const response = await fetch(`${BASE_API}/games`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -133,8 +135,8 @@ export function AdminProvider({ children }) {
         stock: parseInt(productData.stock),
       };
 
-      // Update in JSON server
-      const response = await fetch(`http://localhost:3001/games/${id}`, {
+      // Update in JSON server using BASE_API
+      const response = await fetch(`${BASE_API}/games/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -156,8 +158,8 @@ export function AdminProvider({ children }) {
 
   const deleteProduct = async (id) => {
     try {
-      // Delete from JSON server
-      const response = await fetch(`http://localhost:3001/games/${id}`, {
+      // Delete from JSON server using BASE_API
+      const response = await fetch(`${BASE_API}/games/${id}`, {
         method: 'DELETE',
       });
 
@@ -175,7 +177,7 @@ export function AdminProvider({ children }) {
   // User functions with API persistence
   const updateUser = async (id, userData) => {
     try {
-      const response = await fetch(`http://localhost:3001/users/${id}`, {
+      const response = await fetch(`${BASE_API}/users/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -212,7 +214,7 @@ export function AdminProvider({ children }) {
   const deleteUser = async (id) => {
     try {
       const userToDelete = users.find(u => u.id === id);
-      const response = await fetch(`http://localhost:3001/users/${id}`, {
+      const response = await fetch(`${BASE_API}/users/${id}`, {
         method: 'DELETE',
       });
 
@@ -251,8 +253,8 @@ export function AdminProvider({ children }) {
           : purchase
       );
 
-      // Update user in JSON server
-      const response = await fetch(`http://localhost:3001/users/${user.id}`, {
+      // Update user in JSON server using BASE_API
+      const response = await fetch(`${BASE_API}/users/${user.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -293,8 +295,8 @@ export function AdminProvider({ children }) {
         !(typeof purchase === 'object' && purchase.id === orderId)
       );
 
-      // Update user in JSON server
-      const response = await fetch(`http://localhost:3001/users/${user.id}`, {
+      // Update user in JSON server using BASE_API
+      const response = await fetch(`${BASE_API}/users/${user.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
