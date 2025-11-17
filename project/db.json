@@ -452,7 +452,7 @@
       "email": "naheel@gmail.com",
       "phone": "+919876543210",
       "role": "user",
-      "status": "active",
+      "status": "blocked",
       "wishlist": [],
       "cart": [],
       "purchaseHistory": [
@@ -568,12 +568,38 @@
       "phone": "",
       "password": "123456",
       "role": "admin",
-      "wishlist": [],
-      "cart": [],
+      "wishlist": [
+        "14",
+        "11"
+      ],
+      "cart": [
+        {
+          "id": "cart_1763218480083_3i1b7sgu7",
+          "gameId": "11",
+          "quantity": 1,
+          "addedAt": "2025-11-15T14:54:40.083Z",
+          "updatedAt": "2025-11-15T14:54:40.083Z"
+        }
+      ],
       "purchaseHistory": [],
       "addresses": [],
       "createdAt": "2025-11-14T05:31:13.818Z",
       "status": "active"
+    },
+    {
+      "id": "1a1c",
+      "firstName": "naheel123",
+      "lastName": "m",
+      "email": "naheel1234@gmail.com",
+      "phone": "",
+      "password": "123456",
+      "role": "user",
+      "status": "active",
+      "wishlist": [],
+      "cart": [],
+      "purchaseHistory": [],
+      "addresses": [],
+      "createdAt": "2025-11-17T04:26:59.498Z"
     }
   ]
 }

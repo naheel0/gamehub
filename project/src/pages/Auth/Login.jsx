@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import Logo from "../../components/common/Logo";
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -35,12 +36,16 @@ const Login = () => {
 
     if (result.success) {
       const userRole = result.user.role;
-
-      if (userRole === "admin") {
-        navigate("/admin", { replace: true });
-      } else {
-        navigate("/", { replace: true });
+      const userStatus=result.user.status;
+    if(userStatus!=='active'){
+        toast.error("Your account has been blocked. Please contact support for assistance.")
+    }else{
+      if (userRole==='admin'){
+        navigate("/admin")
+      }else{
+        navigate("/")
       }
+    }
     } else {
       setError(result.error);
     }

@@ -13,6 +13,7 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
     role: "user",
+    status: "active",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -54,6 +55,7 @@ const Signup = () => {
       phone: formData.phone,
       password: formData.password,
       role: formData.role,
+      status:formData.status,
     };
 
     const result = await signup(userData);
