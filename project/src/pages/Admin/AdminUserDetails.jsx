@@ -13,6 +13,73 @@ import {
 } from "lucide-react";
 import { useState, useMemo } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import { styled } from '@mui/material/styles';
+
+// Custom styled switches
+const StatusSwitch = styled(Switch)(({ theme }) => ({
+  padding: 8,
+  '& .MuiSwitch-track': {
+    borderRadius: 22 / 2,
+    backgroundColor: '#374151',
+    '&:before, &:after': {
+      content: '""',
+      position: 'absolute',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      width: 16,
+      height: 16,
+    },
+  },
+  '& .MuiSwitch-thumb': {
+    boxShadow: 'none',
+    width: 16,
+    height: 16,
+    margin: 2,
+  },
+  '& .MuiSwitch-switchBase.Mui-checked': {
+    color: '#10B981',
+    '&:hover': {
+      backgroundColor: 'rgba(16, 185, 129, 0.08)',
+    },
+  },
+  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+    backgroundColor: '#10B981',
+  },
+}));
+
+const RoleSwitch = styled(Switch)(({ theme }) => ({
+  padding: 8,
+  '& .MuiSwitch-track': {
+    borderRadius: 22 / 2,
+    backgroundColor: '#374151',
+    '&:before, &:after': {
+      content: '""',
+      position: 'absolute',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      width: 16,
+      height: 16,
+    },
+  },
+  '& .MuiSwitch-thumb': {
+    boxShadow: 'none',
+    width: 16,
+    height: 16,
+    margin: 2,
+  },
+  '& .MuiSwitch-switchBase.Mui-checked': {
+    color: '#F59E0B',
+    '&:hover': {
+      backgroundColor: 'rgba(245, 158, 11, 0.08)',
+    },
+  },
+  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+    backgroundColor: '#F59E0B',
+  },
+}));
 
 export default function AdminUsers() {
   const { users, updateUser, deleteUser } = useAdmin();
@@ -315,53 +382,71 @@ export default function AdminUsers() {
 
                       {/* Status */}
                       <td className="p-4">
-                        <div className="flex justify-center items-center gap-2">
+                        <div className="flex justify-center items-center gap-3">
                           {getStatusIcon(u.status)}
-                          <select
-                            value={u.status ?? "active"}
-                            onChange={(e) =>
-                              handleStatusChange(u.id, e.target.value)
-                            }
-                            disabled={updatingUserId === u.id}
-                            className={`bg-gray-700/50 border border-gray-600 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 transition-all duration-200 text-white ${
-                              updatingUserId === u.id
-                                ? "opacity-50 cursor-not-allowed"
-                                : "hover:border-gray-500 cursor-pointer"
-                            }`}
-                          >
-                            <option value="active" className="bg-gray-800 text-green-400">
-                              Active
-                            </option>
-                            <option value="blocked" className="bg-gray-800 text-red-400">
-                              Blocked
-                            </option>
-                          </select>
+                          <FormGroup>
+                            <FormControlLabel
+                              control={
+                                <StatusSwitch
+                                  checked={u.status === "active"}
+                                  onChange={(e) =>
+                                    handleStatusChange(u.id, e.target.checked ? "active" : "blocked")
+                                  }
+                                  disabled={updatingUserId === u.id}
+                                  size="small"
+                                />
+                              }
+                              label={
+                                <span className={`text-sm font-medium ${
+                                  u.status === "active" ? "text-green-400" : "text-red-400"
+                                }`}>
+                                  {u.status === "active" ? "Active" : "Blocked"}
+                                </span>
+                              }
+                              labelPlacement="start"
+                              sx={{
+                                margin: 0,
+                                '& .MuiFormControlLabel-label': {
+                                  marginLeft: 1,
+                                }
+                              }}
+                            />
+                          </FormGroup>
                         </div>
                       </td>
 
                       {/* Role */}
                       <td className="p-4">
-                        <div className="flex justify-center items-center gap-2">
+                        <div className="flex justify-center items-center gap-3">
                           {getRoleIcon(u.role)}
-                          <select
-                            value={u.role || "user"}
-                            onChange={(e) =>
-                              handleRoleChange(u.id, e.target.value)
-                            }
-                            disabled={updatingUserId === u.id}
-                            className={`bg-gray-700/50 border border-gray-600 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 transition-all duration-200 text-white ${
-                              updatingUserId === u.id
-                                ? "opacity-50 cursor-not-allowed"
-                                : "hover:border-gray-500 cursor-pointer"
-                            }`}
-                          >
-                            <option value="user" className="bg-gray-800">
-                              User
-                            </option>
-                            <option value="admin" className="bg-gray-800">
-                              Admin
-                            </option>
-                          </select>
+                          <FormGroup>
+                            <FormControlLabel
+                              control={
+                                <RoleSwitch
+                                  checked={u.role === "admin"}
+                                  onChange={(e) =>
+                                    handleRoleChange(u.id, e.target.checked ? "admin" : "user")
+                                  }
+                                  disabled={updatingUserId === u.id}
+                                  size="small"
+                                />
+                              }
+                              label={
+                                <span className={`text-sm font-medium ${
+                                  u.role === "admin" ? "text-yellow-400" : "text-blue-400"
+                                }`}>
+                                  {u.role === "admin" ? "Admin" : "User"}
+                                </span>
+                              }
+                              labelPlacement="start"
+                              sx={{
+                                margin: 0,
+                                '& .MuiFormControlLabel-label': {
+                                  marginLeft: 1,
+                                }
+                              }}
+                            />
+                          </FormGroup>
                         </div>
                       </td>
 

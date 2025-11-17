@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useAdmin } from "./contexts/AdminContext";
-import { Edit3, Plus, Trash2,  Search, X } from "lucide-react";
+import { Edit3, Plus, Trash2, Search, X, Filter } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import AdminAddProducts from "./AdminAddProducts";
@@ -13,19 +13,45 @@ export default function AdminProducts() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [stockFilter, setStockFilter] = useState("");
 
-  // Filter products based on search term
+  // Get unique categories from products
+  const categories = useMemo(() => {
+    return [...new Set(products?.map(product => product.genre).filter(Boolean))];
+  }, [products]);
+
+  // Filter products based on search term and filters
   const filteredProducts = useMemo(() => {
-    if (!searchTerm) return products;
+    if (!products) return [];
     
-    const term = searchTerm.toLowerCase();
-    return products.filter(product => 
-      product.name?.toLowerCase().includes(term) ||
-      product.genre?.toLowerCase().includes(term) ||
-      product.description?.toLowerCase().includes(term) ||
-      product.price?.toString().includes(term)
-    );
-  }, [products, searchTerm]);
+    let filtered = products;
+
+    // Apply search term
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(product => 
+        product.name?.toLowerCase().includes(term) ||
+        product.genre?.toLowerCase().includes(term) ||
+        product.description?.toLowerCase().includes(term) ||
+        product.price?.toString().includes(term)
+      );
+    }
+
+    // Apply category filter
+    if (categoryFilter) {
+      filtered = filtered.filter(product => product.genre === categoryFilter);
+    }
+
+    // Apply stock filter
+    if (stockFilter) {
+      filtered = filtered.filter(product => 
+        stockFilter === "in-stock" ? product.inStock : !product.inStock
+      );
+    }
+
+    return filtered;
+  }, [products, searchTerm, categoryFilter, stockFilter]);
 
   const handleAdd = () => {
     setEditingProduct(null);
@@ -42,10 +68,17 @@ export default function AdminProducts() {
     setSearchTerm("");
   };
 
-  // Reset to first page when search term changes
+  // Clear all filters
+  const clearFilters = () => {
+    setCategoryFilter("");
+    setStockFilter("");
+    setSearchTerm("");
+  };
+
+  // Reset to first page when search term or filters change
   useState(() => {
     setCurrentPage(1);
-  }, [searchTerm]);
+  }, [searchTerm, categoryFilter, stockFilter]);
 
   // Pagination calculations
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -76,28 +109,23 @@ export default function AdminProducts() {
     const maxVisiblePages = 5;
     
     if (totalPages <= maxVisiblePages) {
-      // Show all pages if total pages are less than max visible
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
       }
     } else {
-      // Show limited pages with ellipsis
       if (currentPage <= 3) {
-        // Near the start
         for (let i = 1; i <= 4; i++) {
           pageNumbers.push(i);
         }
         pageNumbers.push('...');
         pageNumbers.push(totalPages);
       } else if (currentPage >= totalPages - 2) {
-        // Near the end
         pageNumbers.push(1);
         pageNumbers.push('...');
         for (let i = totalPages - 3; i <= totalPages; i++) {
           pageNumbers.push(i);
         }
       } else {
-        // In the middle
         pageNumbers.push(1);
         pageNumbers.push('...');
         for (let i = currentPage - 1; i <= currentPage + 1; i++) {
@@ -111,6 +139,9 @@ export default function AdminProducts() {
     return pageNumbers;
   };
 
+  // Check if any filter is active
+  const isAnyFilterActive = searchTerm || categoryFilter || stockFilter;
+
   return (
     <div className="min-h-screen bg-gray-950 px-4 py-10">
       <div className="max-w-6xl mx-auto">
@@ -119,48 +150,107 @@ export default function AdminProducts() {
             <div>
               <h1 className="text-3xl font-semibold text-white">Manage Products</h1>
               <p className="text-gray-400 mt-1">
-                {searchTerm ? (
-                  <>Showing {filteredProducts.length} of {products?.length || 0} products for "{searchTerm}"</>
+                {isAnyFilterActive ? (
+                  <>Showing {filteredProducts.length} of {products?.length || 0} filtered products</>
                 ) : (
                   <>Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredProducts.length)} of {filteredProducts.length} products</>
                 )}
               </p>
             </div>
 
-            <button
-              onClick={handleAdd}
-              className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 rounded-lg text-white transition duration-300 transform hover:scale-105"
-            >
-              <Plus size={18} /> Add Product
-            </button>
-          </div>
-
-          {/* Search Bar */}
-          <div className="relative max-w-md">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <input
-                type="text"
-                placeholder="Search products by name, category, description, or price..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-gray-800/80 border border-gray-700 rounded-xl pl-10 pr-10 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 transition-all duration-200"
-              />
-              {searchTerm && (
+            <div className="flex items-center gap-3">
+              {/* Clear Filters Button */}
+              {isAnyFilterActive && (
                 <button
-                  onClick={clearSearch}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
+                  onClick={clearFilters}
+                  className="flex items-center gap-2 px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-gray-300 transition duration-200"
                 >
-                  <X className="w-4 h-4" />
+                  <X size={16} />
+                  Clear Filters
                 </button>
               )}
+
+              <button
+                onClick={handleAdd}
+                className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 rounded-lg text-white transition duration-300 transform hover:scale-105"
+              >
+                <Plus size={18} /> Add Product
+              </button>
             </div>
-            {searchTerm && (
-              <p className="text-xs text-gray-500 mt-2">
-                Search results: {filteredProducts.length} product{filteredProducts.length !== 1 ? 's' : ''} found
-              </p>
-            )}
           </div>
+
+          {/* Search and Filter Bar */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            {/* Search Bar */}
+            <div className="relative flex-1 max-w-md">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <input
+                  type="text"
+                  placeholder="Search products by name, category, description, or price..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full bg-gray-800/80 border border-gray-700 rounded-xl pl-10 pr-10 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 transition-all duration-200"
+                />
+                {searchTerm && (
+                  <button
+                    onClick={clearSearch}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Category Filter */}
+            <div className="flex gap-2">
+              <select
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+                className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-w-[150px]"
+              >
+                <option value="">All Categories</option>
+                {categories.map(category => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+
+              {/* Stock Filter */}
+              <select
+                value={stockFilter}
+                onChange={(e) => setStockFilter(e.target.value)}
+                className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-w-[140px]"
+              >
+                <option value="">All Stock</option>
+                <option value="in-stock">In Stock</option>
+                <option value="out-of-stock">Out of Stock</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Active Filters Display */}
+          {isAnyFilterActive && (
+            <div className="flex flex-wrap gap-2">
+              {searchTerm && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-600/20 text-blue-300 rounded-full text-sm border border-blue-500/30">
+                  Search: "{searchTerm}"
+                </span>
+              )}
+              {categoryFilter && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-600/20 text-green-300 rounded-full text-sm border border-green-500/30">
+                  Category: {categoryFilter}
+                </span>
+              )}
+              {stockFilter && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 bg-yellow-600/20 text-yellow-300 rounded-full text-sm border border-yellow-500/30">
+                  Stock: {stockFilter === "in-stock" ? "In Stock" : "Out of Stock"}
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="overflow-x-auto bg-gray-900 rounded-lg border border-gray-800">
@@ -186,7 +276,7 @@ export default function AdminProducts() {
               ) : currentProducts.length === 0 ? (
                 <tr>
                   <td colSpan="6" className="text-center p-6 text-slate-400">
-                    {searchTerm ? 'No products found matching your search' : 'No products found.'}
+                    {isAnyFilterActive ? 'No products found matching your filters' : 'No products found.'}
                   </td>
                 </tr>
               ) : (
@@ -257,7 +347,6 @@ export default function AdminProducts() {
                 }`}
               >
                 <ChevronLeftIcon className="h-6 w-5" />
-                
               </button>
 
               {/* Page Numbers */}
