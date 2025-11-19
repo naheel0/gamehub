@@ -278,7 +278,7 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-red-600 to-red-800 py-20">
+      <section className="bg-linear-to-r from-red-600 to-red-800 py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <FaGamepad className="text-6xl text-white mx-auto mb-6" />
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">

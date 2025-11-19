@@ -128,7 +128,7 @@ const CardPaymentForm = ({
     <button
       type="submit"
       disabled={isProcessing || !selectedAddress}
-      className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:from-gray-600 disabled:to-gray-700 text-white py-4 px-6 rounded-lg transition duration-300 font-semibold border border-red-600 disabled:border-gray-600 flex items-center justify-center"
+      className="w-full bg-linear-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:from-gray-600 disabled:to-gray-700 text-white py-4 px-6 rounded-lg transition duration-300 font-semibold border border-red-600 disabled:border-gray-600 flex items-center justify-center"
     >
       {isProcessing ? (
         <>
@@ -157,7 +157,7 @@ const OtherPaymentButton = ({
     <button
       onClick={handlePaymentSubmit}
       disabled={isProcessing || !selectedAddress}
-      className={`w-full bg-gradient-to-r ${colorClass} disabled:from-gray-600 disabled:to-gray-700 text-white py-4 px-6 rounded-lg transition duration-300 font-semibold flex items-center justify-center space-x-2 border border-red-600 disabled:border-gray-600`}
+      className={`w-full bg-linear-to-r ${colorClass} disabled:from-gray-600 disabled:to-gray-700 text-white py-4 px-6 rounded-lg transition duration-300 font-semibold flex items-center justify-center space-x-2 border border-red-600 disabled:border-gray-600`}
     >
       {isProcessing ? (
         <>

@@ -40,8 +40,8 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0 flex items-center">
-              <span className="text-2xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
+            <Link to="/" className="shrink-0 flex items-center">
+              <span className="text-2xl font-bold bg-linear-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
                 <Logo />
               </span>
             </Link>
@@ -266,7 +266,7 @@ const Navbar = () => {
                     handleLogin();
                     setIsMenuOpen(false);
                   }}
-                  className="flex items-center space-x-2 w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 transition duration-300 bg-red-600 hover:bg-red-700"
+                  className="flex items-center space-x-2 w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 transition duration-300 bg-red-600 "
                 >
                   <UserIcon className="h-5 w-5" />
                   <span>Login</span>

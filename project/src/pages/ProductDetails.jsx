@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { StarIcon, ShoppingCartIcon, HeartIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import { StarIcon as StarOutline, HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
@@ -101,21 +101,21 @@ const ProductDetails = () => {
     setIsFullScreen(false);
   };
 
-  const nextImage = () => {
-    if (game && game.images) {
-      setFullScreenImageIndex(prev => 
-        prev < game.images.length - 1 ? prev + 1 : 0
-      );
-    }
-  };
+  const nextImage = useCallback(() => {
+  if (game?.images) {
+    setFullScreenImageIndex(prev => 
+      prev < game.images.length - 1 ? prev + 1 : 0
+    );
+  }
+}, [game?.images])
 
-  const prevImage = () => {
-    if (game && game.images) {
-      setFullScreenImageIndex(prev => 
-        prev > 0 ? prev - 1 : game.images.length - 1
-      );
-    }
-  };
+  const prevImage = useCallback(() => {
+  if (game?.images) {
+    setFullScreenImageIndex(prev => 
+      prev > 0 ? prev - 1 : game.images.length - 1
+    );
+  }
+}, [game?.images]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -132,7 +132,7 @@ const ProductDetails = () => {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isFullScreen]);
+  }, [isFullScreen,nextImage, prevImage]);
 
   const handleAddToCart = () => {
     if (game && game.inStock) {
@@ -554,7 +554,7 @@ const ProductDetails = () => {
               <button
                 key={index}
                 onClick={() => setFullScreenImageIndex(index)}
-                className={`flex-shrink-0 w-16 h-16 rounded overflow-hidden border-2 ${
+                className={`shrink-0 w-16 h-16 rounded overflow-hidden border-2 ${
                   fullScreenImageIndex === index 
                     ? 'border-red-600' 
                     : 'border-gray-600'

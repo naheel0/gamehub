@@ -356,7 +356,7 @@ export default function AdminProducts() {
                     key={index}
                     onClick={() => typeof pageNumber === 'number' && goToPage(pageNumber)}
                     disabled={pageNumber === '...'}
-                    className={`min-w-[40px] h-10 flex items-center justify-center rounded-lg transition duration-200 ${
+                    className={`min-w-10 h-10 flex items-center justify-center rounded-lg transition duration-200 ${
                       pageNumber === currentPage
                         ? "bg-red-600 text-white"
                         : pageNumber === '...'

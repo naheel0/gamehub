@@ -108,7 +108,7 @@ export default function AdminHome() {
         className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
       >
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold bg-linear-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
             Dashboard Overview
           </h1>
           <p className="text-slate-600 dark:text-slate-400 mt-2">
@@ -140,7 +140,7 @@ export default function AdminHome() {
           >
             {/* Animated background element */}
             <div
-              className={`absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-r ${stat.color} rounded-full opacity-10 group-hover:opacity-20 transition-opacity duration-300`}
+              className={`absolute -top-4 -right-4 w-20 h-20 bg-linear-to-r ${stat.color} rounded-full opacity-10 group-hover:opacity-20 transition-opacity duration-300`}
             ></div>
 
             <div className="flex items-center justify-between relative z-10">
@@ -161,7 +161,7 @@ export default function AdminHome() {
                 </div>
               </div>
               <div
-                className={`p-4 rounded-xl bg-gradient-to-r ${stat.color} shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                className={`p-4 rounded-xl bg-linear-to-r ${stat.color} shadow-lg group-hover:scale-110 transition-transform duration-300`}
               >
                 <stat.icon className="w-6 h-6 text-white" />
               </div>

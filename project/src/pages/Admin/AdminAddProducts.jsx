@@ -95,7 +95,7 @@ export default function AdminAddProducts({ onClose, editingProduct }) {
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.9, opacity: 0, y: 20 }}
         transition={{ type: "spring", damping: 25 }}
-        className="bg-gradient-to-br from-gray-900 to-gray-800 p-6 rounded-3xl w-full max-w-2xl max-h-[95vh] overflow-y-auto shadow-2xl border border-gray-700/50 relative"
+        className="bg-linear-to-br from-gray-900 to-gray-800 p-6 rounded-3xl w-full max-w-2xl max-h-[95vh] overflow-y-auto shadow-2xl border border-gray-700/50 relative"
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-700/50">
@@ -104,7 +104,7 @@ export default function AdminAddProducts({ onClose, editingProduct }) {
               <GamepadIcon className="w-6 h-6 text-red-400" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+              <h2 className="text-2xl font-bold bg-linear-to-r from-white to-gray-300 bg-clip-text text-transparent">
                 {editingProduct ? "Edit Product" : "Add New Game"}
               </h2>
               <p className="text-sm text-gray-400">
@@ -407,7 +407,7 @@ export default function AdminAddProducts({ onClose, editingProduct }) {
             </button>
             <button
               type="submit"
-              className="px-6 py-3 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 font-medium shadow-lg shadow-red-500/25 flex items-center gap-2"
+              className="px-6 py-3 bg-linear-to- from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 font-medium shadow-lg shadow-red-500/25 flex items-center gap-2"
             >
               {editingProduct ? (
                 <>

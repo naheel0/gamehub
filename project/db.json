@@ -379,22 +379,22 @@
             {
               "gameId": "9",
               "name": "Assassin's Creed Mirage",
-              "price": 49.99,
+              "price": 2999,
               "quantity": 2,
               "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3035570/header.jpg?t=1753294133"
             },
             {
               "gameId": "11",
               "name": "Baldur's Gate 3",
-              "price": 59.99,
+              "price": 3999,
               "quantity": 1,
               "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
             }
           ],
           "summary": {
-            "subtotal": "159.97",
-            "tax": "16.00",
-            "total": "175.97"
+            "subtotal": "10997.00",
+            "tax": "1099.70",
+            "total": "12096.70"
           },
           "paymentMethod": "google",
           "status": "Delivered",
@@ -406,15 +406,15 @@
             {
               "gameId": "11",
               "name": "Baldur's Gate 3",
-              "price": 59.99,
+              "price": 3999,
               "quantity": 1,
               "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
             }
           ],
           "summary": {
-            "subtotal": "59.99",
-            "tax": "6.00",
-            "total": "65.99"
+            "subtotal": "3999.00",
+            "tax": "399.90",
+            "total": "4398.90"
           },
           "paymentMethod": "paypal",
           "status": "Pending",
@@ -426,15 +426,15 @@
             {
               "gameId": "11",
               "name": "Baldur's Gate 3",
-              "price": 59.99,
+              "price": 3999,
               "quantity": 1,
               "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
             }
           ],
           "summary": {
-            "subtotal": "59.99",
-            "tax": "6.00",
-            "total": "65.99"
+            "subtotal": "3999.00",
+            "tax": "399.90",
+            "total": "4398.90"
           },
           "paymentMethod": "paypal",
           "status": "Pending",
@@ -589,10 +589,10 @@
     {
       "id": "1a1c",
       "firstName": "naheel123",
-      "lastName": "m",
+      "lastName": "",
       "email": "naheel1234@gmail.com",
       "phone": "",
-      "password": "123456",
+      "password":"123456",
       "role": "user",
       "status": "active",
       "wishlist": [],

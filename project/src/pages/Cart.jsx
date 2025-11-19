@@ -165,7 +165,7 @@ const CartPage = () => {
               >
                 <div className="flex flex-col sm:flex-row gap-4">
                   {/* Game Image */}
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <img
                       src={item.images?.[0] || "/images/placeholder-game.jpg"}
                       alt={item.name}
@@ -177,7 +177,7 @@ const CartPage = () => {
                   </div>
 
                   {/* Game Details */}
-                  <div className="flex-grow">
+                  <div className="grow">
                     <h3 className="text-lg font-semibold text-white mb-2">
                       {item.name}
                     </h3>

@@ -121,7 +121,7 @@ const OrderConfirmation = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-900 via-gray-900 to-black py-8">
+      <div className="min-h-screen bg-linear-to-br from-green-900 via-gray-900 to-black py-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto mb-4"></div>
@@ -134,7 +134,7 @@ const OrderConfirmation = () => {
 
   if (!order) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black py-8">
+      <div className="min-h-screen bg-linear-to-br from-gray-900 to-black py-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="bg-red-900/20 border border-red-700 rounded-xl p-8">
             <h1 className="text-2xl font-bold text-white mb-4">Order Not Found</h1>
@@ -159,7 +159,7 @@ const OrderConfirmation = () => {
   const orderItems = order.items || [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-900 via-gray-900 to-black py-8">
+    <div className="min-h-screen bg-linear-to-br from-green-900 via-gray-900 to-black py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Success Header */}
         <div className="text-center mb-12">
@@ -181,7 +181,7 @@ const OrderConfirmation = () => {
         {/* Order Details Card */}
         <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 shadow-2xl overflow-hidden mb-8">
           {/* Order Header */}
-          <div className="bg-gradient-to-r from-green-600 to-green-700 p-6">
+          <div className="bg-linear-to-r from-green-600 to-green-700 p-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
               <div>
                 <h2 className="text-2xl font-bold text-white mb-2">

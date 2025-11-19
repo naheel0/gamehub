@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
@@ -42,12 +42,20 @@ const Profile = () => {
 
   const API_BASE = 'http://localhost:3001';
 
-  const formatRupees = (amount) => {
+  const formatRupees = useCallback((amount) => {
     if (!amount) return '₹0';
     return `₹${amount.toLocaleString('en-IN')}`;
-  };
+  }, []);
 
-  const fetchOrderCount = async () => {
+  const formatDate = useCallback((dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }, []);
+
+  const fetchOrderCount = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -63,9 +71,9 @@ const Profile = () => {
       console.error('Error fetching order count:', error);
       setOrderCount(0);
     }
-  };
+  }, [user, API_BASE]);
 
-  const fetchOrderHistory = async () => {
+  const fetchOrderHistory = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -136,40 +144,17 @@ const Profile = () => {
     } finally {
       setOrdersLoading(false);
     }
-  };
+  }, [user, API_BASE]);
 
-  useEffect(() => {
-    if (user) {
-      setFormData({
-        firstName: user.firstName || '',
-        lastName: user.lastName || '',
-        email: user.email || '',
-        phone: user.phone || ''
-      });
-      
-      fetchOrderCount();
-      
-      if (activeTab === 'orders') {
-        fetchOrderHistory();
-      }
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (activeTab === 'orders' && user) {
-      fetchOrderHistory();
-    }
-  }, [activeTab, user]);
-
-  const handleInputChange = (e) => {
+  const handleInputChange = useCallback((e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
-  };
+  }, []);
 
-  const handleSaveProfile = async () => {
+  const handleSaveProfile = useCallback(async () => {
     if (!user) return;
 
     setLoading(true);
@@ -189,25 +174,53 @@ const Profile = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user, formData, updateUser, fetchOrderCount]);
 
-  const handleCancelEdit = () => {
+  const handleCancelEdit = useCallback(() => {
     setFormData({
-      firstName: user.firstName || '',
-      lastName: user.lastName || '',
-      email: user.email || '',
-      phone: user.phone || ''
+      firstName: user?.firstName || '',
+      lastName: user?.lastName || '',
+      email: user?.email || '',
+      phone: user?.phone || ''
     });
     setIsEditing(false);
-  };
+  }, [user]);
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
+  const handleTabChange = useCallback((tabId) => {
+    setActiveTab(tabId);
+  }, []);
+
+  const handleEditToggle = useCallback(() => {
+    setIsEditing(!isEditing);
+  }, [isEditing]);
+
+  const handleViewWishlist = useCallback(() => {
+    setActiveTab('wishlist');
+  }, []);
+
+  const handleViewOrders = useCallback(() => {
+    setActiveTab('orders');
+  }, []);
+
+  // Initialize form data when user changes
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        email: user.email || '',
+        phone: user.phone || ''
+      });
+      fetchOrderCount();
+    }
+  }, [user, fetchOrderCount]);
+
+  // Fetch order history when orders tab is active
+  useEffect(() => {
+    if (activeTab === 'orders' && user) {
+      fetchOrderHistory();
+    }
+  }, [activeTab, user, fetchOrderHistory]);
 
   const cartSummary = getCartSummary();
   const wishlistCount = getWishlistCount();
@@ -230,7 +243,7 @@ const Profile = () => {
     <div className="min-h-screen bg-black py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="bg-gradient-to-r from-red-600 to-red-800 rounded-2xl p-8 mb-8">
+        <div className="bg-linear-to-r from-red-600 to-red-800 rounded-2xl p-8 mb-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-6">
               <div className="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center border-2 border-white border-opacity-30">
@@ -247,7 +260,7 @@ const Profile = () => {
               </div>
             </div>
             <button
-              onClick={() => setIsEditing(!isEditing)}
+              onClick={handleEditToggle}
               className="bg-white bg-opacity-20 hover:bg-opacity-30 text-red-700 px-6 py-3 rounded-lg transition duration-300 border border-white border-opacity-30 flex items-center space-x-2"
             >
               <PencilIcon className="h-5 w-5" />
@@ -270,7 +283,7 @@ const Profile = () => {
                 ].map((item) => (
                   <button
                     key={item.id}
-                    onClick={() => setActiveTab(item.id)}
+                    onClick={() => handleTabChange(item.id)}
                     className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition duration-300 ${
                       activeTab === item.id
                         ? 'bg-red-600 text-white'
@@ -409,7 +422,7 @@ const Profile = () => {
                       </div>
                       
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center">
+                        <label className=" text-sm font-medium text-gray-300 mb-2 flex items-center">
                           <EnvelopeIcon className="h-4 w-4 mr-2" />
                           Email
                         </label>
@@ -418,7 +431,7 @@ const Profile = () => {
                       
                       {user.phone && (
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center">
+                          <label className=" text-sm font-medium text-gray-300 mb-2 flex items-center">
                             <PhoneIcon className="h-4 w-4 mr-2" />
                             Phone Number
                           </label>
@@ -427,7 +440,7 @@ const Profile = () => {
                       )}
                       
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center">
+                        <label className=" text-sm font-medium text-gray-300 mb-2 flex items-center">
                           <CalendarIcon className="h-4 w-4 mr-2" />
                           Member Since
                         </label>
@@ -462,7 +475,7 @@ const Profile = () => {
                       {wishlistCount} games saved for later
                     </p>
                     <button
-                      onClick={() => setActiveTab('wishlist')}
+                      onClick={handleViewWishlist}
                       className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition duration-300"
                     >
                       View Wishlist
@@ -476,7 +489,7 @@ const Profile = () => {
                       {orderCount} total orders
                     </p>
                     <button
-                      onClick={() => setActiveTab('orders')}
+                      onClick={handleViewOrders}
                       className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition duration-300"
                     >
                       View Orders

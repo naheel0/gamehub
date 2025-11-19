@@ -19,7 +19,7 @@ import Switch from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
 
 // Custom styled switches
-const StatusSwitch = styled(Switch)(({ theme }) => ({
+const StatusSwitch = styled(Switch)(() => ({
   padding: 8,
   '& .MuiSwitch-track': {
     borderRadius: 22 / 2,
@@ -50,7 +50,7 @@ const StatusSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-const RoleSwitch = styled(Switch)(({ theme }) => ({
+const RoleSwitch = styled(Switch)(() => ({
   padding: 8,
   '& .MuiSwitch-track': {
     borderRadius: 22 / 2,
@@ -103,7 +103,6 @@ export default function AdminUsers() {
     );
   }, [users, searchTerm]);
 
-  // ✅ Update Role (Saves to DB)
   const handleRoleChange = async (id, newRole) => {
     setUpdatingUserId(id);
     try {
@@ -115,7 +114,6 @@ export default function AdminUsers() {
     }
   };
 
-  // ✅ Update Status (Active / Blocked)
   const handleStatusChange = async (id, newStatus) => {
     setUpdatingUserId(id);
     try {
@@ -127,7 +125,6 @@ export default function AdminUsers() {
     }
   };
 
-  // ✅ Delete User
   const handleDeleteUser = async (id) => {
     if (
       window.confirm(
@@ -159,18 +156,15 @@ export default function AdminUsers() {
     );
   };
 
-  // Pagination calculations
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentUsers = filteredUsers?.slice(indexOfFirstItem, indexOfLastItem) || [];
   const totalPages = Math.ceil((filteredUsers?.length || 0) / itemsPerPage);
 
-  // Reset to first page when search term changes
   useState(() => {
     setCurrentPage(1);
   }, [searchTerm]);
 
-  // Page change handlers
   const goToNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -187,34 +181,28 @@ export default function AdminUsers() {
     setCurrentPage(pageNumber);
   };
 
-  // Generate page numbers for pagination
   const getPageNumbers = () => {
     const pageNumbers = [];
     const maxVisiblePages = 5;
     
     if (totalPages <= maxVisiblePages) {
-      // Show all pages if total pages are less than max visible
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
       }
     } else {
-      // Show limited pages with ellipsis
       if (currentPage <= 3) {
-        // Near the start
         for (let i = 1; i <= 4; i++) {
           pageNumbers.push(i);
         }
         pageNumbers.push('...');
         pageNumbers.push(totalPages);
       } else if (currentPage >= totalPages - 2) {
-        // Near the end
         pageNumbers.push(1);
         pageNumbers.push('...');
         for (let i = totalPages - 3; i <= totalPages; i++) {
           pageNumbers.push(i);
         }
       } else {
-        // In the middle
         pageNumbers.push(1);
         pageNumbers.push('...');
         for (let i = currentPage - 1; i <= currentPage + 1; i++) {
@@ -228,7 +216,6 @@ export default function AdminUsers() {
     return pageNumbers;
   };
 
-  // Clear search
   const clearSearch = () => {
     setSearchTerm("");
   };
@@ -239,7 +226,7 @@ export default function AdminUsers() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
-        className="bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700/50 rounded-3xl p-6 sm:p-8 w-full max-w-6xl mx-auto shadow-2xl overflow-hidden"
+        className="bg-linear-to-br from-gray-900 to-gray-800 border border-gray-700/50 rounded-3xl p-6 sm:p-8 w-full max-w-6xl mx-auto shadow-2xl overflow-hidden"
       >
         {/* Header */}
         <div className="flex flex-col gap-6 mb-8">
@@ -249,7 +236,7 @@ export default function AdminUsers() {
                 <Users className="w-6 h-6 text-red-400" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                <h2 className="text-2xl font-bold bg-linear-to-r from-white to-gray-300 bg-clip-text text-transparent">
                   User Management
                 </h2>
                 <p className="text-sm text-gray-400">
@@ -357,7 +344,7 @@ export default function AdminUsers() {
                       {/* User Info */}
                       <td className="p-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                          <div className="w-10 h-10 bg-linear-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                             {u.firstName?.[0]}
                             {u.lastName?.[0]}
                           </div>
@@ -498,7 +485,7 @@ export default function AdminUsers() {
                         key={index}
                         onClick={() => typeof pageNumber === 'number' && goToPage(pageNumber)}
                         disabled={pageNumber === '...'}
-                        className={`min-w-[40px] h-10 flex items-center justify-center rounded-lg transition duration-200 ${
+                        className={`min-w-10 h-10 flex items-center justify-center rounded-lg transition duration-200 ${
                           pageNumber === currentPage
                             ? "bg-red-600 text-white"
                             : pageNumber === '...'

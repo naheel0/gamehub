@@ -44,7 +44,7 @@ const AnimatedGameHubLogo = () => (
     {/* Moving Speed Lines */}
     <div className="relative h-1 mt-1 overflow-hidden">
       <motion.div
-        className="absolute h-0.5 bg-gradient-to-r from-transparent via-green-400 to-transparent w-full"
+        className="absolute h-0.5 bg-linear-to-r from-transparent via-green-400 to-transparent w-full"
         animate={{ x: [-100, 100] }}
         transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
       />

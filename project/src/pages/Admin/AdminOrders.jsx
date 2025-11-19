@@ -129,7 +129,7 @@ export default function AdminOrders() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
-        className="bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700/50 rounded-3xl p-6 sm:p-8 w-full max-w-6xl mx-auto shadow-2xl overflow-hidden"
+        className="bg-linear-to-br from-gray-900 to-gray-800 border border-gray-700/50 rounded-3xl p-6 sm:p-8 w-full max-w-6xl mx-auto shadow-2xl overflow-hidden"
       >
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
@@ -138,7 +138,7 @@ export default function AdminOrders() {
               <Package className="w-6 h-6 text-red-400" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+              <h2 className="text-2xl font-bold bg-linear-to-r from-white to-gray-300 bg-clip-text text-transparent">
                 Order Management
               </h2>
               <p className="text-sm text-gray-400">
@@ -307,7 +307,7 @@ export default function AdminOrders() {
                         key={index}
                         onClick={() => typeof pageNumber === 'number' && goToPage(pageNumber)}
                         disabled={pageNumber === '...'}
-                        className={`min-w-[40px] h-10 flex items-center justify-center rounded-lg transition duration-200 ${
+                        className={`min-w-10 h-10 flex items-center justify-center rounded-lg transition duration-200 ${
                           pageNumber === currentPage
                             ? "bg-red-600 text-white"
                             : pageNumber === '...'
@@ -349,7 +349,7 @@ export default function AdminOrders() {
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700/50 rounded-3xl p-6 w-full max-w-2xl shadow-2xl"
+            className="bg-linear-to-br from-gray-900 to-gray-800 border border-gray-700/50 rounded-3xl p-6 w-full max-w-2xl shadow-2xl"
           >
             {/* Modal Header */}
             <div className="flex items-center justify-between mb-6">
