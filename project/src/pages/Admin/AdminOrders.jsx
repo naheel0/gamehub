@@ -11,8 +11,8 @@ export default function AdminOrders() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
 
-  console.log('Orders data:', orders); // Debug log
-  console.log('Users data:', users); // Debug log
+  console.log('Orders data:', orders); 
+  console.log('Users data:', users); 
 
   const getTotalPrice = (items) => {
     return items.reduce((sum, item) => sum + item.price * (item.qty || 1), 0);
@@ -48,13 +48,11 @@ export default function AdminOrders() {
     }
   };
 
-  // Pagination calculations
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentOrders = orders?.slice(indexOfFirstItem, indexOfLastItem) || [];
   const totalPages = Math.ceil((orders?.length || 0) / itemsPerPage);
 
-  // Page change handlers
   const goToNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -71,34 +69,28 @@ export default function AdminOrders() {
     setCurrentPage(pageNumber);
   };
 
-  // Generate page numbers for pagination
   const getPageNumbers = () => {
     const pageNumbers = [];
     const maxVisiblePages = 5;
     
     if (totalPages <= maxVisiblePages) {
-      // Show all pages if total pages are less than max visible
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
       }
     } else {
-      // Show limited pages with ellipsis
       if (currentPage <= 3) {
-        // Near the start
         for (let i = 1; i <= 4; i++) {
           pageNumbers.push(i);
         }
         pageNumbers.push('...');
         pageNumbers.push(totalPages);
       } else if (currentPage >= totalPages - 2) {
-        // Near the end
         pageNumbers.push(1);
         pageNumbers.push('...');
         for (let i = totalPages - 3; i <= totalPages; i++) {
           pageNumbers.push(i);
         }
       } else {
-        // In the middle
         pageNumbers.push(1);
         pageNumbers.push('...');
         for (let i = currentPage - 1; i <= currentPage + 1; i++) {

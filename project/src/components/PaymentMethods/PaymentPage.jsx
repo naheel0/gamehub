@@ -7,14 +7,13 @@ import AddressSection from '../PaymentMethods/AddressSection'; // New Component
 import PaymentFormSection from "../PaymentMethods/PaymentFormSection"; // New Component
 import OrderSummary from "../PaymentMethods/OrderSummary"; // New Component
 import {
-  FaLock, // ADDED
-  FaShieldAlt, // ADDED
-  FaCheckCircle, // ADDED
+  FaLock, 
+  FaShieldAlt, 
+  FaCheckCircle, 
    FaArrowLeft 
 } from "react-icons/fa";
 
 const PaymentPage = () => {
-  // --- State Management ---
   const [selectedMethod, setSelectedMethod] = useState("card");
   const [saveCard, setSaveCard] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -41,7 +40,6 @@ const PaymentPage = () => {
     isDefault: false,
   });
 
-  // --- Hooks & Contexts ---
   const navigate = useNavigate();
   const location = useLocation();
   const { getCartSummary, checkout, cart } = useCart();
@@ -51,7 +49,6 @@ const PaymentPage = () => {
   const summary = order?.summary || getCartSummary();
   const userAddresses = useMemo(() => user?.addresses || [], [user]);
 
-  // --- Initial/Auth/Cart Effects ---
   useEffect(() => {
     if (!user) {
       toast.warning("Please log in to proceed with payment.");
@@ -71,7 +68,6 @@ const PaymentPage = () => {
     }
   }, [user, order, cart, navigate, userAddresses, selectedAddress]);
 
-  // --- Address Handlers (Passed to AddressSection) ---
 
   const handleAddressInputChange = (field, value) => {
     setAddressForm((prev) => ({
@@ -96,7 +92,6 @@ const PaymentPage = () => {
   }, []);
 
   const validateAddress = () => {
-    // (Keep the full validation logic here or move to a utility)
     const required = [
       "fullName",
       "addressLine1",
@@ -228,7 +223,6 @@ const PaymentPage = () => {
   };
 
 
-  // --- Payment Handlers (Passed to PaymentFormSection) ---
 
   const handleCardInputChange = (field, value) => {
     let formattedValue = value;

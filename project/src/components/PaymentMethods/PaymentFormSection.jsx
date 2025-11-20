@@ -5,9 +5,6 @@ import {
   FaApple,
   FaGoogle,
   FaRegCreditCard,
-  FaLock,
-  FaShieldAlt,
-  FaCheckCircle,
 } from "react-icons/fa";
 import { SiVisa, SiMastercard } from "react-icons/si";
 
@@ -143,7 +140,6 @@ const CardPaymentForm = ({
 );
 
 const OtherPaymentButton = ({
-//   methodId,
   handlePaymentSubmit,
   isProcessing,
   icon,

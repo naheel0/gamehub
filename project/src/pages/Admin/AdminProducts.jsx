@@ -16,18 +16,15 @@ export default function AdminProducts() {
   const [categoryFilter, setCategoryFilter] = useState("");
   const [stockFilter, setStockFilter] = useState("");
 
-  // Get unique categories from products
   const categories = useMemo(() => {
     return [...new Set(products?.map(product => product.genre).filter(Boolean))];
   }, [products]);
 
-  // Filter products based on search term and filters
   const filteredProducts = useMemo(() => {
     if (!products) return [];
     
     let filtered = products;
 
-    // Apply search term
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(product => 
@@ -38,12 +35,10 @@ export default function AdminProducts() {
       );
     }
 
-    // Apply category filter
     if (categoryFilter) {
       filtered = filtered.filter(product => product.genre === categoryFilter);
     }
 
-    // Apply stock filter
     if (stockFilter) {
       filtered = filtered.filter(product => 
         stockFilter === "in-stock" ? product.inStock : !product.inStock
@@ -63,30 +58,25 @@ export default function AdminProducts() {
     setIsModalOpen(true);
   };
 
-  // Clear search
   const clearSearch = () => {
     setSearchTerm("");
   };
 
-  // Clear all filters
   const clearFilters = () => {
     setCategoryFilter("");
     setStockFilter("");
     setSearchTerm("");
   };
 
-  // Reset to first page when search term or filters change
   useState(() => {
     setCurrentPage(1);
   }, [searchTerm, categoryFilter, stockFilter]);
 
-  // Pagination calculations
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentProducts = filteredProducts?.slice(indexOfFirstItem, indexOfLastItem) || [];
   const totalPages = Math.ceil((filteredProducts?.length || 0) / itemsPerPage);
 
-  // Page change handlers
   const goToNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -103,7 +93,6 @@ export default function AdminProducts() {
     setCurrentPage(pageNumber);
   };
 
-  // Generate page numbers for pagination
   const getPageNumbers = () => {
     const pageNumbers = [];
     const maxVisiblePages = 5;
@@ -139,7 +128,6 @@ export default function AdminProducts() {
     return pageNumbers;
   };
 
-  // Check if any filter is active
   const isAnyFilterActive = searchTerm || categoryFilter || stockFilter;
 
   return (

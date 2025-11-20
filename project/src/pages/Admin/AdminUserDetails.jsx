@@ -88,7 +88,6 @@ export default function AdminUsers() {
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Filter users based on search term
   const filteredUsers = useMemo(() => {
     if (!searchTerm) return users;
     

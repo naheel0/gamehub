@@ -72,7 +72,6 @@ export default function AdminHome() {
     value: orderStatusData[status],
   }));
 
-  // Modern color palette
   const CHART_COLORS = [
     "#8b5cf6",
     "#06b6d4",
@@ -82,7 +81,7 @@ export default function AdminHome() {
     "#8b5cf6",
   ];
 
-  // Sales Data for Bar Chart (Last 7 days)
+  
   const salesData = Array.from({ length: 7 }, (_, i) => {
     const date = new Date();
     date.setDate(date.getDate() - i);
@@ -96,7 +95,6 @@ export default function AdminHome() {
     };
   }).reverse();
 
-  // Recent orders for activity section
   const recentOrders = orders.slice(-5).reverse();
 
   return (
@@ -221,7 +219,7 @@ export default function AdminHome() {
                       boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.3)",
                     }}
                     itemStyle={{
-                      color: "#f8fafc", // <--- FIX: item/value text color
+                      color: "#f8fafc", 
                     }}
                   />
                   <Legend
