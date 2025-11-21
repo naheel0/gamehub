@@ -527,8 +527,8 @@ const Profile = () => {
                               {formatRupees(order.summary?.total || order.total)}
                             </p>
                             <span className={`inline-block px-2 py-1 rounded text-xs ${
-                              (order.status || 'Completed').toLowerCase() === 'completed' ? 'bg-green-500' : 
-                              (order.status || 'Completed').toLowerCase() === 'processing' ? 'bg-yellow-500' : 
+                              (order.status || 'Completed').toLowerCase() === 'delivered' ? 'bg-green-500' : 
+                              (order.status || 'Completed').toLowerCase() === 'pending' ? 'bg-yellow-500' : 
                               (order.status || 'Completed').toLowerCase() === 'cancelled' ? 'bg-red-500' : 
                               'bg-gray-500'
                             } text-white`}>

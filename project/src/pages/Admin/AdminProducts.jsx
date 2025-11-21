@@ -1,10 +1,11 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useAdmin } from "./contexts/AdminContext";
-import { Edit3, Plus, Trash2, Search, X, Filter } from "lucide-react";
+import { Edit3, Plus, Trash2, X, Filter } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import AdminAddProducts from "./AdminAddProducts";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import SearchBar from "./SearchBar";
 
 export default function AdminProducts() {
   const { products, deleteProduct } = useAdmin();
@@ -17,30 +18,53 @@ export default function AdminProducts() {
   const [stockFilter, setStockFilter] = useState("");
 
   const categories = useMemo(() => {
-    return [...new Set(products?.map(product => product.genre).filter(Boolean))];
+    return [
+      ...new Set(products?.map((product) => product.genre).filter(Boolean)),
+    ];
   }, [products]);
 
   const filteredProducts = useMemo(() => {
     if (!products) return [];
-    
-    let filtered = products;
 
+    let filtered = [...products];
+
+    const term = searchTerm.toLowerCase();
+
+    // Search filter
     if (searchTerm) {
-      const term = searchTerm.toLowerCase();
-      filtered = filtered.filter(product => 
-        product.name?.toLowerCase().includes(term) ||
-        product.genre?.toLowerCase().includes(term) ||
-        product.description?.toLowerCase().includes(term) ||
-        product.price?.toString().includes(term)
+      filtered = filtered.filter(
+        (product) =>
+          product.name?.toLowerCase().includes(term) ||
+          product.genre?.toLowerCase().includes(term) ||
+          product.price?.toString().includes(term)
       );
+
+      // Sort: matches that start with term come first
+      filtered.sort((a, b) => {
+        const aStarts =
+          a.name?.toLowerCase().startsWith(term) ||
+          a.genre?.toLowerCase().startsWith(term) ||
+          a.price?.toString().startsWith(term)
+            ? 0
+            : 1;
+        const bStarts =
+          b.name?.toLowerCase().startsWith(term) ||
+          b.genre?.toLowerCase().startsWith(term) ||
+          b.price?.toString().startsWith(term)
+            ? 0
+            : 1;
+        return aStarts - bStarts;
+      });
     }
 
+    // Category filter
     if (categoryFilter) {
-      filtered = filtered.filter(product => product.genre === categoryFilter);
+      filtered = filtered.filter((product) => product.genre === categoryFilter);
     }
 
+    // Stock filter
     if (stockFilter) {
-      filtered = filtered.filter(product => 
+      filtered = filtered.filter((product) =>
         stockFilter === "in-stock" ? product.inStock : !product.inStock
       );
     }
@@ -58,35 +82,28 @@ export default function AdminProducts() {
     setIsModalOpen(true);
   };
 
-  const clearSearch = () => {
-    setSearchTerm("");
-  };
-
   const clearFilters = () => {
     setCategoryFilter("");
     setStockFilter("");
     setSearchTerm("");
   };
 
-  useState(() => {
+  useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, categoryFilter, stockFilter]);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentProducts = filteredProducts?.slice(indexOfFirstItem, indexOfLastItem) || [];
+  const currentProducts =
+    filteredProducts?.slice(indexOfFirstItem, indexOfLastItem) || [];
   const totalPages = Math.ceil((filteredProducts?.length || 0) / itemsPerPage);
 
   const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
   const goToPrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
   const goToPage = (pageNumber) => {
@@ -96,35 +113,27 @@ export default function AdminProducts() {
   const getPageNumbers = () => {
     const pageNumbers = [];
     const maxVisiblePages = 5;
-    
+
     if (totalPages <= maxVisiblePages) {
-      for (let i = 1; i <= totalPages; i++) {
-        pageNumbers.push(i);
-      }
+      for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
     } else {
       if (currentPage <= 3) {
-        for (let i = 1; i <= 4; i++) {
-          pageNumbers.push(i);
-        }
-        pageNumbers.push('...');
+        for (let i = 1; i <= 4; i++) pageNumbers.push(i);
+        pageNumbers.push("...");
         pageNumbers.push(totalPages);
       } else if (currentPage >= totalPages - 2) {
         pageNumbers.push(1);
-        pageNumbers.push('...');
-        for (let i = totalPages - 3; i <= totalPages; i++) {
-          pageNumbers.push(i);
-        }
+        pageNumbers.push("...");
+        for (let i = totalPages - 3; i <= totalPages; i++) pageNumbers.push(i);
       } else {
         pageNumbers.push(1);
-        pageNumbers.push('...');
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-          pageNumbers.push(i);
-        }
-        pageNumbers.push('...');
+        pageNumbers.push("...");
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) pageNumbers.push(i);
+        pageNumbers.push("...");
         pageNumbers.push(totalPages);
       }
     }
-    
+
     return pageNumbers;
   };
 
@@ -136,18 +145,24 @@ export default function AdminProducts() {
         <div className="flex flex-col gap-6 mb-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
-              <h1 className="text-3xl font-semibold text-white">Manage Products</h1>
+              <h1 className="text-3xl font-semibold text-white">
+                Manage Products
+              </h1>
               <p className="text-gray-400 mt-1">
                 {isAnyFilterActive ? (
-                  <>Showing {filteredProducts.length} of {products?.length || 0} filtered products</>
+                  <>
+                    Showing {filteredProducts.length} of {products?.length || 0} filtered products
+                  </>
                 ) : (
-                  <>Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredProducts.length)} of {filteredProducts.length} products</>
+                  <>
+                    Showing {indexOfFirstItem + 1}-
+                    {Math.min(indexOfLastItem, filteredProducts.length)} of {filteredProducts.length} products
+                  </>
                 )}
               </p>
             </div>
 
             <div className="flex items-center gap-3">
-              {/* Clear Filters Button */}
               {isAnyFilterActive && (
                 <button
                   onClick={clearFilters}
@@ -168,30 +183,13 @@ export default function AdminProducts() {
           </div>
 
           {/* Search and Filter Bar */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            {/* Search Bar */}
-            <div className="relative flex-1 max-w-md">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <input
-                  type="text"
-                  placeholder="Search products by name, category, description, or price..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-gray-800/80 border border-gray-700 rounded-xl pl-10 pr-10 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 transition-all duration-200"
-                />
-                {searchTerm && (
-                  <button
-                    onClick={clearSearch}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-            </div>
+          <div className="flex flex-col sm:flex-row gap-4 items-start">
+            <SearchBar
+              className="px-3 py-3"
+              placeholder="Search products by name, category, or price..."
+              onSearch={(value) => setSearchTerm(value)}
+            />
 
-            {/* Category Filter */}
             <div className="flex gap-2">
               <select
                 value={categoryFilter}
@@ -199,14 +197,13 @@ export default function AdminProducts() {
                 className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-w-[150px]"
               >
                 <option value="">All Categories</option>
-                {categories.map(category => (
-                  <option key={category} value={category}>
+                {categories.map((category, index) => (
+                  <option key={category || index} value={category}>
                     {category}
                   </option>
                 ))}
               </select>
 
-              {/* Stock Filter */}
               <select
                 value={stockFilter}
                 onChange={(e) => setStockFilter(e.target.value)}
@@ -264,12 +261,17 @@ export default function AdminProducts() {
               ) : currentProducts.length === 0 ? (
                 <tr>
                   <td colSpan="6" className="text-center p-6 text-slate-400">
-                    {isAnyFilterActive ? 'No products found matching your filters' : 'No products found.'}
+                    {isAnyFilterActive
+                      ? "No products found matching your filters"
+                      : "No products found."}
                   </td>
                 </tr>
               ) : (
                 currentProducts.map((p) => (
-                  <tr key={p.id} className="border-t border-gray-800 hover:bg-gray-800/50 transition-colors">
+                  <tr
+                    key={p.id}
+                    className="border-t border-gray-800 hover:bg-gray-800/50 transition-colors"
+                  >
                     <td className="p-4">
                       <img
                         src={p.images?.[0] || "/placeholder-game.jpg"}
@@ -322,9 +324,8 @@ export default function AdminProducts() {
             <div className="text-gray-400 text-sm">
               Page {currentPage} of {totalPages}
             </div>
-            
+
             <div className="flex items-center gap-2">
-              {/* Previous Button */}
               <button
                 onClick={goToPrevPage}
                 disabled={currentPage === 1}
@@ -337,17 +338,18 @@ export default function AdminProducts() {
                 <ChevronLeftIcon className="h-6 w-5" />
               </button>
 
-              {/* Page Numbers */}
               <div className="flex items-center gap-1">
                 {getPageNumbers().map((pageNumber, index) => (
                   <button
                     key={index}
-                    onClick={() => typeof pageNumber === 'number' && goToPage(pageNumber)}
-                    disabled={pageNumber === '...'}
+                    onClick={() =>
+                      typeof pageNumber === "number" && goToPage(pageNumber)
+                    }
+                    disabled={pageNumber === "..."}
                     className={`min-w-10 h-10 flex items-center justify-center rounded-lg transition duration-200 ${
                       pageNumber === currentPage
                         ? "bg-red-600 text-white"
-                        : pageNumber === '...'
+                        : pageNumber === "..."
                         ? "text-gray-500 cursor-default"
                         : "bg-gray-700 hover:bg-gray-600 text-white"
                     }`}
@@ -357,7 +359,6 @@ export default function AdminProducts() {
                 ))}
               </div>
 
-              {/* Next Button */}
               <button
                 onClick={goToNextPage}
                 disabled={currentPage === totalPages}
@@ -367,14 +368,13 @@ export default function AdminProducts() {
                     : "bg-gray-700 hover:bg-gray-600 text-white"
                 }`}
               >
-               <ChevronRightIcon className="h-6 w-5" />
+                <ChevronRightIcon className="h-6 w-5" />
               </button>
             </div>
 
-            {/* Items Per Page Selector */}
             <div className="flex items-center gap-2 text-sm text-gray-400">
               <span>Show:</span>
-              <select 
+              <select
                 value={itemsPerPage}
                 onChange={(e) => {
                   setItemsPerPage(Number(e.target.value));

@@ -8,8 +8,6 @@ import {
   CheckCircle,
   Trash2,
   Users,
-  Search,
-  X,
 } from "lucide-react";
 import { useState, useMemo } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
@@ -17,38 +15,11 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
+import SearchBar from "./SearchBar"; // <-- import your SearchBar
+import StatusSwitch from './Switches';
 
 // Custom styled switches
-const StatusSwitch = styled(Switch)(() => ({
-  padding: 8,
-  '& .MuiSwitch-track': {
-    borderRadius: 22 / 2,
-    backgroundColor: '#374151',
-    '&:before, &:after': {
-      content: '""',
-      position: 'absolute',
-      top: '50%',
-      transform: 'translateY(-50%)',
-      width: 16,
-      height: 16,
-    },
-  },
-  '& .MuiSwitch-thumb': {
-    boxShadow: 'none',
-    width: 16,
-    height: 16,
-    margin: 2,
-  },
-  '& .MuiSwitch-switchBase.Mui-checked': {
-    color: '#10B981',
-    '&:hover': {
-      backgroundColor: 'rgba(16, 185, 129, 0.08)',
-    },
-  },
-  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-    backgroundColor: '#10B981',
-  },
-}));
+
 
 const RoleSwitch = styled(Switch)(() => ({
   padding: 8,
@@ -88,17 +59,17 @@ export default function AdminUsers() {
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Filter users based on searchTerm
   const filteredUsers = useMemo(() => {
     if (!searchTerm) return users;
-    
-    const term = searchTerm.toLowerCase();
-    return users.filter(user => 
-      user.firstName?.toLowerCase().includes(term) ||
-      user.lastName?.toLowerCase().includes(term) ||
-      user.email?.toLowerCase().includes(term) ||
-      user.phone?.includes(term) ||
-      user.role?.toLowerCase().includes(term) ||
-      user.status?.toLowerCase().includes(term)
+
+    return users.filter(user =>
+      user.firstName?.toLowerCase().includes(searchTerm) ||
+      user.lastName?.toLowerCase().includes(searchTerm) ||
+      user.email?.toLowerCase().includes(searchTerm) ||
+      user.phone?.includes(searchTerm) ||
+      user.role?.toLowerCase().includes(searchTerm) ||
+      user.status?.toLowerCase().includes(searchTerm)
     );
   }, [users, searchTerm]);
 
@@ -125,11 +96,7 @@ export default function AdminUsers() {
   };
 
   const handleDeleteUser = async (id) => {
-    if (
-      window.confirm(
-        "Are you sure you want to delete this user? This action cannot be undone."
-      )
-    ) {
+    if (window.confirm("Are you sure you want to delete this user? This action cannot be undone.")) {
       try {
         await deleteUser(id);
       } catch (error) {
@@ -165,59 +132,41 @@ export default function AdminUsers() {
   }, [searchTerm]);
 
   const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
   const goToPrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
-  const goToPage = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+  const goToPage = (pageNumber) => setCurrentPage(pageNumber);
 
   const getPageNumbers = () => {
     const pageNumbers = [];
     const maxVisiblePages = 5;
-    
+
     if (totalPages <= maxVisiblePages) {
-      for (let i = 1; i <= totalPages; i++) {
-        pageNumbers.push(i);
-      }
+      for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
     } else {
       if (currentPage <= 3) {
-        for (let i = 1; i <= 4; i++) {
-          pageNumbers.push(i);
-        }
+        for (let i = 1; i <= 4; i++) pageNumbers.push(i);
         pageNumbers.push('...');
         pageNumbers.push(totalPages);
       } else if (currentPage >= totalPages - 2) {
         pageNumbers.push(1);
         pageNumbers.push('...');
-        for (let i = totalPages - 3; i <= totalPages; i++) {
-          pageNumbers.push(i);
-        }
+        for (let i = totalPages - 3; i <= totalPages; i++) pageNumbers.push(i);
       } else {
         pageNumbers.push(1);
         pageNumbers.push('...');
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-          pageNumbers.push(i);
-        }
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) pageNumbers.push(i);
         pageNumbers.push('...');
         pageNumbers.push(totalPages);
       }
     }
-    
     return pageNumbers;
   };
 
-  const clearSearch = () => {
-    setSearchTerm("");
-  };
 
   return (
     <div className="min-h-screen bg-black/70 backdrop-blur-md px-4 py-8">
@@ -239,19 +188,15 @@ export default function AdminUsers() {
                   User Management
                 </h2>
                 <p className="text-sm text-gray-400">
-                  {searchTerm ? (
-                    <>Showing {filteredUsers.length} of {users.length} users for "{searchTerm}"</>
-                  ) : (
-                    <>Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredUsers.length)} of {filteredUsers.length} users</>
-                  )}
+                  Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredUsers.length)} of {filteredUsers.length} users
                 </p>
               </div>
             </div>
-            
+
             {/* Items Per Page Selector */}
             <div className="flex items-center gap-2 text-sm text-gray-400">
               <span>Show:</span>
-              <select 
+              <select
                 value={itemsPerPage}
                 onChange={(e) => {
                   setItemsPerPage(Number(e.target.value));
@@ -268,32 +213,17 @@ export default function AdminUsers() {
             </div>
           </div>
 
-          {/* Search Bar */}
-          <div className="relative max-w-md">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <input
-                type="text"
-                placeholder="Search users by name, email, phone, role, or status..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-gray-800/50 border border-gray-700 rounded-xl pl-10 pr-10 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 transition-all duration-200"
-              />
-              {searchTerm && (
-                <button
-                  onClick={clearSearch}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-            {searchTerm && (
-              <p className="text-xs text-gray-500 mt-2">
-                Search results: {filteredUsers.length} user{filteredUsers.length !== 1 ? 's' : ''} found
-              </p>
-            )}
-          </div>
+          {/* SearchBar Component */}
+          <SearchBar
+            placeholder="Search users by name, email, phone, role, or status..."
+            onSearch={setSearchTerm}
+            className="px-3 py-3"
+          />
+          {searchTerm && (
+            <p className="text-xs text-gray-500 mt-2">
+              Search results: {filteredUsers.length} user{filteredUsers.length !== 1 ? 's' : ''} found
+            </p>
+          )}
         </div>
 
         {filteredUsers.length === 0 ? (
@@ -302,11 +232,6 @@ export default function AdminUsers() {
             <p className="text-gray-400 text-lg">
               {searchTerm ? 'No users found matching your search' : 'No users found'}
             </p>
-            {searchTerm && (
-              <p className="text-gray-500 text-sm mt-2">
-                Try searching with different terms
-              </p>
-            )}
           </div>
         ) : (
           <>
@@ -420,9 +345,7 @@ export default function AdminUsers() {
                               label={
                                 <span className={`text-sm font-medium ${
                                   u.role === "admin" ? "text-yellow-400" : "text-blue-400"
-                                }`}>
-                                  {u.role === "admin" ? "Admin" : "User"}
-                                </span>
+                                }`}>{u.role === "admin" ? "Admin" : "User"}</span>
                               }
                               labelPlacement="start"
                               sx={{
@@ -436,7 +359,7 @@ export default function AdminUsers() {
                         </div>
                       </td>
 
-                      {/* Actions - Direct Delete Button */}
+                      {/* Actions */}
                       <td className="p-4">
                         <div className="flex justify-center">
                           <button
@@ -462,9 +385,8 @@ export default function AdminUsers() {
                 <div className="text-gray-400 text-sm">
                   Page {currentPage} of {totalPages}
                 </div>
-                
+
                 <div className="flex items-center gap-2">
-                  {/* Previous Button */}
                   <button
                     onClick={goToPrevPage}
                     disabled={currentPage === 1}
@@ -474,10 +396,9 @@ export default function AdminUsers() {
                         : "bg-gray-700 hover:bg-gray-600 text-white"
                     }`}
                   >
-                     <ChevronLeftIcon className="h-6 w-5" />
+                    <ChevronLeftIcon className="h-6 w-5" />
                   </button>
 
-                  {/* Page Numbers */}
                   <div className="flex items-center gap-1">
                     {getPageNumbers().map((pageNumber, index) => (
                       <button
@@ -497,7 +418,6 @@ export default function AdminUsers() {
                     ))}
                   </div>
 
-                  {/* Next Button */}
                   <button
                     onClick={goToNextPage}
                     disabled={currentPage === totalPages}
@@ -507,8 +427,7 @@ export default function AdminUsers() {
                         : "bg-gray-700 hover:bg-gray-600 text-white"
                     }`}
                   >
-                    
-                     <ChevronRightIcon className="h-6 w-5" />
+                    <ChevronRightIcon className="h-6 w-5" />
                   </button>
                 </div>
               </div>

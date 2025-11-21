@@ -473,7 +473,7 @@
             "total": "4398.90"
           },
           "paymentMethod": "paypal",
-          "status": "Delivered",
+          "status": "Pending",
           "date": "2025-11-10T09:50:25.825Z"
         },
         {
@@ -592,13 +592,54 @@
       "lastName": "",
       "email": "naheel1234@gmail.com",
       "phone": "",
-      "password":"123456",
+      "password": "123456",
       "role": "user",
       "status": "active",
       "wishlist": [],
       "cart": [],
-      "purchaseHistory": [],
-      "addresses": [],
+      "purchaseHistory": [
+        {
+          "id": "cart_1763636139147_21mgkgi8d",
+          "items": [
+            {
+              "gameId": "11",
+              "name": "Baldur's Gate 3",
+              "price": 3999,
+              "quantity": 1,
+              "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg"
+            },
+            {
+              "gameId": "4",
+              "name": "Call of Duty: Modern Warfare III",
+              "price": 4999,
+              "quantity": 1,
+              "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3595270/7d0f21912a075c33bbb5ea558100e187ceb234ac/header.jpg?t=1758060267"
+            }
+          ],
+          "summary": {
+            "subtotal": "8998.00",
+            "tax": "899.80",
+            "total": "9897.80"
+          },
+          "paymentMethod": "paypal",
+          "status": "Delivered",
+          "date": "2025-11-20T10:55:39.147Z"
+        }
+      ],
+      "addresses": [
+        {
+          "id": "addr_1763636134569",
+          "fullName": "naheel123 m",
+          "addressLine1": "wertyop",
+          "addressLine2": "eghjkl",
+          "city": "adgfhjk",
+          "state": "zsdxg",
+          "zipCode": "465671",
+          "country": "india",
+          "phone": "9876543210",
+          "isDefault": false
+        }
+      ],
       "createdAt": "2025-11-17T04:26:59.498Z"
     }
   ]
