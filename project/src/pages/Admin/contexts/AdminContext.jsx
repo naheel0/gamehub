@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-
-const BASE_API = 'http://localhost:3001';
+import { BaseUrl } from '../../../Services/api';
+const BASE_API = BaseUrl;
 
 const AdminContext = createContext();
 

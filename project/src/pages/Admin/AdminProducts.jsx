@@ -5,7 +5,7 @@ import { Edit3, Plus, Trash2, X, Filter } from "lucide-react";
 import { motion } from "framer-motion";
 import AdminAddProducts from "./AdminAddProducts";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import SearchBar from "./SearchBar";
+import SearchBar from "./components/SearchBar";
 
 export default function AdminProducts() {
   const { products, deleteProduct } = useAdmin();

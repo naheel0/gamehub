@@ -4,7 +4,7 @@ import { useAdmin } from "./contexts/AdminContext";
 import { motion } from "framer-motion";
 import { useState,useEffect } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import SearchBar from "./SearchBar"
+import SearchBar from "./components/SearchBar"
 
 export default function AdminOrders() {
   const { orders, deleteOrder, updateOrderStatus, users, loading } = useAdmin();

@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useAuth } from './AuthContext';
+import { BaseUrl } from '../Services/api';
 
 const CartContext = createContext();
 // eslint-disable-next-line react-refresh/only-export-components
@@ -19,7 +20,7 @@ export const CartProvider = ({ children }) => {
   const { user } = useAuth();
 
   
-  const API_BASE = 'http://localhost:3001';
+  const API_BASE = BaseUrl;
 
   useEffect(() => {
     const loadCart = async () => {
@@ -74,7 +75,7 @@ export const CartProvider = ({ children }) => {
     };
 
     loadCart();
-  }, [user]);
+  }, [user,API_BASE]);
 
   const generateCartItemId = () => {
     return 'cart_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);

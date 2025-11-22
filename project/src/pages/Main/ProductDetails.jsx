@@ -2,12 +2,13 @@ import React, { useState, useEffect,useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { StarIcon, ShoppingCartIcon, HeartIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import { StarIcon as StarOutline, HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
-import { useCart } from '../contexts/CartContext';
-import { useAuth } from '../contexts/AuthContext';
-import { useWishlist } from '../contexts/WishlistContext';
+import { useCart } from '../../contexts/CartContext';
+import { useAuth } from '../../contexts/AuthContext';
+import { useWishlist } from '../../contexts/WishlistContext';
 import { GiFastBackwardButton } from 'react-icons/gi';
 import { MdArrowForwardIos, MdArrowBackIosNew } from "react-icons/md";
 import { toast } from 'react-toastify';
+import { BaseUrl } from '../../Services/api';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -24,7 +25,7 @@ const ProductDetails = () => {
   const { user } = useAuth();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   
-  const API_BASE = 'http://localhost:3001';
+  const API_BASE = BaseUrl;
 
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [fullScreenImageIndex, setFullScreenImageIndex] = useState(0);
@@ -55,7 +56,7 @@ const ProductDetails = () => {
     };
 
     fetchGame();
-  }, [id]);
+  }, [id,API_BASE]);
 
   useEffect(() => {
     if (game && user) {

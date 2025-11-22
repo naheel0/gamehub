@@ -11,9 +11,10 @@ import {
 } from "@heroicons/react/24/outline";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { toast } from "react-toastify";
-import { useCart } from "../contexts/CartContext";
-import { useWishlist } from "../contexts/WishlistContext";
-import { useAuth } from "../contexts/AuthContext";
+import { useCart } from "../../contexts/CartContext";
+import { useWishlist } from "../../contexts/WishlistContext";
+import { useAuth } from "../../contexts/AuthContext";
+import { BaseUrl } from "../../Services/api";
 
 const Products = () => {
   const [games, setGames] = useState([]);
@@ -37,7 +38,7 @@ const Products = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [gamesPerPage] = useState(6);
 
-  const API_BASE = "http://localhost:3001";
+  const API_BASE = BaseUrl;
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -59,7 +60,7 @@ const Products = () => {
     };
 
     fetchGames();
-  }, []);
+  }, [API_BASE]);
 
   useEffect(() => {
     let result = [...games];

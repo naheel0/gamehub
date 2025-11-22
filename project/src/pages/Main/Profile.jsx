@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { useCart } from '../contexts/CartContext';
-import { useWishlist } from '../contexts/WishlistContext';
+import { useAuth } from '../../contexts/AuthContext';
+import { useCart } from '../../contexts/CartContext';
+import { useWishlist } from '../../contexts/WishlistContext';
 import { 
   UserIcon, 
   EnvelopeIcon, 
@@ -21,6 +21,7 @@ import {
   ShoppingBagIcon as ShoppingBagSolid,
   HeartIcon as HeartSolid
 } from '@heroicons/react/24/solid';
+import { BaseUrl } from '../../Services/api';
 
 const Profile = () => {
   const { user, updateUser } = useAuth();
@@ -40,7 +41,7 @@ const Profile = () => {
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [orderCount, setOrderCount] = useState(0);
 
-  const API_BASE = 'http://localhost:3001';
+  const API_BASE = BaseUrl ;
 
   const formatRupees = useCallback((amount) => {
     if (!amount) return '₹0';

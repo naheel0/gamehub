@@ -1,13 +1,13 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import Home from "./pages/Home";
-import Products from "./pages/Products";
-import About from "./pages/About";
+import Home from "./pages/Main/Home";
+import Products from "./pages/Main/Products";
+import About from "./pages/Main/About";
 import Contact from "../src/components/layout/Contact";
 import Footer from "./components/layout/Footer";
-import ProductDetails from "./pages/ProductDetails";
-import Wishlist from "./pages/Wishlist";
-import Cart from "./pages/Cart";
+import ProductDetails from "./pages/Main/ProductDetails";
+import Wishlist from "./pages/Main/Wishlist";
+import Cart from "./pages/Main/Cart";
 import Login from "../src/pages/Auth/Login";
 import Signup from "../src/pages/Auth/Signup";
 import { CartProvider } from "./contexts/CartContext";
@@ -16,9 +16,9 @@ import { WishlistProvider } from "./contexts/WishlistContext";
 import PaymentMethods from "../src/components/PaymentMethods/PaymentPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import OrderConfirmation from "./pages/OrderConfirmation";
+import OrderConfirmation from "./pages/Main/OrderConfirmation";
 import Navbar from "../src/components/layout/NavBar";
-import Profile from "./pages/Profile";
+import Profile from "./pages/Main/Profile";
 
 // Admin Components
 import AdminDashboard from "./pages/Admin/AdminDashboard";
@@ -55,7 +55,7 @@ function App() {
             <div className="min-h-screen bg-black flex flex-col">
               {shouldShowNavbar && <Navbar />}
 
-              <main className="flex-grow">
+              <main className="grow">
                 <Routes>
                   {/* Public Routes */}
                   <Route path="/" element={<Home />} />

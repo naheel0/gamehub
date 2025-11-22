@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useWishlist } from "../contexts/WishlistContext";
+import { useWishlist } from "../../contexts/WishlistContext";
 import {
   FaHeart,
   FaStar,
@@ -17,12 +17,13 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
+import { BaseUrl } from "../../Services/api";
 
 const Home = () => {
   const [featuredGames, setFeaturedGames] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const API_BASE = "http://localhost:3001";
+  const API_BASE = BaseUrl;
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -41,7 +42,7 @@ const Home = () => {
     };
 
     fetchGames();
-  }, []);
+  }, [API_BASE]);
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
   const handleWishlistToggle = (game) => {

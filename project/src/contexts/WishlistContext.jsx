@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { useAuth } from './AuthContext';
+import { BaseUrl } from '../Services/api';
 
 const WishlistContext = createContext();
 // eslint-disable-next-line react-refresh/only-export-components
@@ -17,7 +18,7 @@ export const WishlistProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const { user, updateUserPartial } = useAuth();
 
-  const API_BASE = 'http://localhost:3001';
+  const API_BASE = BaseUrl;
 
   // Use useCallback to prevent unnecessary reloads
   const loadWishlist = useCallback(async () => {
@@ -59,7 +60,7 @@ export const WishlistProvider = ({ children }) => {
       toast.error('Failed to load wishlist');
       setLoading(false);
     }
-  }, [user]);
+  }, [user,API_BASE]);
 
   useEffect(() => {
     loadWishlist();

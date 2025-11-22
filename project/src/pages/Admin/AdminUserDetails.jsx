@@ -15,8 +15,8 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
-import SearchBar from "./SearchBar"; // <-- import your SearchBar
-import StatusSwitch from './Switches';
+import SearchBar from "./components/SearchBar"; 
+import StatusSwitch from './components/Switches';
 
 // Custom styled switches
 
