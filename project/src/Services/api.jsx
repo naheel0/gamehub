@@ -1,1 +1,1 @@
-export const BaseUrl = "http://localhost:3001"
+export const BaseUrl = "https://gamehub-db.onrender.com"
