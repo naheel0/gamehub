@@ -1,8 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useAdmin } from "./contexts/AdminContext";
 import { Edit3, Plus, Trash2, X, Filter } from "lucide-react";
-// eslint-disable-next-line no-unused-vars
-import { motion } from "framer-motion";
 import AdminAddProducts from "./AdminAddProducts";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import SearchBar from "./components/SearchBar";
